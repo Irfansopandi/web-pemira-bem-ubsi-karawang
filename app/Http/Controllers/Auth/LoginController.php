@@ -96,3 +96,4 @@ class LoginController extends Controller
         return redirect('/login')->with('status', 'Anda telah berhasil keluar dari sistem.');
     }
 }
+

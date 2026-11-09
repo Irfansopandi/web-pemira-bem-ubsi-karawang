@@ -50,3 +50,4 @@ class Admin extends Authenticatable
         return $this->role === 'committee';
     }
 }
+

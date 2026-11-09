@@ -51,3 +51,4 @@ class Student extends Authenticatable
         return $this->hasMany(VoterParticipation::class, 'student_nim', 'nim');
     }
 }
+
