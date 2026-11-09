@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Official UBSI Identity Palette */
+    --color-ubsi-red: #940c10;
+    --color-ubsi-red-dark: #7A0A0D;
+    --color-ubsi-red-light: #FEE2E2;
+
+    --color-ubsi-gold: #CE9501;
+    --color-ubsi-gold-dark: #B58200;
+    --color-ubsi-gold-light: #FEF3C7;
+
+    --color-ubsi-white: #FDFDFD;
+
+    /* Semantic Aliases */
+    --color-primary: #940c10;
+    --color-primary-hover: #7A0A0D;
+    --color-accent: #CE9501;
+    --color-accent-hover: #B58200;
+}
