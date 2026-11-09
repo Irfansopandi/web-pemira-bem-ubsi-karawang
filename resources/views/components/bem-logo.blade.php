@@ -34,3 +34,4 @@
         <text x="60" y="99" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-weight="700" font-size="6" fill="#CE9501" letter-spacing="1">KARAWANG</text>
     </svg>
 </div>
+
