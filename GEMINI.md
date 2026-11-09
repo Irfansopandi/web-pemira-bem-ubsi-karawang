@@ -13,6 +13,7 @@ Dokumen panduan eksekusi untuk model AI Gemini dalam mengembangkan sistem PEMIRA
   - JANGAN menggunakan REST API sebagai alur kerja utama jika Blade + Controller dapat menyelesaikannya.
   - JANGAN memindahkan atau menghapus folder `pemira-ubsi-frontend` tanpa izin pengguna.
   - JANGAN membuat migration database sebelum dokumen ERD dipresentasikan dan disetujui.
+  - JANGAN membuat halaman guest publik / landing page umum. Akses pertama sistem (`/`) langsung dialihkan ke halaman Login (`/login`).
 
 ---
 

@@ -124,6 +124,14 @@ Menggunakan tipografi modern berseri bebas-distraksi yang memiliki keterbacaan t
 - **Tombol Darurat Antrean**:
   - Tombol merah `#940c10` dengan teks `#FDFDFD`: *"Selesai / Keluar Sekarang"*, mengakhiri sesi seketika demi mempercepat pemilih berikutnya di TPS.
 
+### D. Halaman Login Langsung (Direct Entry — Zero-Guest Policy)
+- **Aturan Rute**: Aplikasi tidak memiliki landing page atau halaman guest umum. Rute root (`/`) langsung mengarahkan pengguna ke halaman Login (`/login`).
+- **Antarmuka Login Institusional**:
+  - Identitas kampus UBSI Karawang di header card.
+  - Form Login terpadu yang memfasilitasi mahasiswa (NIM + Password) serta Panitia/Admin.
+  - Tidak ada tombol registrasi mandiri (DPT sepenuhnya dikelola dan di-import oleh Admin).
+  - Peringatan keamanan dan informasi bantuan panitia TPS.
+
 ---
 
 ## 6. PRE-DELIVERY CHECKLIST UI/UX

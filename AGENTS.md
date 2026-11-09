@@ -15,8 +15,9 @@ Aplikasi PEMIRA BEM UBSI Karawang dikembangkan murni menggunakan arsitektur **Fu
 1. **DILARANG MENGGUNAKAN NEXT.JS ATAU REACT** sebagai frontend terpisah.
 2. **DILARANG MEMBUAT FRONTEND TERPISAH**. Seluruh UI di-render menggunakan Laravel Blade.
 3. **DILARANG MENGGUNAKAN REST API SEBAGAI ARSITEKTUR UTAMA** apabila Blade dan Laravel Controller sudah mencukupi.
-4. Jangan menghapus atau memindahkan direktori `pemira-ubsi-frontend` tanpa persetujuan eksplisit dari pengguna.
-5. Seluruh kode, logic, routing, autentikasi, dan view berada di dalam project `pemira-ubsi-backend`.
+4. **DILARANG MEMBUAT HALAMAN GUEST ATAU LANDING PAGE PUBLIK**. Akses pertama aplikasi (`/`) wajib langsung mengarah ke halaman Login (`/login`). Seluruh fitur dan informasi kandidat diakses secara terproteksi setelah autentikasi.
+5. Jangan menghapus atau memindahkan direktori `pemira-ubsi-frontend` tanpa persetujuan eksplisit dari pengguna.
+6. Seluruh kode, logic, routing, autentikasi, dan view berada di dalam project `pemira-ubsi-backend`.
 
 ---
 
