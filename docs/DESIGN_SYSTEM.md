@@ -1,18 +1,28 @@
-# DESIGN SYSTEM — PEMIRA BEM UNIVERSITAS UBSI KARAWANG
+# DESIGN SYSTEM — PEMIRA BEM UNIVERSITAS BSI KAMPUS KARAWANG
 *Dokumentasi Resmi Standar Desain Antarmuka Sistem E-Voting PEMIRA BEM UBSI Karawang*
-*Dihasilkan & Disesuaikan dengan Identitas Resmi UBSI dan UI/UX Pro Max Skill*
+*Dihasilkan & Disesuaikan Penuh dengan Identitas Resmi BEM UBSI Karawang dan UI/UX Pro Max Skill*
 
 ---
 
-## 1. VISUAL DIRECTION & BRAND IDENTITY
+## 1. VISUAL DIRECTION & IDENTITAS RESMI BEM UBSI KARAWANG
 
-### A. Karakteristik Utama
-- **Gaya Desain**: *Modern Institutional & Accessible* (WCAG AAA Compliance).
-- **Nuansa (Mood)**: Formal, berintegritas tinggi, kredibel, tegas, bersih, dan merepresentasikan almamater UBSI secara otentik.
-- **Identitas Warna Resmi Kampus UBSI**:
-  - **Merah UBSI (Primary Brand)**: `#940c10` (Warna utama institusional, badge kepemimpinan, aksen navbar/header).
-  - **Kuning Emas UBSI (Accent & Highlight)**: `#CE9501` (Nomor urut paslon, badge pemilu, tombol aksi sorotan, active indicator).
-  - **Putih Bersih UBSI (Surface)**: `#FDFDFD` (Latar belakang bilik suara, permukaan kartu paslon, kontras tinggi).
+### A. Lembaga & Identitas Organisasi
+- **Institusi Induk**: Universitas Bina Sarana Informatika (UBSI) Kampus Karawang.
+- **Lembaga Eksekutif**: Badan Eksekutif Mahasiswa (BEM) UBSI Karawang.
+- **Penyelenggara Pemilihan**: Panitia Pemilihan Umum Raya (PEMIRA) BEM UBSI Karawang.
+- **Karakteristik Desain**:
+  - *Modern Institutional & Accessible* (WCAG AAA Compliance).
+  - Wibawa organisasi mahasiswa yang independen, demokratis, jujur, adil, transparan, dan kredibel.
+  - Membawa identitas kebanggaan almamater UBSI Karawang.
+- **Aturan Akses Utama (Zero-Guest Policy)**:
+  - **DILARANG menyediakan halaman publik / tamu / landing page umum**.
+  - Rute awal aplikasi (`/`) langsung mengarahkan pengguna ke **Halaman Login Resmi PEMIRA BEM UBSI Karawang**.
+  - Seluruh akses informasi kandidat, visi misi, bilik suara, dan rekapitulasi data berada di balik autentikasi terverifikasi.
+
+### B. Identitas Warna Resmi Kampus & BEM UBSI Karawang
+- **Merah UBSI (Primary Brand)**: `#940c10` (hover: `#7A0A0D`) — Warna utama almamater UBSI, header organisasi, badge kepemimpinan BEM, dan tombol aksi utama.
+- **Kuning Emas UBSI (Accent & Highlight)**: `#CE9501` (hover: `#B58200`) — Warna emas lambang BEM UBSI, nomor urut paslon ketua & wakil ketua, border kartu sorotan, serta indikator timer.
+- **Putih Bersih UBSI (Surface)**: `#FDFDFD` — Latar belakang bilik suara dan kontainer kartu berlatar bersih dengan kontras tinggi.
 
 ---
 
