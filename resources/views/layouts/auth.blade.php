@@ -10,7 +10,28 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if (file_exists(public_path('hot')) || file_exists(public_path('build/manifest.json')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <!-- Fallback Tailwind CSS & Alpine.js while Vite dev server / build is pending -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            'ubsi-red': '#940c10',
+                            'ubsi-red-dark': '#7A0A0D',
+                            'ubsi-gold': '#CE9501',
+                            'ubsi-gold-dark': '#B58200',
+                            'ubsi-white': '#FDFDFD',
+                        }
+                    }
+                }
+            }
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @endif
 </head>
 <body class="min-h-full flex flex-col justify-between font-sans antialiased text-[#1A1A1A] bg-[#FDFDFD] selection:bg-[#940c10] selection:text-[#FDFDFD]">
     
@@ -54,4 +75,3 @@
 
 </body>
 </html>
-
