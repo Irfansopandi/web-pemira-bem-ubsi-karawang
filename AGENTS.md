@@ -63,10 +63,12 @@ Aplikasi PEMIRA BEM UBSI Karawang dikembangkan murni menggunakan arsitektur **Fu
 
 1. **Prinsip Kerahasiaan (Luber Jurdil)**:
    - **Identitas mahasiswa TIDAK BOLEH dapat dihubungkan kembali dengan pilihan kandidatnya**.
-   - DILARANG menyimpan `student_id` dan `candidate_id` dalam satu baris tabel yang sama di database.
+   - DILARANG menyimpan `student_nim` dan `candidate_id` dalam satu baris tabel yang sama di database.
 2. **Pemisahan Partisipasi dan Kotak Suara**:
-   - Tabel **Voter Participation** (`election_voters`): Mencatat status mahasiswa bahwa hak suaranya telah digunakan pada periode tersebut (`has_voted = true`, `voted_at = timestamp`), IP/lokasi TPS jika diperlukan untuk audit.
-   - Tabel **Anonymous Ballots** (`ballots`): Menyimpan surat suara murni (`election_id`, `candidate_id`, `ballot_hash/serial`, `created_at`). Tidak ada foreign key ke `students` atau `users`.
+   - Tabel **Students** (`students`): Khusus data pemilih Mahasiswa DPT UBSI Karawang dengan **Primary Key `nim` (string)**.
+   - Tabel **Admins** (`admins`): Terpisah dari mahasiswa, khusus akun pengelola (Admin & Panitia TPS) dengan Primary Key `id` (bigint).
+   - Tabel **Voter Participation** (`voter_participations`): Mencatat status partisipasi mahasiswa (`student_nim`, `has_voted = true`, `voted_at = timestamp`), IP/lokasi TPS jika diperlukan untuk audit.
+   - Tabel **Anonymous Ballots** (`ballots`): Menyimpan surat suara murni (`election_id`, `candidate_id`, `ballot_hash/serial`, `created_at`). Tidak ada foreign key ke `students` atau `admins`.
 3. **Mekanisme Blind Token / One-Time Single-Use Credential**:
    - Saat mahasiswa menekan tombol konfirmasi voting, transaksi database (`DB::transaction`) secara atomik:
      1. Memeriksa apakah mahasiswa sudah memilih (`lockForUpdate`).

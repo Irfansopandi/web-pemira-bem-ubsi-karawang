@@ -45,11 +45,14 @@ Dokumen panduan eksekusi untuk model AI Gemini dalam mengembangkan sistem PEMIRA
 
 ---
 
-## 3. PRINSIP KERAHASIAAN SUARA (ANONYMOUS BALLOT ARCHITECTURE)
+## 3. PRINSIP KERAHASIAAN SUARA & MULTI-TABLE ENTITY
 
-- **Pemisahan Entitas**:
-  - Data pemilih yang mencatat siapa yang sudah hadir/memilih (`voter_participations`) terpisah total dari surat suara (`ballots`).
-  - Tidak ada kolom `user_id` atau `student_id` pada tabel `ballots`.
+- **Pemisahan Tabel Akun**:
+  - Tabel `students`: Data mahasiswa DPT dengan **Primary Key `nim` (string)**.
+  - Tabel `admins`: Akun pengelola (Admin & Panitia TPS) dengan Primary Key `id` (bigint).
+- **Pemisahan Kotak Suara & Partisipasi**:
+  - Data pemilih yang mencatat siapa yang sudah hadir/memilih (`voter_participations`) terpisah total dari surat suara (`ballots`). Relasi pemilih menggunakan `student_nim`.
+  - Tidak ada kolom identitas mahasiswa (`student_nim`) pada tabel `ballots`.
 - **Atomisitas Transaksi**:
   - Eksekusi voting dilakukan di dalam `DB::transaction` dengan `lockForUpdate` pada record partisipasi pemilih.
   - Suara yang dikirimkan tidak dapat dibatalkan atau diedit.
