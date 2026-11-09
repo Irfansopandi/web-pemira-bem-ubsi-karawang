@@ -51,7 +51,7 @@
             </div>
             <div class="hidden sm:flex items-center gap-2 text-xs font-semibold px-3 py-1 bg-[#7A0A0D] border border-[#CE9501]/40 text-[#FDFDFD] rounded-full">
                 <span class="w-2 h-2 rounded-full bg-[#CE9501] animate-pulse"></span>
-                <span>Portal Resmi TPS E-Voting</span>
+                <span>Sistem E-Voting Terpadu</span>
             </div>
         </div>
     </header>

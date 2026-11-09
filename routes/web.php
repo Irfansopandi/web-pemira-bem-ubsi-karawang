@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
-// Zero-Guest Policy: Root directly redirects to Login
+// Zero-Guest Policy: Akses root langsung dialihkan ke login
 Route::redirect('/', '/login');
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Autentikasi Terpadu (Single Unified Entry Point)
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
