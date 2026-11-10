@@ -16,9 +16,15 @@
             </div>
         </div>
 
-        @if($period)
         <!-- Controls & Status Actions -->
         <div class="flex items-center gap-3 flex-wrap">
+            <a href="{{ route('admin.candidates.index') }}"
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940c10] text-white hover:bg-[#7A0A0D] text-xs font-bold shadow-xs transition-all">
+                <i data-lucide="users" class="w-4 h-4 text-[#CE9501]"></i>
+                <span>Kelola Paslon & Visi Misi</span>
+            </a>
+
+            @if($period)
             <!-- Toggle Publish Results Button -->
             <form action="{{ route('admin.periods.toggle-publish', $period) }}" method="POST">
                 @csrf
@@ -40,8 +46,8 @@
                     <option value="archived" {{ $period->status === 'archived' ? 'selected' : '' }}>Diarsipkan</option>
                 </select>
             </form>
+            @endif
         </div>
-        @endif
     </div>
 
     @if($period)
@@ -78,9 +84,15 @@
                     <h2 class="text-lg font-black text-gray-900">Rekapitulasi Suara Anonim Realtime</h2>
                     <p class="text-xs text-gray-500">Dihitung murni dari tabel kotak suara tanpa foreign key mahasiswa</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-xs font-bold text-gray-600">Sinkronisasi Otomatis</span>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-700 hover:text-[#940c10] hover:border-[#940c10] transition-colors">
+                        <i data-lucide="edit-3" class="w-3.5 h-3.5 text-[#940c10]"></i>
+                        <span>Edit Paslon & Visi Misi</span>
+                    </a>
+                    <div class="flex items-center gap-2 pl-3 border-l border-gray-200">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-xs font-bold text-gray-600">Sinkronisasi Otomatis</span>
+                    </div>
                 </div>
             </div>
 

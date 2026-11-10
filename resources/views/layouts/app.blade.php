@@ -54,17 +54,23 @@
                         </div>
                     @elseif(Auth::guard('admin')->check())
                         @php $user = Auth::guard('admin')->user(); @endphp
-                        <div class="flex items-center gap-3 pl-3 border-l border-gray-200">
+                        <div class="flex items-center gap-2 sm:gap-3 pl-3 border-l border-gray-200">
                             <div class="text-right hidden sm:block">
                                 <p class="text-xs font-bold text-gray-900 leading-none">{{ $user->name }}</p>
                                 <span class="inline-block mt-0.5 px-2 py-0.5 text-[10px] font-bold rounded-full {{ $user->isAdmin() ? 'bg-red-100 text-[#940c10]' : 'bg-amber-100 text-[#CE9501]' }}">
                                     {{ strtoupper($user->role) }}
                                 </span>
                             </div>
-                            <a href="{{ $user->isAdmin() ? route('admin.dashboard') : route('committee.dashboard') }}" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-gray-900 text-white text-xs font-bold hover:bg-black transition-all">
+                            <a href="{{ $user->isAdmin() ? route('admin.dashboard') : route('committee.dashboard') }}" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg {{ request()->routeIs('admin.dashboard') || request()->routeIs('committee.dashboard') ? 'bg-[#940c10] text-white' : 'bg-gray-900 text-white hover:bg-black' }} text-xs font-bold transition-all">
                                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                                 Panel {{ $user->isAdmin() ? 'Admin' : 'TPS' }}
                             </a>
+                            @if($user->isAdmin())
+                                <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg {{ request()->routeIs('admin.candidates.*') ? 'bg-[#940c10] text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200' }} text-xs font-bold transition-all" title="Kelola Paslon & Visi Misi">
+                                    <i data-lucide="users" class="w-4 h-4 text-[#CE9501]"></i>
+                                    <span class="hidden md:inline">Kelola Paslon</span>
+                                </a>
+                            @endif
                             <form action="{{ route('logout') }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" title="Keluar" class="p-2 text-gray-500 hover:text-[#940c10] hover:bg-red-50 rounded-lg transition-colors">

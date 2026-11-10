@@ -27,6 +27,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/periods/{period}/toggle-publish', [DashboardController::class, 'togglePublish'])->name('periods.toggle-publish');
     Route::post('/periods/{period}/toggle-status', [DashboardController::class, 'toggleStatus'])->name('periods.toggle-status');
+    Route::resource('candidates', \App\Http\Controllers\Admin\CandidateController::class);
 });
 
 // Area Panitia TPS Onsite
