@@ -225,3 +225,4 @@ class CandidateController extends Controller
             ->with('success', "Pasangan Calon No. 0{$num} berhasil dihapus.");
     }
 }
+
