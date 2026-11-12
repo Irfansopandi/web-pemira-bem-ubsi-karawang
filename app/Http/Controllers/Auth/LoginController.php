@@ -38,47 +38,107 @@ class LoginController extends Controller
      */
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'identifier' => ['required', 'string'],
-            'password'   => ['required', 'string'],
-        ], [
-            'identifier.required' => 'NIM atau Username/Email wajib diisi.',
-            'password.required'   => 'Kata Sandi / Kredensial TPS wajib diisi.',
-        ]);
+        $identifier = trim((string) $request->input('identifier', ''));
+        $password   = (string) $request->input('password', '');
 
-        $identifier = trim($credentials['identifier']);
-        $password   = $credentials['password'];
-
-        // 1. Prioritas Autentikasi Mahasiswa DPT (Pencocokan NIM)
-        $studentExists = Student::where('nim', $identifier)->exists();
-        if ($studentExists) {
-            if (Auth::guard('student')->attempt(['nim' => $identifier, 'password' => $password, 'is_active' => true])) {
-                $request->session()->regenerate();
-                return redirect()->intended(route('student.voting'));
-            }
+        // 1. Kasus: Keduanya Kosong / Salah
+        if ($identifier === '' && $password === '') {
+            return back()
+                ->withErrors([
+                    'general' => 'Username dan Password wajib diisi.',
+                ]);
         }
 
-        // 2. Autentikasi Petugas (Admin & Panitia TPS via Username atau Email)
-        $field = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        if (Auth::guard('admin')->attempt([$field => $identifier, 'password' => $password, 'is_active' => true])) {
+        // 2. Kasus: Hanya Username Kosong
+        if ($identifier === '') {
+            return back()
+                ->withErrors([
+                    'identifier' => 'Username atau NIM wajib diisi.',
+                ]);
+        }
+
+        // 3. Kasus: Hanya Password Kosong
+        if ($password === '') {
+            return back()
+                ->withInput(['identifier' => $identifier])
+                ->withErrors([
+                    'password' => 'Kata sandi wajib diisi.',
+                ]);
+        }
+
+        // 4. Cari pengguna di tabel students (NIM) & admins (username / email)
+        $student = Student::where('nim', $identifier)->first();
+        $admin = Admin::where('username', $identifier)
+            ->orWhere('email', $identifier)
+            ->first();
+
+        // 5. Kasus: Username / NIM Tidak Ditemukan
+        if (!$student && !$admin) {
+            return back()
+                ->withInput(['identifier' => $identifier])
+                ->withErrors([
+                    'identifier' => 'Username atau NIM tidak terdaftar.',
+                ]);
+        }
+
+        // 6. Autentikasi Mahasiswa (Student)
+        if ($student) {
+            if (!$student->is_active) {
+                return back()
+                    ->withInput(['identifier' => $identifier])
+                    ->withErrors([
+                        'identifier' => 'Akun mahasiswa Anda sedang dinonaktifkan.',
+                    ]);
+            }
+
+            // Validasi kata sandi mahasiswa (mencocokkan tanggal lahir terdaftar YYYY-MM-DD per NIM)
+            if (!\Illuminate\Support\Facades\Hash::check($password, $student->password)) {
+                return back()
+                    ->withInput(['identifier' => $identifier])
+                    ->withErrors([
+                        'password' => 'Kata sandi yang Anda masukkan salah. Pastikan format tanggal lahir sesuai (YYYY-MM-DD).',
+                    ]);
+            }
+
+            Auth::guard('student')->login($student);
+            $request->session()->regenerate();
+            return redirect()->intended(route('student.voting'));
+        }
+
+        // 7. Autentikasi Pengelola (Admin & Panitia TPS)
+        if ($admin) {
+            if (!$admin->is_active) {
+                return back()
+                    ->withInput(['identifier' => $identifier])
+                    ->withErrors([
+                        'identifier' => 'Akun pengelola Anda sedang dinonaktifkan.',
+                    ]);
+            }
+
+            // Jika Password Salah
+            if (!\Illuminate\Support\Facades\Hash::check($password, $admin->password)) {
+                return back()
+                    ->withInput(['identifier' => $identifier])
+                    ->withErrors([
+                        'password' => 'Kata sandi yang Anda masukkan salah.',
+                    ]);
+            }
+
+            Auth::guard('admin')->login($admin);
             $request->session()->regenerate();
 
-            /** @var Admin $user */
-            $user = Auth::guard('admin')->user();
-
-            // Otorisasi & Pengalihan Berdasarkan Peran
-            return match ($user->role) {
+            return match ($admin->role) {
                 'admin'     => redirect()->intended(route('admin.dashboard')),
                 'committee' => redirect()->intended(route('committee.dashboard')),
                 default     => redirect()->intended('/login'),
             };
         }
 
-        // 3. Jika kedua percobaan gagal
+        // Fallback jika terjadi kegagalan tak terduga (keduanya salah)
         return back()
-            ->withInput($request->only('identifier'))
+            ->withInput(['identifier' => $identifier])
             ->withErrors([
-                'identifier' => 'Kredensial yang Anda masukkan salah atau akun belum aktif.',
+                'general' => 'Username dan kata sandi yang Anda masukkan tidak sesuai.',
             ]);
     }
 

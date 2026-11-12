@@ -109,29 +109,29 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 4. Data Mahasiswa DPT (Primary Key NIM)
+        // 4. Data Mahasiswa DPT (Primary Key NIM dengan Tanggal Lahir Unik per NIM)
         $studentsData = [
-            ['nim' => '12220001', 'name' => 'Ahmad Fauzi', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01'],
-            ['nim' => '12220002', 'name' => 'Dinda Permata', 'study_program' => 'Teknologi Informasi', 'class_group' => '12.4B.01'],
-            ['nim' => '12220003', 'name' => 'Budi Santoso', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_group' => '12.4C.01'],
-            ['nim' => '12220004', 'name' => 'Siti Nurhaliza', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01'],
-            ['nim' => '12220005', 'name' => 'Rian Hidayat', 'study_program' => 'Manajemen Informatika', 'class_group' => '12.4D.01'],
-            ['nim' => '12220006', 'name' => 'Maya Anggraini', 'study_program' => 'Teknologi Informasi', 'class_group' => '12.4B.01'],
-            ['nim' => '12220007', 'name' => 'Reza Pratama', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_group' => '12.4C.01'],
-            ['nim' => '12220008', 'name' => 'Putri Ayu', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01'],
-            ['nim' => '12220009', 'name' => 'Ilham Maulana', 'study_program' => 'Manajemen Informatika', 'class_group' => '12.4D.01'],
-            ['nim' => '12220010', 'name' => 'Dewi Lestari', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01'],
+            ['nim' => '12220001', 'name' => 'Ahmad Fauzi', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-03-15'],
+            ['nim' => '12220002', 'name' => 'Dinda Permata', 'study_program' => 'Teknologi Informasi', 'class_group' => '12.4B.01', 'birth_date' => '2004-07-22'],
+            ['nim' => '12220003', 'name' => 'Budi Santoso', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_group' => '12.4C.01', 'birth_date' => '2003-11-09'],
+            ['nim' => '12220004', 'name' => 'Siti Nurhaliza', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-01-30'],
+            ['nim' => '12220005', 'name' => 'Rian Hidayat', 'study_program' => 'Manajemen Informatika', 'class_group' => '12.4D.01', 'birth_date' => '2003-09-18'],
+            ['nim' => '12220006', 'name' => 'Maya Anggraini', 'study_program' => 'Teknologi Informasi', 'class_group' => '12.4B.01', 'birth_date' => '2004-05-25'],
+            ['nim' => '12220007', 'name' => 'Reza Pratama', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_group' => '12.4C.01', 'birth_date' => '2004-12-04'],
+            ['nim' => '12220008', 'name' => 'Putri Ayu', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-08-14'],
+            ['nim' => '12220009', 'name' => 'Ilham Maulana', 'study_program' => 'Manajemen Informatika', 'class_group' => '12.4D.01', 'birth_date' => '2003-06-11'],
+            ['nim' => '12220010', 'name' => 'Dewi Lestari', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-10-28'],
         ];
 
         foreach ($studentsData as $studentInfo) {
-            $student = Student::firstOrCreate(
+            $student = Student::updateOrCreate(
                 ['nim' => $studentInfo['nim']],
                 [
                     'name' => $studentInfo['name'],
                     'study_program' => $studentInfo['study_program'],
                     'class_group' => $studentInfo['class_group'],
                     'academic_year' => '2026/2027',
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make($studentInfo['birth_date']), // Tanggal lahir unik per mahasiswa (format YYYY-MM-DD)
                     'is_active' => true,
                 ]
             );

@@ -1,14 +1,46 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full scroll-smooth">
+<html lang="id" class="h-full scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'PEMIRA BEM Universitas BSI Karawang' }}</title>
+    <title>{{ isset($title) ? $title . ' - PEMIRA BEM UBSI KARAWANG' : 'PEMIRA BEM UBSI KARAWANG' }}</title>
 
-    <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Favicon Resmi BEM UBSI Karawang (Full-Bleed Maksimal & Tajam) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('apple-touch-icon.png') }}?v=2">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v=2">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
+
+    <!-- Vite Assets with Fallback to CDN -->
+    @if (file_exists(public_path('hot')) || file_exists(public_path('build/manifest.json')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <!-- Fallback Tailwind CSS, Alpine.js & Lucide while Vite dev server / build is pending -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            'ubsi-red': '#940c10',
+                            'ubsi-red-dark': '#7A0A0D',
+                            'ubsi-gold': '#CE9501',
+                            'ubsi-gold-dark': '#B58200',
+                            'ubsi-white': '#FDFDFD',
+                        }
+                    }
+                }
+            }
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://unpkg.com/lucide@latest"></script>
+    @endif
 
     <style>
         [x-cloak] { display: none !important; }
@@ -22,8 +54,8 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Brand / Logo Section -->
                 <div class="flex items-center gap-3.5">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#940c10] to-[#7A0A0D] flex items-center justify-center text-white shadow-sm ring-2 ring-[#CE9501]/30">
-                        <i data-lucide="vote" class="w-6 h-6 text-[#CE9501]"></i>
+                    <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center p-1 shadow-sm ring-1 ring-gray-200">
+                        <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-10 h-10 object-contain">
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xs font-bold uppercase tracking-widest text-[#CE9501]">Pesta Demokrasi Mahasiswa</span>
@@ -47,7 +79,7 @@
                             </a>
                             <form action="{{ route('logout') }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" title="Keluar" class="p-2 text-gray-500 hover:text-[#940c10] hover:bg-red-50 rounded-lg transition-colors">
+                                <button type="submit" title="Keluar" class="p-2 text-gray-500 hover:text-[#940c10] hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
                                     <i data-lucide="log-out" class="w-4 h-4"></i>
                                 </button>
                             </form>
@@ -73,7 +105,7 @@
                             @endif
                             <form action="{{ route('logout') }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" title="Keluar" class="p-2 text-gray-500 hover:text-[#940c10] hover:bg-red-50 rounded-lg transition-colors">
+                                <button type="submit" title="Keluar" class="p-2 text-gray-500 hover:text-[#940c10] hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
                                     <i data-lucide="log-out" class="w-4 h-4"></i>
                                 </button>
                             </form>

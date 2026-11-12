@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Tanda Terima Hak Suara — PEMIRA BEM UBSI Karawang'])
+@extends('layouts.app', ['title' => 'Tanda Terima Hak Suara'])
 
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

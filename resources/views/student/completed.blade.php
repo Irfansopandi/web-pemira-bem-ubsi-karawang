@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Hak Suara Berhasil Digunakan — PEMIRA BEM UBSI'])
+@extends('layouts.app', ['title' => 'Voting Selesai'])
 
 @section('content')
 <div class="min-h-[calc(100vh-20rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
