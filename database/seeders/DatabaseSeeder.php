@@ -52,8 +52,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. Pasangan Calon Ketua & Wakil Ketua BEM
-        $paslon1 = CandidatePair::firstOrCreate(
+        // 3. Pasangan Calon Ketua & Wakil Ketua BEM (3 Paslon)
+        $paslon1 = CandidatePair::updateOrCreate(
             [
                 'election_period_id' => $period->id,
                 'candidate_number' => 1,
@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
                 'vice_chairman_name' => 'Siti Aisyah Rahmawati',
                 'vice_chairman_nim' => '12220145',
                 'vice_chairman_study_program' => 'Teknologi Informasi',
-                'photo_url' => null,
+                'photo_url' => 'storage/candidates/paslon-01.png',
                 'vision' => 'Mewujudkan BEM UBSI Karawang yang Progresif, Kolaboratif, Transparan, dan Berorientasi pada Pengembangan Potensi Mahasiswa di Era Digital.',
                 'mission' => [
                     'Membangun ruang aspirasi mahasiswa yang terbuka, inklusif, dan responsif terhadap isu kampus.',
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $paslon2 = CandidatePair::firstOrCreate(
+        $paslon2 = CandidatePair::updateOrCreate(
             [
                 'election_period_id' => $period->id,
                 'candidate_number' => 2,
@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
                 'vice_chairman_name' => 'Nabila Putri Maharani',
                 'vice_chairman_nim' => '12220288',
                 'vice_chairman_study_program' => 'Manajemen Informatika',
-                'photo_url' => null,
+                'photo_url' => 'storage/candidates/paslon-02.png',
                 'vision' => 'Terwujudnya BEM UBSI Karawang yang Berintegritas, Mandiri, Berdaya Saing Global, dan Mengabdi Nyata untuk Civitas Akademika.',
                 'mission' => [
                     'Menguatkan kemitraan strategis dengan industri dan komunitas teknologi nasional.',
@@ -105,6 +105,34 @@ class DatabaseSeeder extends Seeder
                     'Career & Industry Mentorship Program',
                     'Rumah Advokasi Sahabat Mahasiswa',
                     'Desa Binaan Berdaya UBSI Karawang',
+                ],
+            ]
+        );
+
+        $paslon3 = CandidatePair::updateOrCreate(
+            [
+                'election_period_id' => $period->id,
+                'candidate_number' => 3,
+            ],
+            [
+                'chairman_name' => 'Dimas Aditya Pratama',
+                'chairman_nim' => '12220303',
+                'chairman_study_program' => 'Sistem Informasi',
+                'vice_chairman_name' => 'Zahra Amanda Putri',
+                'vice_chairman_nim' => '12220355',
+                'vice_chairman_study_program' => 'Teknologi Informasi',
+                'photo_url' => 'storage/candidates/paslon-03.png',
+                'vision' => 'Mentransformasi BEM UBSI Karawang sebagai Katalisator Perubahan Mahasiswa yang Berintegritas, Kreatif, Adaptif, dan Peduli Sosial.',
+                'mission' => [
+                    'Menggalang gerakan solidaritas dan kepedulian sosial kampus berbasis pengabdian.',
+                    'Membangun inkubator kreativitas dan riset terapan bagi talenta muda mahasiswa.',
+                    'Mengawal advokasi hak-hak akademik dan transparansi birokrasi kampus secara konstruktif.',
+                    'Memperluas jejaring BEM UBSI Karawang di kancah daerah maupun nasional.',
+                ],
+                'work_programs' => [
+                    'UBSI Social & Green Movement',
+                    'Ruang Solutif: Hotline Advokasi Mahasiswa 24 Jam',
+                    'Pekan Olahraga & Seni Demokrasi Mahasiswa (PORDEM)',
                 ],
             ]
         );

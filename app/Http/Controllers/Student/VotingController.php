@@ -44,6 +44,26 @@ class VotingController extends Controller
         return view('student.voting', compact('student', 'activePeriod', 'candidates', 'participation'));
     }
 
+    public function showCandidate(CandidatePair $candidate): View|RedirectResponse
+    {
+        $student = Auth::guard('student')->user();
+        $activePeriod = $this->electionService->getActivePeriod();
+
+        if (! $activePeriod || $candidate->election_period_id !== $activePeriod->id) {
+            return redirect()->route('student.voting');
+        }
+
+        $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
+            ->where('student_nim', $student->nim)
+            ->first();
+
+        if ($participation && $participation->has_voted) {
+            return redirect()->route('student.receipt');
+        }
+
+        return view('student.candidate-detail', compact('student', 'activePeriod', 'candidate', 'participation'));
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([

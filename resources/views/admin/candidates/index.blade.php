@@ -10,22 +10,22 @@
                 <i data-lucide="users" class="w-7 h-7"></i>
             </div>
             <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-[#940c10]">Manajemen Kontestan Pemilu</span>
-                <h1 class="text-2xl font-black text-gray-900">Kelola Paslon, Visi & Misi</h1>
-                <p class="text-xs text-gray-500">Periode: {{ $period->name ?? 'Belum ada periode aktif' }}</p>
+                <span class="text-xs font-semibold uppercase tracking-wider text-[#940c10]">Manajemen Kontestan Pemilu</span>
+                <h1 class="text-2xl font-bold text-gray-900">Kelola Paslon, Visi & Misi</h1>
+                <p class="text-xs text-gray-500 font-normal">Periode: {{ $period->name ?? 'Belum ada periode aktif' }}</p>
             </div>
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
             <a href="{{ route('admin.dashboard') }}"
-                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 <span>Kembali ke Dashboard</span>
             </a>
 
             @if($period)
                 <a href="{{ route('admin.candidates.create', ['period_id' => $period->id]) }}"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940c10] text-white text-xs font-extrabold hover:bg-[#7A0A0D] shadow-xs transition-all">
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940c10] text-white text-xs font-semibold hover:bg-[#7A0A0D] shadow-xs transition-all">
                     <i data-lucide="plus" class="w-4 h-4 text-[#CE9501]"></i>
                     <span>+ Daftarkan Paslon Baru</span>
                 </a>
@@ -39,14 +39,15 @@
             <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
                 <!-- Header -->
                 <div class="p-6 sm:p-8 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 flex items-center justify-between gap-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-[#940c10] text-[#CE9501] flex flex-col items-center justify-center font-black shadow-xs ring-4 ring-[#CE9501]/20">
-                            <span class="text-[10px] uppercase font-bold text-white">No</span>
-                            <span class="text-2xl leading-none">0{{ $candidate->candidate_number }}</span>
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <img src="{{ $candidate->photo }}" alt="Foto Paslon" class="w-14 h-18 object-cover rounded-xl border border-gray-200 shadow-xs bg-white shrink-0">
+                        <div class="w-12 h-12 rounded-xl bg-[#940c10] text-[#CE9501] flex flex-col items-center justify-center font-bold shadow-xs shrink-0">
+                            <span class="text-[9px] uppercase font-bold text-white">No</span>
+                            <span class="text-xl leading-none">0{{ $candidate->candidate_number }}</span>
                         </div>
                         <div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-[#940c10]">Pasangan Calon No. 0{{ $candidate->candidate_number }}</span>
-                            <h2 class="text-lg font-bold text-gray-900 mt-0.5">{{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}</h2>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-[#940c10]">Pasangan Calon No. 0{{ $candidate->candidate_number }}</span>
+                            <h2 class="text-base sm:text-lg font-bold text-gray-900 mt-0.5">{{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}</h2>
                         </div>
                     </div>
 

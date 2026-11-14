@@ -1,91 +1,95 @@
-@extends('layouts.app', ['title' => 'Tanda Terima Hak Suara'])
+@extends('layouts.app', ['title' => 'Tanda Terima Hak Suara', 'hideNavbar' => true, 'bodyClass' => 'bg-slate-50/70'])
 
 @section('content')
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-lg space-y-0">
-        <!-- Top Receipt Header -->
-        <div class="bg-gradient-to-r from-[#940c10] to-[#7A0A0D] p-8 text-white flex items-center justify-between flex-wrap gap-4">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xs flex items-center justify-center text-white ring-2 ring-[#CE9501]/40">
-                    <i data-lucide="shield-check" class="w-8 h-8 text-[#CE9501]"></i>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+    <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xl space-y-0">
+        <!-- Top Receipt Header (Logo BEM & Kabinet, Serta Badge Suara Sah Bersih) -->
+        <div class="bg-gradient-to-r from-[#940c10] to-[#7A0A0D] p-6 sm:p-8 text-white flex items-start justify-between flex-wrap gap-4 border-b-2 border-[#CE9501]">
+            <div class="flex items-center gap-3.5 sm:gap-4">
+                <!-- 2 Logo Resmi: BEM UBSI di Kiri & Kabinet di Kanannya -->
+                <div class="flex items-center gap-2.5 shrink-0">
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-md">
+                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-md">
                 </div>
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-widest text-[#CE9501]">Sertifikat Partisipasi Resmi</span>
-                    <h1 class="text-2xl font-black">Tanda Terima Pemilih</h1>
-                    <p class="text-xs text-red-100">PEMIRA BEM Universitas BSI Karawang {{ $activePeriod->academic_year }}</p>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#CE9501]">Sertifikat Partisipasi Resmi</span>
+                    <h1 class="text-xl sm:text-2xl font-bold text-white leading-tight">Tanda Terima Pemilih</h1>
+                    <p class="text-xs text-red-100/90 font-normal mt-0.5">PEMIRA BEM Universitas BSI Karawang {{ $activePeriod->academic_year }}</p>
                 </div>
             </div>
-            <div class="px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-200 text-xs font-bold flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+
+            <!-- Badge Suara Sah (Posisi Atas & Ukuran Kompak Lebih Rapi) -->
+            <div class="px-3 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-semibold shadow-xs tracking-normal whitespace-nowrap mt-0.5 sm:mt-1">
                 Suara Telah Sah Digunakan
             </div>
         </div>
 
         <!-- Receipt Body Details -->
-        <div class="p-8 space-y-8">
+        <div class="p-6 sm:p-8 space-y-7">
             <!-- Student Voter Info -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 text-xs text-gray-700">
                 <div>
-                    <span class="text-gray-400 block font-semibold uppercase tracking-wider text-[10px]">Nama Pemilih:</span>
-                    <span class="font-bold text-sm text-gray-900">{{ $student->name }}</span>
+                    <span class="text-gray-400 block font-medium uppercase tracking-wider text-[10px]">Nama Pemilih:</span>
+                    <span class="font-semibold text-sm text-gray-900">{{ $student->name }}</span>
                 </div>
                 <div>
-                    <span class="text-gray-400 block font-semibold uppercase tracking-wider text-[10px]">NIM Mahasiswa:</span>
-                    <span class="font-bold font-mono text-sm text-gray-900">{{ $student->nim }}</span>
+                    <span class="text-gray-400 block font-medium uppercase tracking-wider text-[10px]">NIM Mahasiswa:</span>
+                    <span class="font-semibold font-mono text-sm text-gray-900">{{ $student->nim }}</span>
                 </div>
                 <div>
-                    <span class="text-gray-400 block font-semibold uppercase tracking-wider text-[10px]">Program Studi:</span>
-                    <span class="font-medium text-gray-900">{{ $student->study_program }}</span>
+                    <span class="text-gray-400 block font-medium uppercase tracking-wider text-[10px]">Program Studi:</span>
+                    <span class="font-normal text-gray-900">{{ $student->study_program }}</span>
                 </div>
                 <div>
-                    <span class="text-gray-400 block font-semibold uppercase tracking-wider text-[10px]">Waktu Pencoblosan:</span>
-                    <span class="font-medium text-gray-900">{{ $participation->voted_at?->translatedFormat('d F Y, H:i:s') ?? '-' }} WIB</span>
+                    <span class="text-gray-400 block font-medium uppercase tracking-wider text-[10px]">Waktu Pencoblosan:</span>
+                    <span class="font-normal text-gray-900">{{ $participation->voted_at?->translatedFormat('d F Y, H:i:s') ?? '-' }} WIB</span>
                 </div>
             </div>
 
-            <!-- Chosen Candidate Summary (Decrypted from Isolated Encrypted Receipt) -->
+            <!-- Chosen Candidate Summary (Menggunakan Foto Paslon Pilihan) -->
             @if($chosenCandidate)
                 <div class="space-y-3">
-                    <span class="text-xs font-bold uppercase tracking-wider text-gray-500 block">Pilihan Suara Anda:</span>
-                    <div class="p-6 rounded-2xl border-2 border-emerald-500/30 bg-emerald-50/30 flex items-center justify-between flex-wrap gap-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl bg-[#940c10] text-[#CE9501] font-black text-2xl flex items-center justify-center shadow-xs">
-                                0{{ $chosenCandidate->candidate_number }}
+                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 block">Pilihan Suara Anda:</span>
+                    <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-slate-50/70 flex items-center justify-between flex-wrap gap-5 shadow-xs">
+                        <div class="flex items-center gap-4 sm:gap-5">
+                            <!-- Foto Paslon Lengkap dengan Badge Nomor Urut -->
+                            <div class="relative w-20 h-24 sm:w-24 sm:h-28 rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-md shrink-0">
+                                <img src="{{ $chosenCandidate->photo }}" alt="Paslon 0{{ $chosenCandidate->candidate_number }}" class="w-full h-full object-cover">
+                                <!-- Badge Nomor Urut di Pojok Kiri Atas Foto -->
+                                <div class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-lg bg-[#940c10] text-[#CE9501] border border-[#CE9501] text-[10px] font-bold shadow-xs">
+                                    0{{ $chosenCandidate->candidate_number }}
+                                </div>
                             </div>
+
                             <div>
-                                <span class="text-xs font-bold text-[#059669] uppercase tracking-wider">Pasangan Calon Pilihan</span>
-                                <p class="text-lg font-black text-gray-900">{{ $chosenCandidate->chairman_name }} & {{ $chosenCandidate->vice_chairman_name }}</p>
-                                <p class="text-xs text-gray-600 mt-0.5">Calon Ketua & Wakil Ketua BEM UBSI Karawang</p>
+                                <span class="text-xs font-semibold text-[#CE9501] uppercase tracking-wider">Pasangan Calon Terpilih</span>
+                                <p class="text-base sm:text-lg font-bold text-gray-900 mt-0.5 leading-snug">{{ $chosenCandidate->chairman_name }} & {{ $chosenCandidate->vice_chairman_name }}</p>
+                                <p class="text-xs text-gray-500 mt-1 font-normal">Calon Ketua & Wakil Ketua BEM UBSI Karawang</p>
+                                <div class="mt-2.5 inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold">
+                                    Tersimpan Terenkripsi
+                                </div>
                             </div>
                         </div>
-                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-                            Tersimpan Terenkripsi
-                        </span>
                     </div>
                 </div>
             @endif
 
             <!-- Security Assurance Note -->
             <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 space-y-2">
-                <div class="flex items-center gap-2 font-bold text-[#CE9501]">
+                <div class="flex items-center gap-2 font-semibold text-[#CE9501]">
                     <i data-lucide="lock" class="w-4 h-4"></i>
                     <span>Ketentuan Kerahasiaan & Keamanan:</span>
                 </div>
-                <p class="leading-relaxed text-[11px] text-gray-700">
+                <p class="leading-relaxed text-[11px] text-gray-700 font-normal">
                     Hak suara Anda telah digunakan dan berstatus final. Sistem tidak mengizinkan pemungutan suara ulang untuk menjaga prinsip keadilan dan integritas PEMIRA BEM UBSI. Di basis data utama, surat suara Anda telah dipisahkan secara anonim dari identitas NIM Anda.
                 </p>
             </div>
 
-            <!-- Actions -->
-            <div class="flex items-center justify-between pt-4 border-t border-gray-100 flex-wrap gap-4">
-                <a href="{{ route('student.voting') }}" class="text-xs font-bold text-gray-600 hover:text-[#940c10] flex items-center gap-1.5">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    <span>Kembali ke Halaman Bilik Suara</span>
-                </a>
-
-                <form action="{{ route('logout') }}" method="POST">
+            <!-- Actions (Tombol Keluar Sesi Sesuai Warna Tema UBSI) -->
+            <div class="pt-6 border-t border-gray-100 flex justify-end">
+                <form id="logout-form-receipt" action="{{ route('logout') }}" method="POST" class="w-full sm:w-auto">
                     @csrf
-                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-xs font-bold hover:bg-black transition-colors shadow-xs">
+                    <button type="button" onclick="confirmLogout('logout-form-receipt')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-[#940c10] hover:bg-[#7A0A0D] text-white text-xs sm:text-sm font-semibold shadow-md shadow-[#940c10]/20 transition-all transform hover:-translate-y-0.5 cursor-pointer">
                         <i data-lucide="log-out" class="w-4 h-4 text-[#CE9501]"></i>
                         <span>Keluar Sesi</span>
                     </button>

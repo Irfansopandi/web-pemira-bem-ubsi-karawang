@@ -1,179 +1,63 @@
 @extends('layouts.app', ['title' => 'Bilik Suara'])
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" x-data="{
-    modalOpen: false,
-    selectedCandidateId: null,
-    selectedCandidateNumber: null,
-    selectedCandidateNames: '',
-    confirmVote(id, number, names) {
-        this.selectedCandidateId = id;
-        this.selectedCandidateNumber = number;
-        this.selectedCandidateNames = names;
-        this.modalOpen = true;
-    }
-}">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
 
-    <!-- Top Bilik Suara Header -->
-    <div class="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-xs mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-[#940c10] text-[#CE9501] flex items-center justify-center font-bold shadow-xs">
-                <i data-lucide="vote" class="w-7 h-7"></i>
-            </div>
-            <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-[#CE9501]">Surat Suara Elektronik Sah</span>
-                <h1 class="text-2xl font-black text-gray-900">Bilik Suara PEMIRA BEM UBSI</h1>
-                <p class="text-xs text-gray-500">Tahun Akademik {{ $activePeriod->academic_year }} &bull; Kampus UBSI Karawang</p>
-            </div>
-        </div>
-
-        <!-- Student Identity Badge -->
-        <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-200/80 w-full md:w-auto">
-            <div class="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-700 font-bold text-sm">
-                {{ substr($student->name, 0, 1) }}
-            </div>
-            <div class="space-y-0.5">
-                <p class="text-xs font-bold text-gray-900">{{ $student->name }}</p>
-                <p class="text-[11px] font-mono text-gray-600">NIM: {{ $student->nim }} &bull; {{ $student->study_program }}</p>
-                <div class="flex items-center gap-1.5 text-[10px] text-emerald-700 font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span>Hak Suara Terverifikasi Aktif</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Privacy Banner -->
-    <div class="mb-8 p-4 rounded-2xl bg-red-50/60 border border-red-200/70 flex items-center gap-3 text-xs text-[#940c10]">
-        <i data-lucide="shield-check" class="w-5 h-5 shrink-0 text-[#940c10]"></i>
-        <p>
-            <strong>Jaminan Kerahasiaan Suara:</strong> Surat suara Anda diproses menggunakan enkripsi anonim (Anonymous Ballot). Pilihan Anda tidak dapat dilacak kembali oleh siapa pun, termasuk panitia dan administrator.
+    <!-- Header Halaman Voting (Bersih, Smooth & Profesional) -->
+    <div class="mb-8 sm:mb-10 text-center sm:text-left">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#CE9501]">
+            PEMIRA BEM UBSI Karawang &bull; Tahun Akademik {{ $activePeriod->academic_year }}
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-normal mt-1.5">
+            Gunakan Hak Suara Anda
+        </h1>
+        <p class="text-sm font-normal text-gray-500 mt-2 max-w-2xl leading-relaxed">
+            Silakan pilih pasangan calon di bawah ini untuk melihat profil lengkap, visi, misi, program kerja unggulan, dan menyalurkan hak suara Anda.
         </p>
     </div>
 
-    <!-- Candidate Ballot Cards Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Candidate Ballot Cards Grid (3 Sejajar ke Kanan, Full Foto, Nomor di Kiri Atas) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         @foreach($candidates as $candidate)
-            <div class="bg-white rounded-3xl border-2 border-gray-200 hover:border-[#940c10] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-                <!-- Card Header -->
-                <div class="p-6 sm:p-8 bg-gray-50/80 border-b border-gray-100 flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-2xl bg-[#940c10] text-[#CE9501] flex flex-col items-center justify-center font-black shadow-xs ring-4 ring-[#CE9501]/30">
-                            <span class="text-[10px] uppercase font-bold text-white">Nomor</span>
-                            <span class="text-3xl leading-none">0{{ $candidate->candidate_number }}</span>
-                        </div>
-                        <div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-[#940c10]">Surat Suara Paslon</span>
-                            <h2 class="text-xl font-extrabold text-gray-900">{{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}</h2>
-                        </div>
+            <a href="{{ route('student.candidate.detail', $candidate->id) }}"
+               class="group relative block aspect-[3/4] sm:aspect-[4/5] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border-2 border-slate-200 hover:border-transparent bg-slate-100 transform hover:-translate-y-1.5 cursor-pointer">
+                
+                <!-- Badge Nomor Urut di Pojok Kiri Atas (Semula) -->
+                <div class="absolute top-4 left-4 z-20">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#940c10] text-[#CE9501] border-2 border-[#CE9501] flex flex-col items-center justify-center shadow-lg">
+                        <span class="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-white leading-none">NOMOR</span>
+                        <span class="text-2xl sm:text-3xl leading-none font-bold text-[#CE9501]">0{{ $candidate->candidate_number }}</span>
                     </div>
                 </div>
 
-                <!-- Card Body -->
-                <div class="p-6 sm:p-8 space-y-6">
-                    <!-- Pair Details -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-[#940c10]">Calon Ketua</span>
-                            <p class="text-base font-bold text-gray-900 mt-1">{{ $candidate->chairman_name }}</p>
-                            <p class="text-xs text-gray-500 font-mono">{{ $candidate->chairman_nim }}</p>
-                            <p class="text-xs text-gray-600">{{ $candidate->chairman_study_program }}</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-[#CE9501]">Calon Wakil Ketua</span>
-                            <p class="text-base font-bold text-gray-900 mt-1">{{ $candidate->vice_chairman_name }}</p>
-                            <p class="text-xs text-gray-500 font-mono">{{ $candidate->vice_chairman_nim }}</p>
-                            <p class="text-xs text-gray-600">{{ $candidate->vice_chairman_study_program }}</p>
-                        </div>
-                    </div>
+                <!-- Foto Paslon Full Card (Storage & Fallback) -->
+                <img src="{{ $candidate->photo }}" 
+                     alt="Pasangan Calon No. 0{{ $candidate->candidate_number }}" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
 
-                    <!-- Visi -->
-                    <div class="space-y-1.5">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Visi Utama:</span>
-                        <p class="text-sm italic text-gray-700 bg-gray-50 p-4 rounded-2xl border border-gray-100 leading-relaxed">
-                            "{{ $candidate->vision }}"
+                <!-- Gradient Overlay & Info Paslon di Bagian Bawah (Nama 1 di Atas & Nama 2 di Bawah) -->
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-5 sm:p-6 text-white pt-24 z-10">
+                    <!-- Nama Kandidat (Ketua di Atas, Wakil di Bawah, Halus & Berkelas) -->
+                    <div class="space-y-1 mb-3">
+                        <h2 class="text-base sm:text-lg font-bold text-white group-hover:text-[#CE9501] transition-colors leading-snug">
+                            {{ $candidate->chairman_name }}
+                        </h2>
+                        <p class="text-xs sm:text-sm font-medium text-slate-300 group-hover:text-amber-200 transition-colors leading-snug">
+                            {{ $candidate->vice_chairman_name }}
                         </p>
                     </div>
 
-                    <!-- Misi Highlight -->
-                    <div class="space-y-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Misi Pokok:</span>
-                        <ul class="space-y-2 text-xs text-gray-600">
-                            @foreach(array_slice($candidate->mission ?? [], 0, 3) as $m)
-                                <li class="flex items-start gap-2">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
-                                    <span>{{ $m }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
+                    <!-- Tombol Aksi Bersih dengan Garis Halus -->
+                    <div class="pt-2.5 border-t border-white/20 flex items-center justify-between">
+                        <span class="text-xs text-amber-300 font-semibold flex items-center gap-1.5 group-hover:text-white transition-colors">
+                            <span>Lihat Visi Misi & Coblos</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform text-[#CE9501]"></i>
+                        </span>
                     </div>
                 </div>
-
-                <!-- Card Bottom Coblos Button -->
-                <div class="p-6 bg-gradient-to-t from-gray-50 to-white border-t border-gray-100">
-                    <button type="button"
-                        @click="confirmVote({{ $candidate->id }}, '0{{ $candidate->candidate_number }}', '{{ addslashes($candidate->chairman_name . ' & ' . $candidate->vice_chairman_name) }}')"
-                        class="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-[#940c10] hover:bg-[#7A0A0D] text-base font-extrabold shadow-md hover:shadow-lg transition-all transform group-hover:scale-[1.01] ring-2 ring-[#CE9501]/40">
-                        <i data-lucide="check-circle" class="w-6 h-6 text-[#CE9501]"></i>
-                        <span>COBLOS PASLON 0{{ $candidate->candidate_number }}</span>
-                    </button>
-                </div>
-            </div>
+            </a>
         @endforeach
-    </div>
-
-    <!-- MODAL KONFIRMASI COBLOS (POPUP) -->
-    <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity" @click="modalOpen = false"></div>
-
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg p-6 sm:p-8 space-y-6 border border-gray-200">
-                
-                <!-- Icon Header -->
-                <div class="text-center space-y-3">
-                    <div class="w-16 h-16 rounded-2xl bg-red-100 text-[#940c10] flex items-center justify-center mx-auto ring-4 ring-red-50">
-                        <i data-lucide="help-circle" class="w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#CE9501]">Konfirmasi Hak Suara</span>
-                        <h3 class="text-2xl font-black text-gray-900 mt-1">Yakin dengan Pilihan Anda?</h3>
-                    </div>
-                </div>
-
-                <!-- Choice Summary -->
-                <div class="p-5 rounded-2xl bg-gray-50 border border-gray-200 text-center space-y-2">
-                    <p class="text-xs text-gray-500 font-medium">Anda akan memberikan suara untuk:</p>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#940c10] text-[#CE9501] text-xs font-bold">
-                        <span>Pasangan Calon No. <span x-text="selectedCandidateNumber"></span></span>
-                    </div>
-                    <p class="text-lg font-black text-gray-900" x-text="selectedCandidateNames"></p>
-                </div>
-
-                <div class="text-xs text-gray-500 text-center leading-relaxed">
-                    Pilihan yang telah dikirimkan bersifat <strong>final, permanen, dan tidak dapat dibatalkan</strong>. Suara akan segera dimasukkan ke kotak suara digital tanpa mencatat identitas Anda.
-                </div>
-
-                <!-- Form Action Buttons -->
-                <form action="{{ route('student.voting.store') }}" method="POST" class="space-y-3">
-                    @csrf
-                    <input type="hidden" name="candidate_pair_id" :value="selectedCandidateId">
-
-                    <button type="submit"
-                        class="w-full flex items-center justify-center gap-2 py-4 px-4 rounded-xl text-white bg-[#059669] hover:bg-emerald-700 text-sm font-extrabold shadow-sm transition-all">
-                        <i data-lucide="check" class="w-5 h-5"></i>
-                        <span>Ya, Kirim Suara Saya Sekarang</span>
-                    </button>
-
-                    <button type="button" @click="modalOpen = false"
-                        class="w-full py-3 px-4 rounded-xl text-gray-700 bg-gray-100 hover:bg-gray-200 text-sm font-bold transition-colors">
-                        Batal / Periksa Kembali
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
 
 </div>
 @endsection
-

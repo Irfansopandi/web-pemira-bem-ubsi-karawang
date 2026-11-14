@@ -176,6 +176,10 @@ class CandidateController extends Controller
         ];
 
         if ($request->hasFile('photo')) {
+            if ($candidate->photo_url && str_starts_with($candidate->photo_url, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $candidate->photo_url);
+                Storage::disk('public')->delete($oldPath);
+            }
             $path = $request->file('photo')->store('candidates', 'public');
             $data['photo_url'] = '/storage/' . $path;
         }
@@ -208,6 +212,11 @@ class CandidateController extends Controller
         $periodId = $candidate->election_period_id;
         $num = $candidate->candidate_number;
         $name = $candidate->chairman_name;
+
+        if ($candidate->photo_url && str_starts_with($candidate->photo_url, '/storage/')) {
+            $oldPath = str_replace('/storage/', '', $candidate->photo_url);
+            Storage::disk('public')->delete($oldPath);
+        }
 
         $candidate->delete();
 

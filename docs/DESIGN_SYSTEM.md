@@ -78,15 +78,22 @@
 
 ## 3. TYPOGRAPHY SYSTEM
 
-Menggunakan tipografi modern berseri bebas-distraksi yang memiliki keterbacaan tinggi di berbagai resolusi layar:
-- **Font Keluarga Utama**: `Instrument Sans` / `Inter`, dengan fallback sans-serif sistem.
+Menggunakan tipografi modern berseri bebas-distraksi yang memiliki keterbacaan tinggi, halus, dan elegan di berbagai resolusi layar:
+- **Font Keluarga Utama**: `Plus Jakarta Sans` (Google Fonts), dengan fallback sans-serif sistem.
+- **Ketentuan Font Weight**:
+  - `Heading Halaman`: 700 (`font-bold`, warna `#940c10` atau `#1A1A1A`).
+  - `Nama Kandidat`: 700 (`font-bold`, tersusun vertikal Ketua & Wakil).
+  - `Judul Section / Sub-Heading`: 600–700 (`font-semibold` / `font-bold`).
+  - `Body Text (Deskripsi, Panduan, Visi-Misi)`: 400 (`font-normal`, leading-relaxed).
+  - `Button / Tombol Aksi`: 600 (`font-semibold`).
+  - `Label dan Badge`: 500–600 (`font-medium` / `font-semibold`).
 - **Hierarki & Skala Ukuran**:
-  - `Display / Judul Halaman`: 28px - 36px (Font-bold, warna `#940c10` atau `#1A1A1A`).
-  - `Nomor Urut Paslon`: 32px - 40px (Font-extrabold, warna `#CE9501` atau background `#940c10` dengan teks `#FDFDFD`).
-  - `Nama Pasangan Calon`: 20px - 24px (Font-bold, warna `#1A1A1A`).
-  - `Sub-Heading / Bagian`: 16px - 18px (Font-semibold, warna `#4B5563`).
-  - `Body Text (Visi-Misi, Panduan)`: 15px - 16px (Font-normal, leading-relaxed, warna `#1A1A1A`).
-  - `Metadata / Waktu / Keterangan`: 12px - 13px (Font-medium, warna `#6B7280`).
+  - `Display / Judul Halaman`: 24px - 30px (`text-2xl` - `text-3xl`, font-bold, tracking-normal).
+  - `Nomor Urut Paslon`: 28px - 32px (`text-2xl` - `text-3xl`, font-bold, warna `#CE9501`).
+  - `Nama Pasangan Calon`: 16px - 18px (`text-base` - `text-lg`, font-bold).
+  - `Sub-Heading / Bagian`: 14px - 16px (`text-sm` - `text-base`, font-semibold).
+  - `Body Text`: 13px - 14px (`text-xs` - `text-sm`, font-normal, leading-relaxed).
+  - `Metadata / Waktu / Keterangan`: 11px - 12px (font-medium).
 
 ---
 

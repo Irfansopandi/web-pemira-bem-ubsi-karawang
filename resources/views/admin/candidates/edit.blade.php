@@ -11,14 +11,14 @@
                     <i data-lucide="edit-3" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-widest text-[#CE9501]">Perbarui Data Paslon</span>
-                    <h1 class="text-xl sm:text-2xl font-black">Edit Pasangan Calon No. 0{{ $candidate->candidate_number }}</h1>
-                    <p class="text-xs text-red-100">{{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}</p>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-[#CE9501]">Perbarui Data Paslon</span>
+                    <h1 class="text-xl sm:text-2xl font-bold">Edit Pasangan Calon No. 0{{ $candidate->candidate_number }}</h1>
+                    <p class="text-xs text-red-100 font-normal">{{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}</p>
                 </div>
             </div>
 
             <a href="{{ route('admin.candidates.index') }}"
-                class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold transition-colors">
+                class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold transition-colors">
                 Kembali
             </a>
         </div>
@@ -28,19 +28,37 @@
             @csrf
             @method('PUT')
 
-            <!-- Section 1: Nomor Urut -->
+            <!-- Section 1: Nomor Urut & Foto Paslon -->
             <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100 space-y-4">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500">Nomor Urut Undian</h3>
-                <div class="max-w-xs">
-                    <label for="candidate_number" class="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Nomor Urut Paslon <span class="text-red-500">*</span>
-                    </label>
-                    <input type="number" min="1" max="99" name="candidate_number" id="candidate_number"
-                        value="{{ old('candidate_number', $candidate->candidate_number) }}" required
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold text-gray-900 focus:ring-2 focus:ring-[#940c10] shadow-2xs">
-                    @error('candidate_number')
-                        <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p>
-                    @enderror
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                    <div>
+                        <label for="candidate_number" class="block text-xs font-semibold text-gray-700 uppercase mb-1">
+                            Nomor Urut Paslon <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" min="1" max="99" name="candidate_number" id="candidate_number"
+                            value="{{ old('candidate_number', $candidate->candidate_number) }}" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#940c10] shadow-2xs">
+                        @error('candidate_number')
+                            <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="photo" class="block text-xs font-semibold text-gray-700 uppercase mb-1">
+                            Foto Pasangan Calon (Disimpan ke Storage)
+                        </label>
+                        <div class="flex items-center gap-4 mb-2">
+                            <img src="{{ $candidate->photo }}" alt="Foto Paslon" class="w-14 h-18 object-cover rounded-xl border border-gray-200 shadow-xs bg-white">
+                            <div class="flex-1">
+                                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png,image/jpg,image/webp"
+                                    class="w-full px-3 py-1.5 rounded-xl border border-gray-300 text-xs text-gray-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#940c10] file:text-white hover:file:bg-[#7A0A0D] file:cursor-pointer">
+                                <p class="text-[11px] text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah foto. Disimpan ke <code>storage/app/public/candidates</code>.</p>
+                            </div>
+                        </div>
+                        @error('photo')
+                            <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
@@ -152,11 +170,11 @@
             <!-- Submit Actions -->
             <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
                 <a href="{{ route('admin.candidates.index') }}"
-                    class="px-5 py-2.5 rounded-xl border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-50">
+                    class="px-5 py-2.5 rounded-xl border border-gray-300 text-xs font-semibold text-gray-700 hover:bg-gray-50">
                     Batal
                 </a>
                 <button type="submit"
-                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#940c10] text-white text-xs font-extrabold hover:bg-[#7A0A0D] shadow-sm transition-all">
+                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#940c10] text-white text-xs font-semibold hover:bg-[#7A0A0D] shadow-sm transition-all">
                     <i data-lucide="check" class="w-4 h-4 text-[#CE9501]"></i>
                     <span>Simpan Perubahan</span>
                 </button>

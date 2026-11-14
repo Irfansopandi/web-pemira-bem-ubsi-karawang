@@ -5,13 +5,13 @@
         <div class="lg:col-span-5 bg-white/85 backdrop-blur-xl border-0 rounded-2xl shadow-2xl shadow-black/30 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:bg-white/90">
             <!-- Header Kartu Kiri -->
             <div class="bg-gradient-to-b from-[#940c10]/95 to-[#7A0A0D]/95 backdrop-blur-md p-5 sm:p-6 text-[#FDFDFD] text-center border-b-2 border-[#CE9501]">
-                <h3 class="text-base sm:text-lg font-bold tracking-tight text-[#FDFDFD] uppercase">
+                <h3 class="text-base sm:text-lg font-bold tracking-normal text-[#FDFDFD] uppercase">
                     Tahapan E-Voting
                 </h3>
                 <p class="text-xs font-semibold text-[#CE9501] tracking-wider uppercase mt-0.5">
                     PEMIRA BEM UBSI Karawang
                 </p>
-                <p class="text-[11px] text-slate-200 mt-1.5 leading-relaxed px-2">
+                <p class="text-[11px] text-slate-200 mt-1.5 leading-relaxed px-2 font-normal">
                     Alur resmi pemungutan suara pesta demokrasi mahasiswa:
                 </p>
             </div>
@@ -20,14 +20,14 @@
             <div class="p-6 sm:p-7 flex-1 flex flex-col justify-center space-y-4">
                 <!-- Tahap 1 -->
                 <div class="flex items-start gap-3.5">
-                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
                         1
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                        <h4 class="text-xs font-semibold text-slate-800 uppercase tracking-wide">
                             Verifikasi & Masuk Akun
                         </h4>
-                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-normal">
                             Masukkan NIM dan kata sandi resmi yang telah terdaftar pada DPT UBSI Karawang.
                         </p>
                     </div>
@@ -35,14 +35,14 @@
 
                 <!-- Tahap 2 -->
                 <div class="flex items-start gap-3.5">
-                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
                         2
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                        <h4 class="text-xs font-semibold text-slate-800 uppercase tracking-wide">
                             Tinjau Paslon & Visi Misi
                         </h4>
-                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-normal">
                             Pelajari gagasan, visi, misi, dan program kerja pasangan calon Ketua & Wakil Ketua BEM.
                         </p>
                     </div>
@@ -50,14 +50,14 @@
 
                 <!-- Tahap 3 -->
                 <div class="flex items-start gap-3.5">
-                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
                         3
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                        <h4 class="text-xs font-semibold text-slate-800 uppercase tracking-wide">
                             Gunakan Hak Suara
                         </h4>
-                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-normal">
                             Tentukan pilihan terbaik Anda di bilik suara digital secara langsung, bebas, dan rahasia.
                         </p>
                     </div>
@@ -65,14 +65,14 @@
 
                 <!-- Tahap 4 -->
                 <div class="flex items-start gap-3.5">
-                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-[#940c10] text-[#FDFDFD] border border-[#CE9501] font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
                         4
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                        <h4 class="text-xs font-semibold text-slate-800 uppercase tracking-wide">
                             Konfirmasi & Selesai
                         </h4>
-                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+                        <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-normal">
                             Konfirmasi pilihan Anda. Surat suara tercatat secara aman dan dijamin kerahasiaannya.
                         </p>
                     </div>
@@ -81,8 +81,8 @@
 
             <!-- Footer Kartu Kiri: Asas Pemira -->
             <div class="px-6 py-3.5 bg-slate-50/70 backdrop-blur-sm border-t border-slate-200/50 text-center">
-                <p class="text-[11px] text-slate-600">
-                    <span class="font-bold text-[#940c10]">Asas Pemilihan:</span> Langsung, Umum, Bebas, Rahasia, Jujur & Adil.
+                <p class="text-[11px] text-slate-600 font-normal">
+                    <span class="font-semibold text-[#940c10]">Asas Pemilihan:</span> Langsung, Umum, Bebas, Rahasia, Jujur & Adil.
                 </p>
             </div>
         </div>
@@ -100,10 +100,10 @@
                     <!-- 3. Logo Kabinet BEM (Swarnadipa Pratibhana) -->
                     <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM UBSI Karawang" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-md">
                 </div>
-                <h2 class="text-lg sm:text-xl font-bold tracking-tight text-[#FDFDFD] leading-tight">
+                <h2 class="text-lg sm:text-xl font-bold tracking-normal text-[#FDFDFD] leading-tight">
                     PEMILIHAN UMUM RAYA
                 </h2>
-                <p class="text-xs font-semibold text-[#CE9501] tracking-widest uppercase mt-0.5">
+                <p class="text-xs font-semibold text-[#CE9501] tracking-wider uppercase mt-0.5">
                     BEM UBSI Kampus Karawang
                 </p>
                 <p class="text-xs text-slate-200 mt-1.5 font-normal tracking-normal px-2">
@@ -121,20 +121,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                         </svg>
                         <div class="text-xs">
-                            <span class="font-bold block">Autentikasi Gagal</span>
-                            <span class="text-[11px] text-red-600">
+                            <span class="font-semibold block">Autentikasi Gagal</span>
+                            <span class="text-[11px] text-red-600 font-normal">
                                 {{ $errors->first('general') ?: 'Username dan Kata Sandi yang Anda masukkan tidak sesuai.' }}
                             </span>
                         </div>
-                    </div>
-                @endif
-
-                @if (session('status'))
-                    <div class="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{ session('status') }}</span>
                     </div>
                 @endif
 
@@ -143,7 +134,7 @@
 
                     <!-- Field 1: USERNAME (NIM) -->
                     <div>
-                        <label for="identifier" class="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        <label for="identifier" class="block text-xs font-semibold text-slate-800 uppercase tracking-wider mb-1.5">
                             USERNAME
                         </label>
                         <input 
@@ -158,14 +149,14 @@
                         
                         <!-- Validasi khusus jika hanya Username yang salah / kosong -->
                         @if ($errors->has('identifier') && !$errors->has('general') && !$errors->has('password'))
-                            <p class="text-[11px] text-red-600 font-semibold mt-1.5 flex items-center gap-1">
+                            <p class="text-[11px] text-red-600 font-medium mt-1.5 flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 7.5h.008v.008H12v-.008z" />
                                 </svg>
                                 <span>{{ $errors->first('identifier') }}</span>
                             </p>
                         @else
-                            <p class="text-[11px] text-slate-500 mt-1">
+                            <p class="text-[11px] text-slate-500 mt-1 font-normal">
                                 Masukkan NIM anda untuk login.
                             </p>
                         @endif
@@ -173,7 +164,7 @@
 
                     <!-- Field 2: PASSWORD (DILENGKAPI TOGGLE SHOW / HIDE PASSWORD DENGAN ICON MATA) -->
                     <div>
-                        <label for="password" class="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        <label for="password" class="block text-xs font-semibold text-slate-800 uppercase tracking-wider mb-1.5">
                             PASSWORD
                         </label>
                         <div class="relative flex items-center">
@@ -206,14 +197,14 @@
 
                         <!-- Validasi khusus jika hanya Password yang salah / kosong -->
                         @if ($errors->has('password') && !$errors->has('general') && !$errors->has('identifier'))
-                            <p class="text-[11px] text-red-600 font-semibold mt-1.5 flex items-center gap-1">
+                            <p class="text-[11px] text-red-600 font-medium mt-1.5 flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 7.5h.008v.008H12v-.008z" />
                                 </svg>
                                 <span>{{ $errors->first('password') }}</span>
                             </p>
                         @else
-                            <p class="text-[11px] text-slate-500 mt-1">
+                            <p class="text-[11px] text-slate-500 mt-1 font-normal">
                                 Masukkan password menggunakan tanggal lahir dengan format YYYY-MM-DD.
                             </p>
                         @endif
@@ -224,7 +215,7 @@
                         <button 
                             type="submit" 
                             :disabled="isSubmitting"
-                            class="w-full py-3 px-4 bg-[#940c10] hover:bg-[#7A0A0D] disabled:opacity-75 disabled:cursor-wait text-[#FDFDFD] font-bold rounded-lg shadow-lg shadow-[#940c10]/25 border-0 transition-all duration-150 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#940c10]">
+                            class="w-full py-3 px-4 bg-[#940c10] hover:bg-[#7A0A0D] disabled:opacity-75 disabled:cursor-wait text-[#FDFDFD] font-semibold rounded-lg shadow-lg shadow-[#940c10]/25 border-0 transition-all duration-150 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#940c10]">
                             
                             <!-- State Normal -->
                             <span x-show="!isSubmitting" class="flex items-center justify-center">

@@ -10,16 +10,16 @@
                 <i data-lucide="layout-dashboard" class="w-7 h-7 text-[#CE9501]"></i>
             </div>
             <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-[#940c10]">Komisi Pemilihan Umum Mahasiswa</span>
-                <h1 class="text-2xl font-black text-gray-900">Panel Administrator Pemilu</h1>
-                <p class="text-xs text-gray-500">Monitoring Partisipasi, Rekapitulasi Suara & Manajemen Periode</p>
+                <span class="text-xs font-semibold uppercase tracking-wider text-[#940c10]">Komisi Pemilihan Umum Mahasiswa</span>
+                <h1 class="text-2xl font-bold text-gray-900">Panel Administrator Pemilu</h1>
+                <p class="text-xs text-gray-500 font-normal">Monitoring Partisipasi, Rekapitulasi Suara & Manajemen Periode</p>
             </div>
         </div>
 
         <!-- Controls & Status Actions -->
         <div class="flex items-center gap-3 flex-wrap">
             <a href="{{ route('admin.candidates.index') }}"
-                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940c10] text-white hover:bg-[#7A0A0D] text-xs font-bold shadow-xs transition-all">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940c10] text-white hover:bg-[#7A0A0D] text-xs font-semibold shadow-xs transition-all">
                 <i data-lucide="users" class="w-4 h-4 text-[#CE9501]"></i>
                 <span>Kelola Paslon & Visi Misi</span>
             </a>
@@ -55,24 +55,24 @@
         @if($stats)
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
             <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-xs">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total DPT Mahasiswa</span>
-                <p class="text-3xl font-black text-gray-900 mt-2">{{ number_format($stats['total_students']) }}</p>
-                <p class="text-xs text-gray-500 mt-1">Pemilih Aktif Terdaftar</p>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total DPT Mahasiswa</span>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($stats['total_students']) }}</p>
+                <p class="text-xs text-gray-500 mt-1 font-normal">Pemilih Aktif Terdaftar</p>
             </div>
             <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-xs">
-                <span class="text-xs font-bold text-[#940c10] uppercase tracking-wider">Suara Masuk</span>
-                <p class="text-3xl font-black text-[#940c10] mt-2">{{ number_format($stats['total_voted']) }}</p>
-                <p class="text-xs text-gray-500 mt-1">Surat Suara di Kotak</p>
+                <span class="text-xs font-semibold text-[#940c10] uppercase tracking-wider">Suara Masuk</span>
+                <p class="text-3xl font-bold text-[#940c10] mt-2">{{ number_format($stats['total_voted']) }}</p>
+                <p class="text-xs text-gray-500 mt-1 font-normal">Surat Suara di Kotak</p>
             </div>
             <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-xs">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Belum Memilih</span>
-                <p class="text-3xl font-black text-gray-700 mt-2">{{ number_format($stats['total_not_voted']) }}</p>
-                <p class="text-xs text-gray-500 mt-1">Sisa Hak Suara</p>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Belum Memilih</span>
+                <p class="text-3xl font-bold text-gray-700 mt-2">{{ number_format($stats['total_not_voted']) }}</p>
+                <p class="text-xs text-gray-500 mt-1 font-normal">Sisa Hak Suara</p>
             </div>
             <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-xs">
-                <span class="text-xs font-bold text-[#CE9501] uppercase tracking-wider">Tingkat Partisipasi</span>
-                <p class="text-3xl font-black text-[#CE9501] mt-2">{{ $stats['turnout_percentage'] }}%</p>
-                <p class="text-xs text-gray-500 mt-1">Partisipasi Pemilih</p>
+                <span class="text-xs font-semibold text-[#CE9501] uppercase tracking-wider">Tingkat Partisipasi</span>
+                <p class="text-3xl font-bold text-[#CE9501] mt-2">{{ $stats['turnout_percentage'] }}%</p>
+                <p class="text-xs text-gray-500 mt-1 font-normal">Partisipasi Pemilih</p>
             </div>
         </div>
         @endif
@@ -81,17 +81,17 @@
         <div class="bg-white rounded-3xl border border-gray-200 p-8 shadow-xs space-y-6">
             <div class="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
                 <div>
-                    <h2 class="text-lg font-black text-gray-900">Rekapitulasi Suara Anonim Realtime</h2>
-                    <p class="text-xs text-gray-500">Dihitung murni dari tabel kotak suara tanpa foreign key mahasiswa</p>
+                    <h2 class="text-lg font-bold text-gray-900">Rekapitulasi Suara Anonim Realtime</h2>
+                    <p class="text-xs text-gray-500 font-normal">Dihitung murni dari tabel kotak suara tanpa foreign key mahasiswa</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-700 hover:text-[#940c10] hover:border-[#940c10] transition-colors">
+                    <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-gray-700 hover:text-[#940c10] hover:border-[#940c10] transition-colors">
                         <i data-lucide="edit-3" class="w-3.5 h-3.5 text-[#940c10]"></i>
                         <span>Edit Paslon & Visi Misi</span>
                     </a>
                     <div class="flex items-center gap-2 pl-3 border-l border-gray-200">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-xs font-bold text-gray-600">Sinkronisasi Otomatis</span>
+                        <span class="text-xs font-semibold text-gray-600">Sinkronisasi Otomatis</span>
                     </div>
                 </div>
             </div>
@@ -101,18 +101,18 @@
                     <div class="p-6 rounded-2xl bg-gray-50 border border-gray-200 space-y-4">
                         <div class="flex items-start justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-[#940c10] text-[#CE9501] font-black flex items-center justify-center text-xl shadow-xs">
+                                <div class="w-12 h-12 rounded-xl bg-[#940c10] text-[#CE9501] font-bold flex items-center justify-center text-xl shadow-xs">
                                     0{{ $item['candidate_number'] }}
                                 </div>
                                 <div>
-                                    <span class="text-xs font-bold text-[#940c10] uppercase">Paslon 0{{ $item['candidate_number'] }}</span>
+                                    <span class="text-xs font-semibold text-[#940c10] uppercase">Paslon 0{{ $item['candidate_number'] }}</span>
                                     <p class="font-bold text-base text-gray-900">{{ $item['chairman_name'] }}</p>
-                                    <p class="text-xs text-gray-500">& {{ $item['vice_chairman_name'] }}</p>
+                                    <p class="text-xs text-gray-500 font-normal">& {{ $item['vice_chairman_name'] }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <span class="text-3xl font-black text-[#940c10]">{{ $item['percentage'] }}%</span>
-                                <p class="text-xs font-bold text-gray-600">{{ number_format($item['total_votes']) }} Suara</p>
+                                <span class="text-3xl font-bold text-[#940c10]">{{ $item['percentage'] }}%</span>
+                                <p class="text-xs font-semibold text-gray-600">{{ number_format($item['total_votes']) }} Suara</p>
                             </div>
                         </div>
 
@@ -130,7 +130,7 @@
         <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xs space-y-4 p-6 sm:p-8">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h2 class="text-lg font-black text-gray-900">Daftar Kehadiran & Partisipasi Pemilih</h2>
+                    <h2 class="text-lg font-bold text-gray-900">Daftar Kehadiran & Partisipasi Pemilih</h2>
                     <p class="text-xs text-gray-500">Mencatat status penggunaan hak pilih dan log TPS</p>
                 </div>
                 <!-- Filters -->

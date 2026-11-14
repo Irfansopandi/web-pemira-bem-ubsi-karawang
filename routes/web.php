@@ -17,6 +17,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Area Mahasiswa (Bilik Suara)
 Route::middleware(['auth:student'])->prefix('voting')->name('student.')->group(function () {
     Route::get('/', [VotingController::class, 'index'])->name('voting');
+    Route::get('/kandidat/{candidate}', [VotingController::class, 'showCandidate'])->name('candidate.detail');
     Route::post('/submit', [VotingController::class, 'store'])->name('voting.store');
     Route::get('/selesai', [VotingController::class, 'completed'])->name('completed');
     Route::get('/tanda-terima', [VotingController::class, 'receipt'])->name('receipt');

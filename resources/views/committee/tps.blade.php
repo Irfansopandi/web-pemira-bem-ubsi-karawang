@@ -10,9 +10,9 @@
                 <i data-lucide="check-square" class="w-7 h-7"></i>
             </div>
             <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-[#CE9501]">Verifikator TPS Onsite</span>
-                <h1 class="text-2xl font-black text-gray-900">Pusat Verifikasi Pemilih</h1>
-                <p class="text-xs text-gray-500">Petugas: {{ $user->name }} &bull; Lokasi: {{ $user->tps_location ?? 'Gedung Utama UBSI' }}</p>
+                <span class="text-xs font-semibold uppercase tracking-wider text-[#CE9501]">Verifikator TPS Onsite</span>
+                <h1 class="text-2xl font-bold text-gray-900">Pusat Verifikasi Pemilih</h1>
+                <p class="text-xs text-gray-500 font-normal">Petugas: {{ $user->name }} &bull; Lokasi: {{ $user->tps_location ?? 'Gedung Utama UBSI' }}</p>
             </div>
         </div>
 
@@ -24,13 +24,13 @@
                 </div>
                 <input type="text" name="search" value="{{ $search }}"
                     placeholder="Cari NIM atau Nama..."
-                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs">
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs font-normal">
             </div>
-            <button type="submit" class="px-4 py-2.5 rounded-xl bg-gray-900 text-white text-xs font-bold hover:bg-black transition-colors">
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-gray-900 text-white text-xs font-semibold hover:bg-black transition-colors">
                 Cari
             </button>
             @if($search)
-                <a href="{{ route('committee.dashboard') }}" class="p-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 text-xs">
+                <a href="{{ route('committee.dashboard') }}" class="p-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 text-xs font-normal">
                     Reset
                 </a>
             @endif
@@ -41,10 +41,10 @@
     <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xs space-y-4 p-6 sm:p-8">
         <div class="flex items-center justify-between pb-4 border-b border-gray-100">
             <div>
-                <h2 class="text-lg font-black text-gray-900">Daftar Pemilih Terdaftar TPS</h2>
-                <p class="text-xs text-gray-500">Verifikasi fisik kehadiran mahasiswa sebelum masuk bilik suara</p>
+                <h2 class="text-lg font-bold text-gray-900">Daftar Pemilih Terdaftar TPS</h2>
+                <p class="text-xs text-gray-500 font-normal">Verifikasi fisik kehadiran mahasiswa sebelum masuk bilik suara</p>
             </div>
-            <span class="px-3 py-1 rounded-full bg-red-50 text-[#940c10] border border-red-200 text-xs font-bold">
+            <span class="px-3 py-1 rounded-full bg-red-50 text-[#940c10] border border-red-200 text-xs font-semibold">
                 Periode {{ $activePeriod->academic_year ?? 'Aktif' }}
             </span>
         </div>

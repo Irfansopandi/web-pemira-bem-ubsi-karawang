@@ -13,14 +13,13 @@
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v=2">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2">
 
-    <!-- Favicon Resmi BEM UBSI Karawang (Full-Bleed Maksimal & Tajam) -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('apple-touch-icon.png') }}?v=2">
-    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v=2">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2">
+    <!-- Google Fonts: Plus Jakarta Sans (Modern, Smooth & Clean) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @if (file_exists(public_path('hot')) || file_exists(public_path('build/manifest.json')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -31,6 +30,9 @@
             tailwind.config = {
                 theme: {
                     extend: {
+                        fontFamily: {
+                            sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        },
                         colors: {
                             'ubsi-red': '#940c10',
                             'ubsi-red-dark': '#7A0A0D',
@@ -47,6 +49,9 @@
 
     <style>
         [x-cloak] { display: none !important; }
+        body, input, button, select, textarea {
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        }
 
         @keyframes float-slow {
             0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
@@ -128,6 +133,42 @@
         {{ $slot ?? '' }}
         @yield('content')
     </main>
+
+    <!-- SweetAlert2 Toast Notifications (Top-End) -->
+    @if (session('status') || session('success') || session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                @if (session('status'))
+                    Toast.fire({
+                        icon: 'success',
+                        title: "{{ session('status') }}"
+                    });
+                @elseif (session('success'))
+                    Toast.fire({
+                        icon: 'success',
+                        title: "{{ session('success') }}"
+                    });
+                @elseif (session('error'))
+                    Toast.fire({
+                        icon: 'error',
+                        title: "{{ session('error') }}"
+                    });
+                @endif
+            });
+        </script>
+    @endif
 
 </body>
 </html>
