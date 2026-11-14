@@ -1,10 +1,10 @@
-@extends('layouts.app', ['title' => 'Tanda Terima Hak Suara', 'hideNavbar' => true, 'bodyClass' => 'bg-slate-50/70'])
+@extends('layouts.app', ['title' => 'Tanda Terima Hak Suara — PEMIRA BEM UBSI Karawang', 'darkTheme' => true, 'allowScroll' => true, 'hideNavbar' => true])
 
 @section('content')
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-    <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xl space-y-0">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 my-auto">
+    <div class="bg-white rounded-3xl border border-white/20 overflow-hidden shadow-2xl shadow-black/80 space-y-0">
         <!-- Top Receipt Header (Logo BEM & Kabinet, Serta Badge Suara Sah Bersih) -->
-        <div class="bg-gradient-to-r from-[#940c10] to-[#7A0A0D] p-6 sm:p-8 text-white flex items-start justify-between flex-wrap gap-4 border-b-2 border-[#CE9501]">
+        <div class="bg-gradient-to-r from-[#940c10] via-[#B51016] to-[#7A0A0D] p-6 sm:p-8 text-white flex items-start justify-between flex-wrap gap-4 border-b-2 border-[#CE9501]">
             <div class="flex items-center gap-3.5 sm:gap-4">
                 <!-- 2 Logo Resmi: BEM UBSI di Kiri & Kabinet di Kanannya -->
                 <div class="flex items-center gap-2.5 shrink-0">
@@ -46,27 +46,44 @@
                 </div>
             </div>
 
-            <!-- Chosen Candidate Summary (Menggunakan Foto Paslon Pilihan) -->
+            <!-- Chosen Candidate Summary (Menggunakan Foto Paslon Pilihan yang Besar & Jelas) -->
             @if($chosenCandidate)
                 <div class="space-y-3">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 block">Pilihan Suara Anda:</span>
-                    <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-slate-50/70 flex items-center justify-between flex-wrap gap-5 shadow-xs">
-                        <div class="flex items-center gap-4 sm:gap-5">
-                            <!-- Foto Paslon Lengkap dengan Badge Nomor Urut -->
-                            <div class="relative w-20 h-24 sm:w-24 sm:h-28 rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-md shrink-0">
-                                <img src="{{ $chosenCandidate->photo }}" alt="Paslon 0{{ $chosenCandidate->candidate_number }}" class="w-full h-full object-cover">
-                                <!-- Badge Nomor Urut di Pojok Kiri Atas Foto -->
-                                <div class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-lg bg-[#940c10] text-[#CE9501] border border-[#CE9501] text-[10px] font-bold shadow-xs">
-                                    0{{ $chosenCandidate->candidate_number }}
-                                </div>
-                            </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Pilihan Suara Anda:</span>
+                    <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-slate-50/80 flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6 shadow-xs">
+                        <!-- Foto Paslon Lebih Besar, Proporsional, & Bersih Tanpa Tertutup Badge -->
+                        <div class="relative w-32 sm:w-36 md:w-40 aspect-[3/4] rounded-2xl overflow-hidden border-2 border-slate-200 bg-gradient-to-b from-[#52000D] via-[#7A0A0D] to-[#940C10] shadow-md shrink-0">
+                            <img src="{{ $chosenCandidate->photo }}" 
+                                 onerror="this.onerror=null;this.src='{{ asset('images/paslon-0' . $chosenCandidate->candidate_number . '.png') }}';"
+                                 alt="Paslon 0{{ $chosenCandidate->candidate_number }}" 
+                                 class="w-full h-full object-cover object-center">
+                        </div>
 
-                            <div>
-                                <span class="text-xs font-semibold text-[#CE9501] uppercase tracking-wider">Pasangan Calon Terpilih</span>
-                                <p class="text-base sm:text-lg font-bold text-gray-900 mt-0.5 leading-snug">{{ $chosenCandidate->chairman_name }} & {{ $chosenCandidate->vice_chairman_name }}</p>
-                                <p class="text-xs text-gray-500 mt-1 font-normal">Calon Ketua & Wakil Ketua BEM UBSI Karawang</p>
-                                <div class="mt-2.5 inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold">
-                                    Tersimpan Terenkripsi
+                        <!-- Data Paslon Pilihan (Tanpa Badge, Langsung Label Pasangan Calon No.) -->
+                        <div class="flex-1 text-center sm:text-left flex flex-col justify-center">
+                            <span class="text-xs sm:text-sm font-bold text-[#CE9501] uppercase tracking-wider block">
+                                Pasangan Calon No. 0{{ $chosenCandidate->candidate_number }}
+                            </span>
+                            <h3 class="text-base sm:text-lg lg:text-xl font-black text-slate-900 mt-1 leading-snug">
+                                {{ $chosenCandidate->chairman_name }} & {{ $chosenCandidate->vice_chairman_name }}
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 font-medium">
+                                Calon Ketua & Calon Wakil Ketua BEM UBSI Karawang
+                            </p>
+
+                            <!-- Rincian Calon Ketua & Wakil (NIM & Prodi Terpisah Baris Rapi) -->
+                            <div class="mt-3 pt-3 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[#940C10] block">Calon Ketua</span>
+                                    <p class="font-bold text-slate-900 mt-0.5 leading-snug">{{ $chosenCandidate->chairman_name }}</p>
+                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">NIM: {{ $chosenCandidate->chairman_nim }}</p>
+                                    <p class="text-[11px] text-slate-600 font-medium">{{ $chosenCandidate->chairman_study_program }}</p>
+                                </div>
+                                <div class="sm:border-l sm:border-slate-200/80 sm:pl-3">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[#940C10] block">Calon Wakil Ketua</span>
+                                    <p class="font-bold text-slate-900 mt-0.5 leading-snug">{{ $chosenCandidate->vice_chairman_name }}</p>
+                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">NIM: {{ $chosenCandidate->vice_chairman_nim }}</p>
+                                    <p class="text-[11px] text-slate-600 font-medium">{{ $chosenCandidate->vice_chairman_study_program }}</p>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +94,10 @@
             <!-- Security Assurance Note -->
             <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 space-y-2">
                 <div class="flex items-center gap-2 font-semibold text-[#CE9501]">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
+                    <svg class="w-4 h-4 text-[#CE9501] shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
                     <span>Ketentuan Kerahasiaan & Keamanan:</span>
                 </div>
                 <p class="leading-relaxed text-[11px] text-gray-700 font-normal">
@@ -89,8 +109,12 @@
             <div class="pt-6 border-t border-gray-100 flex justify-end">
                 <form id="logout-form-receipt" action="{{ route('logout') }}" method="POST" class="w-full sm:w-auto">
                     @csrf
-                    <button type="button" onclick="confirmLogout('logout-form-receipt')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-[#940c10] hover:bg-[#7A0A0D] text-white text-xs sm:text-sm font-semibold shadow-md shadow-[#940c10]/20 transition-all transform hover:-translate-y-0.5 cursor-pointer">
-                        <i data-lucide="log-out" class="w-4 h-4 text-[#CE9501]"></i>
+                    <button type="button" onclick="confirmLogout('logout-form-receipt')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#940C10] via-[#B51016] to-[#7A0A0D] hover:from-[#7A0A0D] hover:via-[#940C10] hover:to-[#B51016] text-white text-xs sm:text-sm font-bold shadow-xl shadow-red-950/40 hover:shadow-red-900/50 transition-all transform hover:-translate-y-0.5 active:scale-[0.99] cursor-pointer">
+                        <svg class="w-4 h-4 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
                         <span>Keluar Sesi</span>
                     </button>
                 </form>

@@ -85,7 +85,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen {{ ($darkTheme ?? false) ? 'lg:h-screen lg:overflow-hidden' : '' }} flex flex-col {{ $bodyClass ?? ($darkTheme ?? false ? 'bg-[#0c0103] text-white' : 'bg-[#FDFDFD] text-[#1A1A1A]') }} font-sans antialiased selection:bg-[#940c10] selection:text-white relative overflow-x-hidden overflow-y-auto">
+<body class="min-h-screen {{ ($darkTheme ?? false) && !($allowScroll ?? false) ? 'lg:h-screen lg:overflow-hidden' : '' }} flex flex-col {{ $bodyClass ?? ($darkTheme ?? false ? 'bg-[#0c0103] text-white' : 'bg-[#FDFDFD] text-[#1A1A1A]') }} font-sans antialiased selection:bg-[#940c10] selection:text-white relative overflow-x-hidden overflow-y-auto">
 
     @if($darkTheme ?? false)
     <!-- LUXURY AMBIENT BACKGROUND: DEEP MAROON GRADIENT + FLOWING LIGHT RIBBONS & DOTTED PARTICLE WAVE -->
@@ -278,7 +278,7 @@
     @endif
 
     <!-- Main Content Area -->
-    <main class="flex-1 min-h-0 flex flex-col {{ ($darkTheme ?? false) ? 'overflow-y-auto custom-scrollbar justify-center' : '' }}">
+    <main class="flex-1 min-h-0 flex flex-col {{ ($darkTheme ?? false) && !($allowScroll ?? false) ? 'overflow-y-auto custom-scrollbar justify-center' : '' }}">
         @yield('content')
     </main>
 
