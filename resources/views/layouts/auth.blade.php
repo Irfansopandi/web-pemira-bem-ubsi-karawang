@@ -7,13 +7,13 @@
 
     <title>{{ $title ?? 'Login' }} - PEMIRA BEM UBSI KARAWANG</title>
 
-    <!-- Favicon Resmi BEM UBSI Karawang (Full-Bleed Maksimal & Tajam) -->
+    <!-- Favicon Resmi BEM UBSI Karawang -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('apple-touch-icon.png') }}?v=2">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v=2">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2">
 
-    <!-- Google Fonts: Plus Jakarta Sans (Modern, Smooth & Clean) -->
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
@@ -49,87 +49,105 @@
 
     <style>
         [x-cloak] { display: none !important; }
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
         body, input, button, select, textarea {
             font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
         }
 
-        @keyframes float-slow {
-            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
-            50% { transform: translateY(-38px) translateX(18px) scale(1.08); }
+        /* Ambient Wave Animations */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.65; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.04); }
         }
-        @keyframes float-reverse {
-            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
-            50% { transform: translateY(32px) translateX(-22px) scale(0.95); }
+        @keyframes float-ribbon {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
         }
-        @keyframes float-diagonal {
-            0%, 100% { transform: translateY(0px) translateX(0px); }
-            50% { transform: translateY(-30px) translateX(-30px); }
+        .animate-pulse-glow {
+            animation: pulse-glow 7s ease-in-out infinite;
         }
-        @keyframes float-drift {
-            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
-            50% { transform: translateY(-20px) translateX(25px) scale(1.05); }
+        .animate-float-ribbon {
+            animation: float-ribbon 12s ease-in-out infinite;
         }
-        @keyframes float-pulse {
-            0%, 100% { transform: scale(1) translateY(0); opacity: 0.6; }
-            50% { transform: scale(1.15) translateY(-15px); opacity: 0.9; }
-        }
-        @keyframes float-gentle {
-            0%, 100% { transform: translateY(0px) translateX(0px); }
-            50% { transform: translateY(22px) translateX(16px); }
-        }
-
-        .animate-bubble-1 { animation: float-slow 8s ease-in-out infinite; }
-        .animate-bubble-2 { animation: float-reverse 10s ease-in-out infinite 1s; }
-        .animate-bubble-3 { animation: float-diagonal 12s ease-in-out infinite 2s; }
-        .animate-bubble-4 { animation: float-drift 9s ease-in-out infinite 1.5s; }
-        .animate-bubble-5 { animation: float-reverse 11s ease-in-out infinite 2.5s; }
-        .animate-bubble-6 { animation: float-pulse 7s ease-in-out infinite 0.5s; }
-        .animate-bubble-7 { animation: float-gentle 13s ease-in-out infinite 3s; }
-        .animate-bubble-8 { animation: float-slow 10.5s ease-in-out infinite 2s; }
     </style>
 </head>
-<body class="min-h-full flex items-center justify-center font-sans antialiased text-[#1A1A1A] bg-gradient-to-br from-[#1a0204] via-[#3a060a] to-[#0f172a] p-4 sm:p-6 lg:p-8 selection:bg-[#940c10] selection:text-[#FDFDFD] relative overflow-x-hidden">
-    
-    <!-- BACKGROUND AMBIENT GLOW & FLOATING BUBBLES BERVARIASI -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <!-- Ambient Glowing Orbs Besar (Pencahayaan Utama) -->
-        <div class="absolute -top-32 -left-32 w-96 h-96 bg-[#940c10]/45 rounded-full blur-[110px] animate-bubble-1"></div>
-        <div class="absolute top-1/4 -right-24 w-80 h-80 bg-[#CE9501]/30 rounded-full blur-[100px] animate-bubble-2"></div>
-        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-[#7A0A0D]/50 rounded-full blur-[120px] animate-bubble-3"></div>
-        <div class="absolute bottom-10 -left-20 w-72 h-72 bg-[#CE9501]/25 rounded-full blur-[90px] animate-bubble-4"></div>
-        <div class="absolute top-1/2 right-1/4 w-64 h-64 bg-[#940c10]/20 rounded-full blur-[100px] animate-bubble-6"></div>
+<body class="h-screen w-full flex items-center justify-center font-sans antialiased text-[#1A1A1A] bg-[#0c0103] p-3 sm:p-4 lg:p-5 selection:bg-[#940c10] selection:text-[#FDFDFD] relative overflow-y-auto lg:overflow-hidden">
 
-        <!-- Floating Glassmorphic Bubble Spheres (Banyak & Melayang) -->
-        <!-- Sisi Kiri Atas -->
-        <div class="absolute top-12 left-[12%] w-28 h-28 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg shadow-[#940c10]/20 animate-bubble-1"></div>
-        <div class="absolute top-28 left-[6%] w-14 h-14 rounded-full bg-[#CE9501]/15 border border-[#CE9501]/30 backdrop-blur-sm animate-bubble-4"></div>
-        <div class="absolute top-8 left-[28%] w-10 h-10 rounded-full bg-white/15 border border-white/30 backdrop-blur-sm animate-bubble-6"></div>
+    <!-- LUXURY AMBIENT BACKGROUND: DEEP MAROON GRADIENT + FLOWING LIGHT RIBBONS & DOTTED PARTICLE WAVE -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[radial-gradient(circle_at_50%_40%,#260408_0%,#130204_45%,#080102_100%)]">
+        
+        <!-- Glowing Ambient Lighting Orbs -->
+        <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#940c10]/35 rounded-full blur-[140px] animate-pulse-glow"></div>
+        <div class="absolute -bottom-40 -right-40 w-[650px] h-[650px] bg-[#ce9501]/25 rounded-full blur-[150px] animate-pulse-glow" style="animation-delay: 3s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#7a0a0d]/20 rounded-full blur-[160px]"></div>
 
-        <!-- Sisi Kanan Atas -->
-        <div class="absolute top-16 right-[14%] w-32 h-32 rounded-full bg-white/8 border border-[#CE9501]/35 backdrop-blur-md shadow-lg shadow-[#CE9501]/20 animate-bubble-2"></div>
-        <div class="absolute top-36 right-[8%] w-16 h-16 rounded-full bg-gradient-to-br from-[#940c10]/25 to-white/5 border border-white/20 backdrop-blur-sm animate-bubble-5"></div>
-        <div class="absolute top-10 right-[32%] w-12 h-12 rounded-full bg-white/15 border border-white/25 backdrop-blur-sm animate-bubble-3"></div>
+        <!-- SVG Flowing Curved Waves & Light Ribbons (Matching Reference Image) -->
+        <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+            <defs>
+                <!-- Crimson Silk Ribbon Gradient -->
+                <linearGradient id="crimsonRibbonLayout" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ff334b" stop-opacity="0.85" />
+                    <stop offset="40%" stop-color="#d71920" stop-opacity="0.65" />
+                    <stop offset="80%" stop-color="#7a0a0d" stop-opacity="0.2" />
+                    <stop offset="100%" stop-color="#300306" stop-opacity="0" />
+                </linearGradient>
 
-        <!-- Sisi Tengah Kiri & Kanan (Dekat Card) -->
-        <div class="absolute top-1/2 left-[4%] w-20 h-20 rounded-full bg-white/10 border border-white/25 backdrop-blur-md shadow-md animate-bubble-3"></div>
-        <div class="absolute top-[58%] left-[12%] w-10 h-10 rounded-full bg-[#CE9501]/20 border border-[#CE9501]/40 backdrop-blur-sm animate-bubble-7"></div>
-        <div class="absolute top-1/2 right-[5%] w-24 h-24 rounded-full bg-gradient-to-tr from-[#940c10]/30 to-white/10 border border-white/25 backdrop-blur-md animate-bubble-8"></div>
-        <div class="absolute top-[42%] right-[10%] w-12 h-12 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm animate-bubble-4"></div>
+                <!-- Golden Edge Ribbon Gradient -->
+                <linearGradient id="goldRibbonLayout" x1="0%" y1="0%" x2="100%" y2="80%">
+                    <stop offset="0%" stop-color="#ffe27a" stop-opacity="0.9" />
+                    <stop offset="30%" stop-color="#e5a900" stop-opacity="0.75" />
+                    <stop offset="70%" stop-color="#b58200" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#7a0a0d" stop-opacity="0" />
+                </linearGradient>
 
-        <!-- Sisi Bawah Kiri -->
-        <div class="absolute bottom-16 left-[18%] w-24 h-24 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-md animate-bubble-5"></div>
-        <div class="absolute bottom-32 left-[8%] w-14 h-14 rounded-full bg-[#CE9501]/15 border border-[#CE9501]/30 backdrop-blur-sm animate-bubble-2"></div>
-        <div class="absolute bottom-8 left-[30%] w-8 h-8 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm animate-bubble-6"></div>
+                <!-- Dotted Matrix Pattern Gradient -->
+                <linearGradient id="dotGradLayout" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffe680" stop-opacity="0.85" />
+                    <stop offset="50%" stop-color="#e5a900" stop-opacity="0.55" />
+                    <stop offset="100%" stop-color="#d71920" stop-opacity="0.15" />
+                </linearGradient>
 
-        <!-- Sisi Bawah Kanan -->
-        <div class="absolute bottom-24 right-[22%] w-20 h-20 rounded-full bg-gradient-to-br from-[#CE9501]/20 to-transparent border border-[#CE9501]/35 backdrop-blur-sm animate-bubble-1"></div>
-        <div class="absolute bottom-12 right-[12%] w-28 h-28 rounded-full bg-white/10 border border-white/25 backdrop-blur-md shadow-lg animate-bubble-7"></div>
-        <div class="absolute bottom-40 right-[6%] w-10 h-10 rounded-full bg-white/15 border border-white/25 backdrop-blur-sm animate-bubble-3"></div>
-        <div class="absolute bottom-6 right-[35%] w-12 h-12 rounded-full bg-[#940c10]/25 border border-white/20 backdrop-blur-sm animate-bubble-8"></div>
+                <!-- Glow Filter -->
+                <filter id="softGlowLayout" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="8" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+
+            <!-- Top Left Silk Wave Ribbon -->
+            <path d="M -100,180 C 200,60 500,280 250,550 C 100,700 -50,650 -100,600 Z" fill="url(#crimsonRibbonLayout)" filter="url(#softGlowLayout)" opacity="0.45" />
+            <path d="M -80,240 C 220,120 420,310 210,510" fill="none" stroke="url(#goldRibbonLayout)" stroke-width="2.5" opacity="0.6" filter="url(#softGlowLayout)" />
+            <path d="M -100,280 C 180,180 360,350 160,540" fill="none" stroke="#ff4d5a" stroke-width="1.5" opacity="0.4" />
+
+            <!-- Bottom Right Golden & Crimson Particle Mesh / Dotted Wave Flow -->
+            <!-- Golden Wave Ribbon Curve -->
+            <path d="M 1200,1180 C 1350,920 1600,750 2050,700 L 2050,1180 Z" fill="url(#crimsonRibbonLayout)" opacity="0.3" filter="url(#softGlowLayout)" />
+            <path d="M 1150,1150 C 1380,880 1650,720 2080,680" fill="none" stroke="url(#goldRibbonLayout)" stroke-width="3" opacity="0.85" filter="url(#softGlowLayout)" />
+            <path d="M 1200,1180 C 1420,910 1680,760 2100,730" fill="none" stroke="#ff3a4d" stroke-width="2" opacity="0.5" />
+
+            <!-- 3D Dotted Particle Wave Matrix (Bottom Right) -->
+            <g fill="url(#dotGradLayout)" opacity="0.6">
+                <!-- Row 1 -->
+                <circle cx="1320" cy="990" r="1.8" /><circle cx="1360" cy="970" r="1.9" /><circle cx="1400" cy="948" r="2.0" /><circle cx="1440" cy="925" r="2.1" /><circle cx="1480" cy="900" r="2.2" /><circle cx="1520" cy="875" r="2.3" /><circle cx="1560" cy="850" r="2.4" /><circle cx="1600" cy="828" r="2.4" /><circle cx="1640" cy="808" r="2.3" /><circle cx="1680" cy="790" r="2.2" /><circle cx="1720" cy="775" r="2.1" /><circle cx="1760" cy="762" r="2.0" /><circle cx="1800" cy="752" r="1.9" /><circle cx="1840" cy="744" r="1.8" /><circle cx="1880" cy="738" r="1.7" /><circle cx="1920" cy="734" r="1.6" />
+                <!-- Row 2 -->
+                <circle cx="1340" cy="1015" r="1.9" /><circle cx="1380" cy="992" r="2.0" /><circle cx="1420" cy="968" r="2.1" /><circle cx="1460" cy="943" r="2.2" /><circle cx="1500" cy="918" r="2.3" /><circle cx="1540" cy="892" r="2.4" /><circle cx="1580" cy="868" r="2.4" /><circle cx="1620" cy="845" r="2.3" /><circle cx="1660" cy="824" r="2.2" /><circle cx="1700" cy="805" r="2.1" /><circle cx="1740" cy="790" r="2.0" /><circle cx="1780" cy="778" r="1.9" /><circle cx="1820" cy="768" r="1.8" /><circle cx="1860" cy="760" r="1.7" /><circle cx="1900" cy="754" r="1.6" />
+                <!-- Row 3 -->
+                <circle cx="1360" cy="1040" r="2.0" /><circle cx="1400" cy="1015" r="2.1" /><circle cx="1440" cy="988" r="2.2" /><circle cx="1480" cy="962" r="2.3" /><circle cx="1520" cy="936" r="2.4" /><circle cx="1560" cy="910" r="2.4" /><circle cx="1600" cy="885" r="2.3" /><circle cx="1640" cy="862" r="2.2" /><circle cx="1680" cy="840" r="2.1" /><circle cx="1720" cy="820" r="2.0" /><circle cx="1760" cy="803" r="1.9" /><circle cx="1800" cy="790" r="1.8" /><circle cx="1840" cy="780" r="1.7" /><circle cx="1880" cy="772" r="1.6" />
+                <!-- Row 4 -->
+                <circle cx="1380" cy="1065" r="2.1" /><circle cx="1420" cy="1038" r="2.2" /><circle cx="1460" cy="1010" r="2.3" /><circle cx="1500" cy="982" r="2.4" /><circle cx="1540" cy="955" r="2.4" /><circle cx="1580" cy="928" r="2.3" /><circle cx="1620" cy="902" r="2.2" /><circle cx="1660" cy="878" r="2.1" /><circle cx="1700" cy="855" r="2.0" /><circle cx="1740" cy="834" r="1.9" /><circle cx="1780" cy="816" r="1.8" /><circle cx="1820" cy="802" r="1.7" /><circle cx="1860" cy="791" r="1.6" />
+                <!-- Row 5 -->
+                <circle cx="1440" cy="1060" r="2.2" /><circle cx="1480" cy="1030" r="2.3" /><circle cx="1520" cy="1002" r="2.4" /><circle cx="1560" cy="974" r="2.3" /><circle cx="1600" cy="946" r="2.2" /><circle cx="1640" cy="920" r="2.1" /><circle cx="1680" cy="895" r="2.0" /><circle cx="1720" cy="872" r="1.9" /><circle cx="1760" cy="850" r="1.8" /><circle cx="1800" cy="832" r="1.7" /><circle cx="1840" cy="818" r="1.6" />
+                <!-- Row 6 -->
+                <circle cx="1500" cy="1050" r="2.3" /><circle cx="1540" cy="1020" r="2.3" /><circle cx="1580" cy="990" r="2.2" /><circle cx="1620" cy="962" r="2.1" /><circle cx="1660" cy="935" r="2.0" /><circle cx="1700" cy="910" r="1.9" /><circle cx="1740" cy="886" r="1.8" /><circle cx="1780" cy="865" r="1.7" /><circle cx="1820" cy="848" r="1.6" />
+            </g>
+        </svg>
     </div>
 
     <!-- Main Auth Content Container -->
-    <main class="w-full max-w-5xl my-auto relative z-10">
+    <main class="w-full max-w-4xl xl:max-w-5xl my-auto relative z-10">
         {{ $slot ?? '' }}
         @yield('content')
     </main>
