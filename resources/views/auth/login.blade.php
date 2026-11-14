@@ -93,12 +93,12 @@
             <div class="bg-gradient-to-b from-[#940c10]/95 to-[#7A0A0D]/95 backdrop-blur-md p-6 text-center text-[#FDFDFD] relative border-b-2 border-[#CE9501]">
                 <!-- 3 Logo Resmi: Ukuran Sama Rata & Jarak Rapat Proporsional -->
                 <div class="flex items-center justify-center gap-3 sm:gap-4 mb-3">
-                    <!-- 1. Logo BEM (Tangan & Buku) -->
-                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Karawang" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-md">
-                    <!-- 2. Logo Kabinet BEM Merah (Swarnadipa Pratibhana) -->
-                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM UBSI Karawang" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-md">
-                    <!-- 3. Logo Universitas BSI -->
+                    <!-- 1. Logo Universitas BSI -->
                     <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-md">
+                    <!-- 2. Logo BEM UBSI Karawang -->
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Karawang" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-md">
+                    <!-- 3. Logo Kabinet BEM (Swarnadipa Pratibhana) -->
+                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM UBSI Karawang" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-md">
                 </div>
                 <h2 class="text-lg sm:text-xl font-bold tracking-tight text-[#FDFDFD] leading-tight">
                     PEMILIHAN UMUM RAYA
