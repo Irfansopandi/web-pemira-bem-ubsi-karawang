@@ -51,40 +51,29 @@ class CandidatePair extends Model
      */
     public function getPhotoUrl(): string
     {
+        $defaultPhoto = 'images/paslon-0' . $this->candidate_number . '.png';
+
         if (! empty($this->photo_url)) {
             // Full HTTP/HTTPS URL
             if (str_starts_with($this->photo_url, 'http://') || str_starts_with($this->photo_url, 'https://')) {
                 return $this->photo_url;
             }
 
-            // Path starting with /storage/ or storage/
-            if (str_starts_with($this->photo_url, '/storage/')) {
-                return asset(ltrim($this->photo_url, '/'));
+            $cleanPath = ltrim($this->photo_url, '/');
+
+            // If path exists directly in public
+            if (file_exists(public_path($cleanPath))) {
+                return asset($cleanPath);
             }
 
-            if (str_starts_with($this->photo_url, 'storage/')) {
-                return asset($this->photo_url);
-            }
-
-            // If it's a relative path in public_path (e.g. images/paslon-01.png)
-            if (file_exists(public_path($this->photo_url))) {
-                return asset($this->photo_url);
-            }
-
-            // Check if relative path inside public/storage (e.g. candidates/xyz.jpg)
-            if (file_exists(public_path('storage/' . ltrim($this->photo_url, '/')))) {
-                return asset('storage/' . ltrim($this->photo_url, '/'));
+            // Path starting with storage/ or /storage/
+            $storageRelative = preg_replace('#^storage/#', '', $cleanPath);
+            if (file_exists(storage_path('app/public/' . $storageRelative))) {
+                return asset('storage/' . $storageRelative);
             }
         }
 
-        // Check if candidate photo exists in storage/candidates/
-        $storageCandidatePhoto = 'storage/candidates/paslon-0' . $this->candidate_number . '.png';
-        if (file_exists(public_path($storageCandidatePhoto))) {
-            return asset($storageCandidatePhoto);
-        }
-
-        // Fallback to public images
-        $defaultPhoto = 'images/paslon-0' . $this->candidate_number . '.png';
+        // Fallback to public images (e.g. public/images/paslon-01.png)
         if (file_exists(public_path($defaultPhoto))) {
             return asset($defaultPhoto);
         }
