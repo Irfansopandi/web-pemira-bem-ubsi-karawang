@@ -109,7 +109,7 @@ class VotingEngineTest extends TestCase
             'password' => 'wrongpassword',
         ]);
 
-        $response->assertSessionHasErrors('identifier');
+        $response->assertSessionHasErrors('password');
         $this->assertGuest('student');
     }
 
