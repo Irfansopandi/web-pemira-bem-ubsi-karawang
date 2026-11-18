@@ -35,19 +35,11 @@ class Admin extends Authenticatable
     }
 
     /**
-     * Check if user is Super Administrator.
+     * Check if user is Administrator.
      */
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
-    }
-
-    /**
-     * Check if user is TPS Committee.
-     */
-    public function isCommittee(): bool
-    {
-        return $this->role === 'committee';
     }
 }
 

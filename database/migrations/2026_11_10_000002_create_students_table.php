@@ -12,14 +12,13 @@ return new class extends Migration
             $table->string('nim', 20)->primary();
             $table->string('name');
             $table->string('study_program', 100);
-            $table->string('class_group', 20)->nullable();
-            $table->string('academic_year', 20)->nullable();
-            $table->string('password');
+            $table->string('class_name', 50);
+            $table->unsignedTinyInteger('semester')->default(1);
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
 
-            $table->index(['study_program', 'class_group']);
+            $table->index(['study_program', 'class_name']);
         });
     }
 
@@ -28,4 +27,3 @@ return new class extends Migration
         Schema::dropIfExists('students');
     }
 };
-

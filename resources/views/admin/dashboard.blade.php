@@ -1,25 +1,43 @@
-@extends('layouts.app', ['title' => 'Dashboard Admin'])
+@extends('layouts.admin', ['title' => 'Dashboard Utama'])
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+<div class="space-y-6 sm:space-y-8">
 
-    <!-- Top Admin Bar -->
-    <div class="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-gray-900 text-white flex items-center justify-center font-bold shadow-xs">
-                <i data-lucide="layout-dashboard" class="w-7 h-7 text-[#CE9501]"></i>
+    <!-- Top Admin Bar: Kontrol Periode & Aksi Cepat -->
+    <div class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-5 sm:p-6 xl:p-7 shadow-xs flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+        <div class="flex items-center gap-3.5 sm:gap-4">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#940C10] to-[#7A0A0D] text-white flex items-center justify-center font-bold shadow-md shadow-red-950/20 shrink-0">
+                <i data-lucide="layout-dashboard" class="w-6 h-6 sm:w-7 sm:h-7 text-[#CE9501]"></i>
             </div>
             <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-[#940c10]">Komisi Pemilihan Umum Mahasiswa</span>
-                <h1 class="text-2xl font-bold text-gray-900">Panel Administrator Pemilu</h1>
-                <p class="text-xs text-gray-500 font-normal">Monitoring Partisipasi, Rekapitulasi Suara & Manajemen Periode</p>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-[#940C10]">KPUM BEM UBSI Karawang</span>
+                    @if($period)
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider
+                            {{ $period->status === 'active' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : '' }}
+                            {{ $period->status === 'draft' ? 'bg-slate-100 text-slate-800 border border-slate-300' : '' }}
+                            {{ $period->status === 'closed' ? 'bg-red-100 text-red-800 border border-red-300' : '' }}
+                            {{ $period->status === 'archived' ? 'bg-amber-100 text-amber-800 border border-amber-300' : '' }}">
+                            ● {{ strtoupper($period->status) }}
+                        </span>
+                        @if($period->is_result_published)
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                HASIL DITERBITKAN
+                            </span>
+                        @endif
+                    @endif
+                </div>
+                <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    {{ $period->name ?? 'Belum Ada Periode Pemilihan' }}
+                </h2>
+                <p class="text-xs text-slate-500 font-medium">Monitoring Partisipasi, Rekapitulasi Suara & Manajemen Periode</p>
             </div>
         </div>
 
         <!-- Controls & Status Actions -->
-        <div class="flex items-center gap-3 flex-wrap">
+        <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap w-full lg:w-auto justify-start lg:justify-end">
             <a href="{{ route('admin.candidates.index') }}"
-                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940c10] text-white hover:bg-[#7A0A0D] text-xs font-semibold shadow-xs transition-all">
+                class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#940c10] text-white hover:bg-[#7A0A0D] text-xs font-bold shadow-sm shadow-red-900/30 transition-all">
                 <i data-lucide="users" class="w-4 h-4 text-[#CE9501]"></i>
                 <span>Kelola Paslon & Visi Misi</span>
             </a>
@@ -29,9 +47,9 @@
             <form action="{{ route('admin.periods.toggle-publish', $period) }}" method="POST">
                 @csrf
                 <button type="submit"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs {{ $period->is_result_published ? 'bg-amber-100 text-amber-900 hover:bg-amber-200' : 'bg-emerald-600 text-white hover:bg-emerald-700' }}">
+                    class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer {{ $period->is_result_published ? 'bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-900/20' }}">
                     <i data-lucide="{{ $period->is_result_published ? 'eye-off' : 'eye' }}" class="w-4 h-4"></i>
-                    <span>{{ $period->is_result_published ? 'Tarik Publikasi Hasil' : 'Publikasikan Hasil ke Publik' }}</span>
+                    <span>{{ $period->is_result_published ? 'Tarik Publikasi Hasil' : 'Publikasikan Hasil' }}</span>
                 </button>
             </form>
 
@@ -39,11 +57,11 @@
             <form action="{{ route('admin.periods.toggle-status', $period) }}" method="POST" class="inline">
                 @csrf
                 <select name="status" onchange="this.form.submit()"
-                    class="px-3 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-800 bg-white shadow-2xs focus:ring-2 focus:ring-[#940c10]">
-                    <option value="draft" {{ $period->status === 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="active" {{ $period->status === 'active' ? 'selected' : '' }}>Aktif (Dibuka)</option>
-                    <option value="closed" {{ $period->status === 'closed' ? 'selected' : '' }}>Ditutup</option>
-                    <option value="archived" {{ $period->status === 'archived' ? 'selected' : '' }}>Diarsipkan</option>
+                    class="px-3 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-800 bg-white shadow-2xs focus:ring-2 focus:ring-[#940c10] cursor-pointer">
+                    <option value="draft" {{ $period->status === 'draft' ? 'selected' : '' }}>Status: Draft</option>
+                    <option value="active" {{ $period->status === 'active' ? 'selected' : '' }}>Status: Aktif (Bilik Buka)</option>
+                    <option value="closed" {{ $period->status === 'closed' ? 'selected' : '' }}>Status: Ditutup</option>
+                    <option value="archived" {{ $period->status === 'archived' ? 'selected' : '' }}>Status: Diarsipkan</option>
                 </select>
             </form>
             @endif
@@ -127,7 +145,7 @@
 
         <!-- Voter Participation Table -->
         @if($participations)
-        <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xs space-y-4 p-6 sm:p-8">
+        <div id="tabel-dpt" class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs space-y-4 p-6 sm:p-8">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 class="text-lg font-bold text-gray-900">Daftar Kehadiran & Partisipasi Pemilih</h2>
@@ -183,7 +201,7 @@
         @endif
 
         <!-- Audit Log Stream -->
-        <div class="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-xs space-y-4">
+        <div id="audit-trail" class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-4">
             <h3 class="text-base font-bold text-gray-900">Log Aktivitas Sistem Terkini (Audit Trail)</h3>
             <div class="space-y-3">
                 @forelse($recentLogs as $log)

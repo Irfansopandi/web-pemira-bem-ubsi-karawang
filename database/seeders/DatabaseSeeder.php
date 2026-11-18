@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Akun Otoritas (Admins & Committee)
-        $admin = Admin::firstOrCreate(
+        // 1. Akun Otoritas (Administrator KPUM)
+        $admin = Admin::updateOrCreate(
             ['username' => 'admin'],
             [
                 'name' => 'Administrator PEMIRA UBSI',
@@ -24,18 +24,6 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
                 'tps_location' => 'Pusat Kampus UBSI Karawang',
-                'is_active' => true,
-            ]
-        );
-
-        $committee = Admin::firstOrCreate(
-            ['username' => 'panitia_tps1'],
-            [
-                'name' => 'Petugas TPS 01 (Aula Utama)',
-                'email' => 'tps01@bsi.ac.id',
-                'password' => Hash::make('panitia123'),
-                'role' => 'committee',
-                'tps_location' => 'Aula Utama Gedung BSI Karawang',
                 'is_active' => true,
             ]
         );
@@ -137,18 +125,20 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 4. Data Mahasiswa DPT (Primary Key NIM dengan Tanggal Lahir Unik per NIM)
+        // 4. Data Mahasiswa DPT (Primary Key NIM, Nama, Prodi, Kelas, Semester — Tanpa Password & Tanggal Lahir)
+        // Disediakan mahasiswa yang sudah hadir di TPS (12220001 - 12220007) dan yang belum hadir (12220008 - 12220010)
         $studentsData = [
-            ['nim' => '12220001', 'name' => 'Ahmad Fauzi', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-03-15'],
-            ['nim' => '12220002', 'name' => 'Dinda Permata', 'study_program' => 'Teknologi Informasi', 'class_group' => '12.4B.01', 'birth_date' => '2004-07-22'],
-            ['nim' => '12220003', 'name' => 'Budi Santoso', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_group' => '12.4C.01', 'birth_date' => '2003-11-09'],
-            ['nim' => '12220004', 'name' => 'Siti Nurhaliza', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-01-30'],
-            ['nim' => '12220005', 'name' => 'Rian Hidayat', 'study_program' => 'Manajemen Informatika', 'class_group' => '12.4D.01', 'birth_date' => '2003-09-18'],
-            ['nim' => '12220006', 'name' => 'Maya Anggraini', 'study_program' => 'Teknologi Informasi', 'class_group' => '12.4B.01', 'birth_date' => '2004-05-25'],
-            ['nim' => '12220007', 'name' => 'Reza Pratama', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_group' => '12.4C.01', 'birth_date' => '2004-12-04'],
-            ['nim' => '12220008', 'name' => 'Putri Ayu', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-08-14'],
-            ['nim' => '12220009', 'name' => 'Ilham Maulana', 'study_program' => 'Manajemen Informatika', 'class_group' => '12.4D.01', 'birth_date' => '2003-06-11'],
-            ['nim' => '12220010', 'name' => 'Dewi Lestari', 'study_program' => 'Sistem Informasi', 'class_group' => '12.4A.01', 'birth_date' => '2004-10-28'],
+            ['nim' => '12220001', 'name' => 'Ahmad Fauzi', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220002', 'name' => 'Dinda Permata', 'study_program' => 'Teknologi Informasi', 'class_name' => '12.4B.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220003', 'name' => 'Budi Santoso', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_name' => '12.4C.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220004', 'name' => 'Siti Nurhaliza', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220005', 'name' => 'Rian Hidayat', 'study_program' => 'Manajemen Informatika', 'class_name' => '12.4D.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220006', 'name' => 'Maya Anggraini', 'study_program' => 'Teknologi Informasi', 'class_name' => '12.4B.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220007', 'name' => 'Reza Pratama', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_name' => '12.4C.01', 'semester' => 4, 'is_present' => true],
+            // Data Mahasiswa Belum Hadir di Buku Tamu TPS (untuk pengujian validasi penolakan):
+            ['nim' => '12220008', 'name' => 'Putri Ayu', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => false],
+            ['nim' => '12220009', 'name' => 'Ilham Maulana', 'study_program' => 'Manajemen Informatika', 'class_name' => '12.4D.01', 'semester' => 4, 'is_present' => false],
+            ['nim' => '12220010', 'name' => 'Dewi Lestari', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => false],
         ];
 
         foreach ($studentsData as $studentInfo) {
@@ -157,22 +147,22 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $studentInfo['name'],
                     'study_program' => $studentInfo['study_program'],
-                    'class_group' => $studentInfo['class_group'],
-                    'academic_year' => '2026/2027',
-                    'password' => Hash::make($studentInfo['birth_date']), // Tanggal lahir unik per mahasiswa (format YYYY-MM-DD)
-                    'is_active' => true,
+                    'class_name' => $studentInfo['class_name'],
+                    'semester' => $studentInfo['semester'],
+                    'is_active' => $studentInfo['is_present'], // 1 jika sudah hadir di Buku Tamu TPS, 0 jika belum
                 ]
             );
 
-            // Record status partisipasi (student_nim)
-            VoterParticipation::firstOrCreate(
+            // Record status partisipasi & verifikasi kehadiran Buku Tamu TPS
+            VoterParticipation::updateOrCreate(
                 [
                     'election_period_id' => $period->id,
                     'student_nim' => $student->nim,
                 ],
                 [
                     'has_voted' => false,
-                    'tps_location' => 'TPS 01 - Gedung Utama UBSI Karawang',
+                    'verified_at' => $studentInfo['is_present'] ? now() : null, // Hadir atau Belum Hadir
+                    'tps_location' => $studentInfo['is_present'] ? 'TPS 01 - Gedung Utama UBSI Karawang' : null,
                 ]
             );
         }

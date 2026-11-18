@@ -221,14 +221,14 @@
                             <div class="text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-white leading-tight">{{ $user->name }}</p>
                                 <span class="inline-block mt-0.5 px-2 py-0.5 text-[10px] font-semibold rounded-full bg-amber-400 text-slate-900">
-                                    {{ strtoupper($user->role) }}
+                                    ADMINISTRATOR
                                 </span>
                             </div>
-                            <a href="{{ $user->isAdmin() ? route('admin.dashboard') : route('committee.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-semibold transition-all">
+                            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-semibold transition-all">
                                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                                <span class="hidden md:inline">Panel {{ $user->isAdmin() ? 'Admin' : 'TPS' }}</span>
+                                <span class="hidden md:inline">Panel Admin</span>
                             </a>
-                            <form id="logout-form-admin" action="{{ route('logout') }}" method="POST" class="inline">
+                            <form id="logout-form-admin" action="{{ route('admin.logout') }}" method="POST" class="inline">
                                 @csrf
                                 <button type="button" onclick="confirmLogout('logout-form-admin')" title="Keluar / Logout" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition-all cursor-pointer">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">

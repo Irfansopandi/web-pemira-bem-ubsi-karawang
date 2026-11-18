@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['admin', 'committee'])->default('committee')->index();
+            $table->string('role', 20)->default('admin')->index();
             $table->string('tps_location')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();

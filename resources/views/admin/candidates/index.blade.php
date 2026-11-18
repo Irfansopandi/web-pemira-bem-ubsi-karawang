@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => 'Kelola Paslon & Visi Misi — Admin PEMIRA UBSI'])
+@extends('layouts.admin', ['title' => 'Kelola Paslon & Visi Misi'])
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+<div class="space-y-6 sm:space-y-8">
 
     <!-- Top Navigation / Header -->
     <div class="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">

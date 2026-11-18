@@ -24,23 +24,52 @@ class Student extends Authenticatable
         'nim',
         'name',
         'study_program',
-        'class_group',
-        'academic_year',
-        'password',
+        'class_name',
+        'semester',
         'is_active',
     ];
 
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
     protected function casts(): array
     {
         return [
-            'password' => 'hashed',
+            'semester' => 'integer',
             'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Mahasiswa login murni menggunakan NIM & verifikasi buku tamu TPS (tanpa password).
+     */
+    public function getAuthPasswordName(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Alias accessor & mutator agar prodi & kelas mudah diakses secara intuitif
+     */
+    public function getKelasAttribute(): ?string
+    {
+        return $this->class_name;
+    }
+
+    public function setKelasAttribute($value): void
+    {
+        $this->attributes['class_name'] = $value;
+    }
+
+    public function getProdiAttribute(): ?string
+    {
+        return $this->study_program;
+    }
+
+    public function setProdiAttribute($value): void
+    {
+        $this->attributes['study_program'] = $value;
     }
 
     /**
@@ -51,4 +80,3 @@ class Student extends Authenticatable
         return $this->hasMany(VoterParticipation::class, 'student_nim', 'nim');
     }
 }
-

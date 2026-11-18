@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\Student;
+use App\Models\VoterParticipation;
+use App\Services\ElectionService;
+use App\Services\GuestbookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,148 +14,167 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
+    public function __construct(
+        protected GuestbookService $guestbookService,
+        protected ElectionService $electionService,
+    ) {}
+
     /**
-     * Tampilkan formulir autentikasi terpadu (Zero-Guest).
+     * Tampilkan formulir bilik suara digital khusus mahasiswa (Zero-Guest).
      */
     public function showLoginForm(): View|RedirectResponse
     {
-        // Jika sudah login sebagai mahasiswa
+        // Jika sudah login sebagai mahasiswa, periksa validitas status pemilihan
         if (Auth::guard('student')->check()) {
-            return redirect()->intended(route('student.voting'));
-        }
+            $student = Auth::guard('student')->user();
+            $activePeriod = $this->electionService->getActivePeriod();
 
-        // Jika sudah login sebagai admin / panitia
-        if (Auth::guard('admin')->check()) {
-            $user = Auth::guard('admin')->user();
-            return $user->role === 'admin'
-                ? redirect()->intended(route('admin.dashboard'))
-                : redirect()->intended(route('committee.dashboard'));
+            // Cegah redirect loop jika periode pemilihan tidak ada/tidak aktif
+            if (! $activePeriod) {
+                $latestPeriod = $this->electionService->getLatestPeriod();
+                if ($latestPeriod) {
+                    $hasVoted = VoterParticipation::where('election_period_id', $latestPeriod->id)
+                        ->where('student_nim', $student->nim)
+                        ->where('has_voted', true)
+                        ->exists();
+
+                    if ($hasVoted) {
+                        return redirect()->route('student.receipt');
+                    }
+                }
+
+                // Bersihkan sesi mahasiswa agar halaman login tampil normal tanpa loop
+                Auth::guard('student')->logout();
+                request()->session()->invalidate();
+                request()->session()->regenerateToken();
+
+                return view('auth.login')->with('info', 'Saat ini belum ada periode pemilihan PEMIRA yang sedang dibuka.');
+            }
+
+            // Jika ada periode aktif, cek apakah mahasiswa sudah pernah memilih
+            $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
+                ->where('student_nim', $student->nim)
+                ->first();
+
+            if ($participation && $participation->has_voted) {
+                return redirect()->route('student.receipt');
+            }
+
+            return redirect()->route('student.voting');
         }
 
         return view('auth.login');
     }
 
     /**
-     * Proses autentikasi otomatis dengan otorisasi berbasis peran.
+     * Proses autentikasi mahasiswa pemilih (cukup input NIM).
+     * Terintegrasi dengan buku tamu TPS eksternal.
      */
     public function login(Request $request): RedirectResponse
     {
         $identifier = trim((string) $request->input('identifier', ''));
-        $password   = (string) $request->input('password', '');
 
-        // 1. Kasus: Keduanya Kosong / Salah
-        if ($identifier === '' && $password === '') {
-            return back()
-                ->withErrors([
-                    'general' => 'Username dan Password wajib diisi.',
-                ]);
-        }
-
-        // 2. Kasus: Hanya Username Kosong
+        // 1. Validasi NIM tidak boleh kosong
         if ($identifier === '') {
             return back()
+                ->withInput(['identifier' => $identifier])
                 ->withErrors([
-                    'identifier' => 'Username atau NIM wajib diisi.',
+                    'identifier' => 'Silakan masukkan NIM Anda.',
                 ]);
         }
 
-        // 3. Kasus: Hanya Password Kosong
-        if ($password === '') {
+        // 2. Cari mahasiswa di DPT
+        $student = Student::where('nim', $identifier)->first();
+
+        if (! $student) {
             return back()
                 ->withInput(['identifier' => $identifier])
                 ->withErrors([
-                    'password' => 'Kata sandi wajib diisi.',
+                    'identifier' => "NIM '{$identifier}' tidak terdaftar di DPT.",
                 ]);
         }
 
-        // 4. Cari pengguna di tabel students (NIM) & admins (username / email)
-        $student = Student::where('nim', $identifier)->first();
-        $admin = Admin::where('username', $identifier)
-            ->orWhere('email', $identifier)
+        // 3. Cek status periode aktif
+        $activePeriod = $this->electionService->getActivePeriod();
+
+        if (! $activePeriod) {
+            $latestPeriod = $this->electionService->getLatestPeriod();
+            if ($latestPeriod) {
+                $hasVoted = VoterParticipation::where('election_period_id', $latestPeriod->id)
+                    ->where('student_nim', $student->nim)
+                    ->where('has_voted', true)
+                    ->exists();
+
+                if ($hasVoted) {
+                    Auth::guard('student')->login($student);
+                    $request->session()->regenerate();
+
+                    return redirect()->route('student.receipt')->with('info', 'Periode telah berakhir. Berikut bukti suara Anda.');
+                }
+            }
+
+            return back()
+                ->withInput(['identifier' => $identifier])
+                ->withErrors([
+                    'identifier' => 'Periode pemilihan belum dibuka oleh KPUM.',
+                ]);
+        }
+
+        // 4. Cek apakah mahasiswa sudah pernah menggunakan hak suara pada periode ini
+        $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
+            ->where('student_nim', $student->nim)
             ->first();
 
-        // 5. Kasus: Username / NIM Tidak Ditemukan
-        if (!$student && !$admin) {
+        if ($participation && $participation->has_voted) {
+            Auth::guard('student')->login($student);
+            $request->session()->regenerate();
+
+            return redirect()->route('student.receipt')->with('info', 'Anda sudah memilih. Berikut tanda terima resmi Anda.');
+        }
+
+        // 5. Verifikasi kehadiran fisik mahasiswa di Buku Tamu TPS
+        $presence = $this->guestbookService->isStudentPresent($student->nim);
+
+        if (! $presence['is_present']) {
             return back()
                 ->withInput(['identifier' => $identifier])
                 ->withErrors([
-                    'identifier' => 'Username atau NIM tidak terdaftar.',
+                    'identifier' => "NIM {$student->nim} belum isi buku tamu TPS.",
                 ]);
         }
 
-        // 6. Autentikasi Mahasiswa (Student)
-        if ($student) {
-            if (!$student->is_active) {
-                return back()
-                    ->withInput(['identifier' => $identifier])
-                    ->withErrors([
-                        'identifier' => 'Akun mahasiswa Anda sedang dinonaktifkan.',
-                    ]);
-            }
+        // 6. Jika lolos seluruh verifikasi, aktifkan dan catat kehadiran di TPS
+        $student->update(['is_active' => true]);
 
-            // Validasi kata sandi mahasiswa (mencocokkan tanggal lahir terdaftar YYYY-MM-DD per NIM)
-            if (!\Illuminate\Support\Facades\Hash::check($password, $student->password)) {
-                return back()
-                    ->withInput(['identifier' => $identifier])
-                    ->withErrors([
-                        'password' => 'Kata sandi yang Anda masukkan salah. Pastikan format tanggal lahir sesuai (YYYY-MM-DD).',
-                    ]);
-            }
+        VoterParticipation::updateOrCreate(
+            [
+                'election_period_id' => $activePeriod->id,
+                'student_nim' => $student->nim,
+            ],
+            [
+                'has_voted' => false,
+                'verified_at' => now(),
+                'tps_location' => 'TPS Kampus UBSI Karawang',
+            ]
+        );
 
-            Auth::guard('student')->login($student);
-            $request->session()->regenerate();
-            return redirect()->intended(route('student.voting'));
-        }
+        // Login dan langsung masuk ke bilik suara
+        Auth::guard('student')->login($student);
+        $request->session()->regenerate();
 
-        // 7. Autentikasi Pengelola (Admin & Panitia TPS)
-        if ($admin) {
-            if (!$admin->is_active) {
-                return back()
-                    ->withInput(['identifier' => $identifier])
-                    ->withErrors([
-                        'identifier' => 'Akun pengelola Anda sedang dinonaktifkan.',
-                    ]);
-            }
-
-            // Jika Password Salah
-            if (!\Illuminate\Support\Facades\Hash::check($password, $admin->password)) {
-                return back()
-                    ->withInput(['identifier' => $identifier])
-                    ->withErrors([
-                        'password' => 'Kata sandi yang Anda masukkan salah.',
-                    ]);
-            }
-
-            Auth::guard('admin')->login($admin);
-            $request->session()->regenerate();
-
-            return match ($admin->role) {
-                'admin'     => redirect()->intended(route('admin.dashboard')),
-                'committee' => redirect()->intended(route('committee.dashboard')),
-                default     => redirect()->intended('/login'),
-            };
-        }
-
-        // Fallback jika terjadi kegagalan tak terduga (keduanya salah)
-        return back()
-            ->withInput(['identifier' => $identifier])
-            ->withErrors([
-                'general' => 'Username dan kata sandi yang Anda masukkan tidak sesuai.',
-            ]);
+        return redirect()->route('student.voting');
     }
 
     /**
-     * Akhiri sesi pengguna (Logout).
+     * Akhiri sesi mahasiswa pemilih (Logout).
      */
     public function logout(Request $request): RedirectResponse
     {
         Auth::guard('student')->logout();
-        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('status', 'Anda telah berhasil keluar dari sistem.');
+        return redirect('/login')->with('status', 'Anda telah keluar dari bilik suara.');
     }
 }
-

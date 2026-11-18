@@ -57,18 +57,6 @@
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mx-auto font-normal">
                 Partisipasi Anda dalam PEMIRA BEM UBSI Karawang telah berhasil diamankan. Suara Anda telah dimasukkan ke dalam kotak suara secara anonim.
             </p>
-
-            <!-- Tombol Manual Suara jika Autoplay Diblokir Browser -->
-            <div id="manual-speech-container" class="hidden pt-1">
-                <button type="button" onclick="playConfirmationVoice(true)"
-                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-medium shadow-xs transition-colors cursor-pointer">
-                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    </svg>
-                    <span>Putar Suara Konfirmasi</span>
-                </button>
-            </div>
         </div>
 
         <!-- 30-Second Countdown Timer Badge -->
@@ -110,39 +98,22 @@
     </div>
 </div>
 
-@if(session('voting_success'))
 <script>
     (function () {
-        const speechSessionKey = 'pemira_speech_played_{{ $participation->id ?? $student->nim }}';
-        const speechText = 'Terima kasih telah memilih. Suara Anda berhasil direkam.';
+        const speechText = {!! json_encode($student->name . ' telah selesai mencoblos.') !!};
 
-        // Mencegah pemutaran ulang suara jika halaman di-refresh
-        if (sessionStorage.getItem(speechSessionKey)) {
-            return;
-        }
-
-        function showManualButton() {
-            const container = document.getElementById('manual-speech-container');
-            if (container) {
-                container.classList.remove('hidden');
-                if (window.lucide && window.lucide.createIcons) {
-                    window.lucide.createIcons();
-                }
-            }
-        }
-
-        // Seleksi khusus suara perempuan bahasa Indonesia (Google / Gadis / Damayanti)
+        // Seleksi khusus suara bahasa Indonesia (Google / Gadis / Damayanti / Andika)
         function findFemaleIndonesianVoice() {
             if (!('speechSynthesis' in window)) return null;
 
             const voices = window.speechSynthesis.getVoices();
             if (!voices || voices.length === 0) return null;
 
-            // 1. Google Bahasa Indonesia (Suara perempuan resmi Google)
+            // 1. Google Bahasa Indonesia (Suara resmi Google)
             let v = voices.find(v => /google/i.test(v.name) && (v.lang === 'id-ID' || v.lang.startsWith('id')));
             if (v) return v;
 
-            // 2. Microsoft Gadis (Suara perempuan natural Windows/Edge)
+            // 2. Microsoft Gadis (Windows natural female)
             v = voices.find(v => /gadis/i.test(v.name));
             if (v) return v;
 
@@ -154,8 +125,8 @@
             v = voices.find(v => (v.lang === 'id-ID' || v.lang.startsWith('id')) && /female|wanita/i.test(v.name));
             if (v) return v;
 
-            // 5. Suara bahasa Indonesia yang BUKAN suara pria (bukan Andika/David/Male)
-            v = voices.find(v => (v.lang === 'id-ID' || v.lang.startsWith('id')) && !/andika|male|david/i.test(v.name));
+            // 5. Suara bahasa Indonesia apa pun yang tersedia di sistem (termasuk Microsoft Andika)
+            v = voices.find(v => (v.lang === 'id-ID' || v.lang.startsWith('id')));
             if (v) return v;
 
             return null;
@@ -163,9 +134,9 @@
 
         let hasExecuted = false;
 
-        function executeSpeech(isManual = false) {
+        function executeSpeech() {
             if (!('speechSynthesis' in window)) return;
-            if (hasExecuted && !isManual) return;
+            if (hasExecuted) return;
 
             hasExecuted = true;
 
@@ -181,71 +152,39 @@
                     utterance.voice = femaleVoice;
                     utterance.pitch = 1.05;
                 } else {
-                    // Fallback pitch tinggi agar terdengar feminin jika voice online belum tersedia
-                    utterance.pitch = 1.3;
+                    utterance.pitch = 1.0;
                 }
-
-                let hasStarted = false;
-
-                utterance.onstart = function () {
-                    hasStarted = true;
-                    sessionStorage.setItem(speechSessionKey, '1');
-                    const container = document.getElementById('manual-speech-container');
-                    if (container && !isManual) {
-                        container.classList.add('hidden');
-                    }
-                };
-
-                utterance.onerror = function (event) {
-                    console.warn('SpeechSynthesis terblokir autoplay atau gagal:', event);
-                    showManualButton();
-                };
 
                 window.speechSynthesis.speak(utterance);
-
-                if (!isManual) {
-                    setTimeout(() => {
-                        if (!hasStarted && !window.speechSynthesis.speaking) {
-                            showManualButton();
-                        }
-                    }, 1200);
-                }
             } catch (err) {
                 console.warn('SpeechSynthesis error:', err);
-                showManualButton();
             }
         }
 
-        // Ekspos ke window untuk pemutaran manual
-        window.playConfirmationVoice = function (isManual = false) {
-            hasExecuted = false;
-            executeSpeech(true);
-        };
-
-        // Tunggu suara Google selesai di-load oleh browser (Chromium memuat voices secara asynchronous)
+        // Tunggu suara selesai di-load oleh browser lalu otomatis putar suara
         function initSpeechPlayer() {
             if (!('speechSynthesis' in window)) return;
 
-            // Coba periksa apakah suara Google sudah siap
+            // Jika suara sudah tersedia
             if (findFemaleIndonesianVoice()) {
-                setTimeout(() => executeSpeech(false), 300);
+                setTimeout(executeSpeech, 250);
                 return;
             }
 
-            // Jika belum siap, tunggu event onvoiceschanged saat browser selesai mengunduh suara Google
+            // Jika browser memuat suara secara async
             let voicesChangedFired = false;
             window.speechSynthesis.onvoiceschanged = () => {
                 if (voicesChangedFired) return;
                 voicesChangedFired = true;
-                setTimeout(() => executeSpeech(false), 200);
+                setTimeout(executeSpeech, 200);
             };
 
-            // Batas waktu maksimal 1500ms sebagai fallback
+            // Batas waktu maksimal 1200ms sebagai fallback otomatis
             setTimeout(() => {
                 if (!hasExecuted) {
-                    executeSpeech(false);
+                    executeSpeech();
                 }
-            }, 1500);
+            }, 1200);
         }
 
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -253,8 +192,18 @@
         } else {
             window.addEventListener('DOMContentLoaded', initSpeechPlayer);
         }
+
+        // Pemicu interaksi awal jika Chromium membatasi autoplay suara sebelum ada klik
+        const triggerOnFirstClick = function () {
+            if (!hasExecuted) {
+                executeSpeech();
+            }
+            window.removeEventListener('click', triggerOnFirstClick);
+            window.removeEventListener('touchstart', triggerOnFirstClick);
+        };
+        window.addEventListener('click', triggerOnFirstClick, { once: true });
+        window.addEventListener('touchstart', triggerOnFirstClick, { once: true });
     })();
 </script>
-@endif
 @endsection
 

@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => 'Daftarkan Paslon Baru — Admin PEMIRA UBSI'])
+@extends('layouts.admin', ['title' => 'Tambah Paslon Baru'])
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="max-w-4xl mx-auto space-y-6">
 
     <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-md">
         <!-- Header -->

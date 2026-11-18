@@ -26,6 +26,19 @@ class VotingController extends Controller
         $activePeriod = $this->electionService->getActivePeriod();
 
         if (! $activePeriod) {
+            $latestPeriod = $this->electionService->getLatestPeriod();
+            if ($latestPeriod) {
+                $hasVoted = VoterParticipation::where('election_period_id', $latestPeriod->id)
+                    ->where('student_nim', $student->nim)
+                    ->where('has_voted', true)
+                    ->exists();
+
+                if ($hasVoted) {
+                    return redirect()->route('student.receipt');
+                }
+            }
+
+            Auth::guard('student')->logout();
             return redirect('/login')
                 ->with('status', 'Saat ini belum ada periode pemilihan PEMIRA yang sedang aktif.');
         }
