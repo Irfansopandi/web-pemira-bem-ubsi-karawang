@@ -57,7 +57,7 @@ class CandidateManagementTest extends TestCase
     public function test_guest_is_redirected_to_login(): void
     {
         $response = $this->get(route('admin.candidates.index'));
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect(route('admin.login'));
     }
 
     public function test_student_cannot_access_candidate_management(): void
@@ -65,17 +65,16 @@ class CandidateManagementTest extends TestCase
         $student = Student::create([
             'nim' => '12229999',
             'name' => 'Budi Santoso',
-            'email' => '12229999@bsi.ac.id',
             'study_program' => 'Sistem Informasi',
-            'class_group' => '12.4A.01',
-            'password' => bcrypt('password'),
+            'class_name' => '12.4A.01',
+            'semester' => 4,
             'is_active' => true,
         ]);
 
         $response = $this->actingAs($student, 'student')
             ->get(route('admin.candidates.index'));
 
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect(route('admin.login'));
     }
 
     public function test_admin_can_view_candidate_list(): void

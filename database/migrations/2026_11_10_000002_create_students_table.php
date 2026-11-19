@@ -12,7 +12,7 @@ return new class extends Migration
             $table->string('nim', 20)->primary();
             $table->string('name');
             $table->string('study_program', 100);
-            $table->string('class_name', 50);
+            $table->string('class_name', 50)->nullable();
             $table->unsignedTinyInteger('semester')->default(1);
             $table->boolean('is_active')->default(true);
             $table->rememberToken();

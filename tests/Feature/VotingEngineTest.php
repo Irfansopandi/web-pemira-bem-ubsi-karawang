@@ -66,8 +66,8 @@ class VotingEngineTest extends TestCase
             'nim' => '12220001',
             'name' => 'Ahmad Fauzi',
             'study_program' => 'Sistem Informasi',
-            'class_group' => '12.4A.01',
-            'password' => bcrypt('password'),
+            'class_name' => '12.4A.01',
+            'semester' => 4,
             'is_active' => true,
         ]);
 
@@ -75,6 +75,8 @@ class VotingEngineTest extends TestCase
             'election_period_id' => $this->period->id,
             'student_nim' => $this->student->nim,
             'has_voted' => false,
+            'verified_at' => now(),
+            'tps_location' => 'TPS 01 - Gedung Utama UBSI Karawang',
         ]);
     }
 
@@ -95,7 +97,6 @@ class VotingEngineTest extends TestCase
     {
         $response = $this->post(route('login.submit'), [
             'identifier' => '12220001',
-            'password' => 'password',
         ]);
 
         $response->assertRedirect(route('student.voting'));
@@ -105,11 +106,36 @@ class VotingEngineTest extends TestCase
     public function test_student_cannot_login_with_invalid_credentials(): void
     {
         $response = $this->post(route('login.submit'), [
-            'identifier' => '12220001',
-            'password' => 'wrongpassword',
+            'identifier' => '99999999',
         ]);
 
-        $response->assertSessionHasErrors('password');
+        $response->assertSessionHasErrors('identifier');
+        $this->assertGuest('student');
+    }
+
+    public function test_student_cannot_login_without_guestbook_presence(): void
+    {
+        $unverifiedStudent = Student::create([
+            'nim' => '12220002',
+            'name' => 'Dinda Permata',
+            'study_program' => 'Teknologi Informasi',
+            'class_name' => '12.4B.01',
+            'semester' => 4,
+            'is_active' => false,
+        ]);
+
+        VoterParticipation::create([
+            'election_period_id' => $this->period->id,
+            'student_nim' => $unverifiedStudent->nim,
+            'has_voted' => false,
+            'verified_at' => null,
+        ]);
+
+        $response = $this->post(route('login.submit'), [
+            'identifier' => '12220002',
+        ]);
+
+        $response->assertSessionHasErrors('identifier');
         $this->assertGuest('student');
     }
 
