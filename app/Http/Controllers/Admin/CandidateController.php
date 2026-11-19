@@ -23,25 +23,23 @@ class CandidateController extends Controller
 
     public function index(Request $request): View
     {
-        $period = null;
         if ($request->has('period_id')) {
-            $period = ElectionPeriod::find($request->period_id);
+            session(['admin_selected_period_id' => $request->period_id]);
         }
-        $period = $period ?? $this->electionService->getActivePeriod() ?? $this->electionService->getLatestPeriod();
+        $period = $this->electionService->getSelectedPeriod();
 
-        $allPeriods = ElectionPeriod::orderByDesc('id')->get();
-        $candidates = $period ? $period->candidatePairs : collect();
+        $allPeriods = ElectionPeriod::orderByDesc('is_active')->orderByDesc('id')->get();
+        $candidates = $period ? $period->candidatePairs()->orderBy('candidate_number')->get() : collect();
 
         return view('admin.candidates.index', compact('period', 'allPeriods', 'candidates'));
     }
 
     public function create(Request $request): View|RedirectResponse
     {
-        $period = null;
         if ($request->has('period_id')) {
-            $period = ElectionPeriod::find($request->period_id);
+            session(['admin_selected_period_id' => $request->period_id]);
         }
-        $period = $period ?? $this->electionService->getActivePeriod() ?? $this->electionService->getLatestPeriod();
+        $period = $this->electionService->getSelectedPeriod();
 
         if (! $period) {
             return redirect()->route('admin.dashboard')

@@ -52,6 +52,11 @@ class VotingController extends Controller
             return redirect()->route('student.receipt');
         }
 
+        // Check if voting booth is closed
+        if ($activePeriod->isVotingClosed()) {
+            return view('student.closed', compact('student', 'activePeriod'));
+        }
+
         $candidates = $activePeriod->candidatePairs;
 
         return view('student.voting', compact('student', 'activePeriod', 'candidates', 'participation'));
@@ -62,7 +67,7 @@ class VotingController extends Controller
         $student = Auth::guard('student')->user();
         $activePeriod = $this->electionService->getActivePeriod();
 
-        if (! $activePeriod || $candidate->election_period_id !== $activePeriod->id) {
+        if (! $activePeriod || $candidate->election_period_id !== $activePeriod->id || $activePeriod->isVotingClosed()) {
             return redirect()->route('student.voting');
         }
 

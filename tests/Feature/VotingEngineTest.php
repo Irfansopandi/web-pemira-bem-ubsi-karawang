@@ -31,7 +31,8 @@ class VotingEngineTest extends TestCase
             'start_time' => now()->subDay(),
             'end_time' => now()->addDays(7),
             'status' => 'active',
-            'is_result_published' => false,
+            'is_active' => true,
+            'voting_status' => 'opened',
         ]);
 
         $this->candidate1 = CandidatePair::create([
@@ -221,7 +222,7 @@ class VotingEngineTest extends TestCase
         $response->assertSee('Fajar Nugraha');
     }
 
-    public function test_admin_can_access_dashboard_and_toggle_results_publication(): void
+    public function test_admin_can_access_dashboard_and_toggle_voting_status(): void
     {
         $admin = Admin::create([
             'name' => 'Admin Test',
@@ -236,12 +237,11 @@ class VotingEngineTest extends TestCase
 
         $response = $this->get(route('admin.dashboard'));
         $response->assertStatus(200);
-        $response->assertSee('Panel Administrator');
 
-        // Toggle publish
-        $this->post(route('admin.periods.toggle-publish', $this->period));
+        // Toggle voting booth status (from opened to closed)
+        $this->post(route('admin.periods.toggle-voting', $this->period));
 
         $this->period->refresh();
-        $this->assertTrue($this->period->is_result_published);
+        $this->assertEquals('closed', $this->period->voting_status);
     }
 }

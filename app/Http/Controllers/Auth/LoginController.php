@@ -132,6 +132,15 @@ class LoginController extends Controller
             return redirect()->route('student.receipt')->with('info', 'Anda sudah memilih. Berikut tanda terima resmi Anda.');
         }
 
+        // 4b. Cek status bilik suara (Jika belum memilih dan bilik suara ditutup, tolak login)
+        if ($activePeriod->isVotingClosed()) {
+            return back()
+                ->withInput(['identifier' => $identifier])
+                ->withErrors([
+                    'identifier' => 'Bilik suara saat ini sedang ditutup oleh Panitia KPUM.',
+                ]);
+        }
+
         // 5. Verifikasi kehadiran fisik mahasiswa di Buku Tamu TPS
         $presence = $this->guestbookService->isStudentPresent($student->nim);
 

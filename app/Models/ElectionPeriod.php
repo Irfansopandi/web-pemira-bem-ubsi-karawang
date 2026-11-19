@@ -13,9 +13,12 @@ class ElectionPeriod extends Model
     protected $fillable = [
         'academic_year',
         'name',
+        'description',
         'start_time',
         'end_time',
         'status',
+        'is_active',
+        'voting_status',
         'is_result_published',
         'published_at',
     ];
@@ -23,6 +26,7 @@ class ElectionPeriod extends Model
     protected function casts(): array
     {
         return [
+            'is_active' => 'boolean',
             'start_time' => 'datetime',
             'end_time' => 'datetime',
             'published_at' => 'datetime',
@@ -50,9 +54,42 @@ class ElectionPeriod extends Model
         return $this->hasMany(Announcement::class);
     }
 
+    /**
+     * Memeriksa apakah periode ini adalah Periode Aktif Pelaksanaan Sistem.
+     */
+    public function isSystemActive(): bool
+    {
+        return (bool) ($this->is_active || $this->status === 'active');
+    }
+
+    /**
+     * Memeriksa apakah periode ini adalah Periode Arsip (bukan periode aktif).
+     */
+    public function isArchived(): bool
+    {
+        return ! $this->isSystemActive() || $this->status === 'archived';
+    }
+
+    /**
+     * Memeriksa apakah bilik suara DIBUKA untuk pencoblosan mahasiswa.
+     * Hanya periode aktif yang bilik suaranya dapat berstatus dibuka.
+     */
+    public function isVotingOpen(): bool
+    {
+        return $this->isSystemActive() && $this->voting_status === 'opened';
+    }
+
+    /**
+     * Memeriksa apakah bilik suara DITUTUP.
+     */
+    public function isVotingClosed(): bool
+    {
+        return ! $this->isVotingOpen();
+    }
+
     public function isActive(): bool
     {
-        return $this->status === 'active' && now()->between($this->start_time, $this->end_time);
+        return $this->isSystemActive();
     }
 }
 

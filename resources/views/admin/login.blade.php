@@ -71,7 +71,7 @@
                                 REKAPITULASI SUARA
                             </h4>
                             <p class="text-[10px] xl:text-[11px] text-slate-300 leading-snug font-normal mt-0.5">
-                                Pemantauan partisipasi pemilih DPT secara real-time dan publikasi hasil resmi.
+                                Pemantauan partisipasi pemilih DPT secara real-time dan rekapitulasi hasil pemungutan suara.
                             </p>
                         </div>
                     </div>

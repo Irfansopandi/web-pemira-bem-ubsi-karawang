@@ -34,7 +34,7 @@
     </div>
 
     <!-- Candidate Pairs Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div id="visi-misi" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         @forelse($candidates as $candidate)
             <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
                 <!-- Header -->

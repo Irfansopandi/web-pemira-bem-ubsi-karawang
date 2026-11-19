@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class ElectionService
 {
+    /**
+     * Mengambil Periode Aktif Sistem untuk pelaksanaan pemilihan saat ini (Bilik Suara Mahasiswa).
+     */
     public function getActivePeriod(): ?ElectionPeriod
     {
         return ElectionPeriod::with(['candidatePairs' => function ($q) {
@@ -19,8 +22,46 @@ class ElectionService
         }, 'announcements' => function ($q) {
             $q->where('is_active', true)->latest();
         }])
-        ->where('status', 'active')
+        ->where(function ($q) {
+            $q->where('is_active', true)->orWhere('status', 'active');
+        })
         ->first();
+    }
+
+    /**
+     * Mengambil Periode yang sedang dipilih / dikelola oleh Admin (Konteks Panel Admin).
+     * Memprioritaskan: Query parameter -> Session admin -> Periode Aktif -> Periode Terbaru.
+     */
+    public function getSelectedPeriod(): ?ElectionPeriod
+    {
+        $selectedId = request('period_id') ?? session('admin_selected_period_id');
+
+        if ($selectedId) {
+            $period = ElectionPeriod::with(['candidatePairs' => function ($q) {
+                $q->orderBy('candidate_number');
+            }])->find($selectedId);
+
+            if ($period) {
+                session(['admin_selected_period_id' => $period->id]);
+                return $period;
+            }
+        }
+
+        // Fallback 1: Periode aktif sistem
+        $active = $this->getActivePeriod();
+        if ($active) {
+            session(['admin_selected_period_id' => $active->id]);
+            return $active;
+        }
+
+        // Fallback 2: Periode terbaru
+        $latest = $this->getLatestPeriod();
+        if ($latest) {
+            session(['admin_selected_period_id' => $latest->id]);
+            return $latest;
+        }
+
+        return null;
     }
 
     public function getLatestPeriod(): ?ElectionPeriod
@@ -33,7 +74,7 @@ class ElectionService
     }
 
     /**
-     * Get anonymous tally directly from ballots table.
+     * Get anonymous tally directly from ballots table for the specific period.
      */
     public function getTally(ElectionPeriod $period): Collection
     {
@@ -59,7 +100,7 @@ class ElectionService
                 'chairman_study_program' => $candidate->chairman_study_program,
                 'vice_chairman_name' => $candidate->vice_chairman_name,
                 'vice_chairman_study_program' => $candidate->vice_chairman_study_program,
-                'photo_url' => $candidate->photo_url,
+                'photo_url' => $candidate->getPhotoUrl(),
                 'total_votes' => $votes,
                 'percentage' => $percentage,
             ];
@@ -68,15 +109,21 @@ class ElectionService
 
     public function getParticipationStats(ElectionPeriod $period): array
     {
-        $totalRegisteredStudents = Student::where('is_active', true)->count();
-        $totalVoted = VoterParticipation::where('election_period_id', $period->id)
+        // 1. Total DPT dihitung dari daftar pemilih yang terdaftar pada periode bersangkutan
+        $totalDpt = VoterParticipation::where('election_period_id', $period->id)->count();
+
+        // 2. Total Suara Masuk: dihitung dari surat suara sah di kotak suara (ballots) pada periode ini
+        $totalBallots = Ballot::where('election_period_id', $period->id)->count();
+        $totalParticipated = VoterParticipation::where('election_period_id', $period->id)
             ->where('has_voted', true)
             ->count();
-        $totalNotVoted = max(0, $totalRegisteredStudents - $totalVoted);
-        $turnoutPercentage = $totalRegisteredStudents > 0 ? round(($totalVoted / $totalRegisteredStudents) * 100, 1) : 0;
+        $totalVoted = max($totalBallots, $totalParticipated);
+
+        $totalNotVoted = max(0, $totalDpt - $totalVoted);
+        $turnoutPercentage = $totalDpt > 0 ? round(($totalVoted / $totalDpt) * 100, 1) : 0;
 
         return [
-            'total_students' => $totalRegisteredStudents,
+            'total_students' => $totalDpt,
             'total_voted' => $totalVoted,
             'total_not_voted' => $totalNotVoted,
             'turnout_percentage' => $turnoutPercentage,

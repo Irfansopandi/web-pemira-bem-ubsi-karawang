@@ -23,13 +23,18 @@ class VotingService
     public function castVote(Student $student, int $candidatePairId, Request $request): VoterParticipation
     {
         // 1. Get current active election period
-        $activePeriod = ElectionPeriod::where('status', 'active')
-            ->where('start_time', '<=', now())
-            ->where('end_time', '>=', now())
-            ->first();
+        $activePeriod = ElectionPeriod::where(function ($q) {
+            $q->where('is_active', true)
+              ->orWhere('status', 'active');
+        })->first();
 
         if (! $activePeriod) {
             throw new RuntimeException('Saat ini tidak ada periode pemilihan PEMIRA yang sedang aktif.');
+        }
+
+        // 2. Validate voting booth status (Must be DIBUKA / opened)
+        if (! $activePeriod->isVotingOpen()) {
+            throw new RuntimeException('Bilik suara untuk periode ' . $activePeriod->name . ' saat ini sedang DITUTUP oleh Panitia KPUM. Pemungutan suara belum dapat dilakukan.');
         }
 
         // 2. Validate candidate pair belongs to active election period
