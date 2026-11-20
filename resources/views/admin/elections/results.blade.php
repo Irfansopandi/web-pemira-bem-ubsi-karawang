@@ -72,14 +72,14 @@
 
                         <div class="text-right shrink-0">
                             <span class="text-3xl sm:text-4xl font-black text-[#940c10]">{{ $item['percentage'] }}%</span>
-                            <p class="text-xs font-bold text-slate-600 mt-0.5">{{ number_format($item['total_votes']) }} Suara</p>
+                            <p class="text-xs font-bold text-slate-600 mt-0.5">{{ number_format($item['total_votes']) }} Suara @if(!empty($item['total_present'])) <span class="font-normal text-slate-400">(dari {{ $item['total_present'] }} Hadir)</span> @endif</p>
                         </div>
                     </div>
 
                     <!-- Progress Bar -->
                     <div class="mt-6 space-y-2">
                         <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                            <span>Perolehan Suara</span>
+                            <span>Perolehan Suara (dari Pemilih Hadir di TPS)</span>
                             <span>{{ $item['percentage'] }}%</span>
                         </div>
                         <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden p-0.5 border border-slate-200">
@@ -90,7 +90,14 @@
 
                 <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
                     <span>Program Studi: {{ $item['chairman_study_program'] ?? 'Teknologi Informasi' }}</span>
-                    <a href="{{ route('admin.candidates.index') }}" class="font-bold text-[#940c10] hover:underline">Detail Paslon &rarr;</a>
+                    <a href="{{ route('admin.candidates.index') }}" 
+                        class="inline-flex items-center gap-1 font-bold text-[#940C10] hover:text-[#7A0A0D] no-underline group/link transition-colors">
+                        <span>Detail Paslon</span>
+                        <svg class="w-4 h-4 transform group-hover/link:translate-x-1.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
                 </div>
             </div>
         @empty

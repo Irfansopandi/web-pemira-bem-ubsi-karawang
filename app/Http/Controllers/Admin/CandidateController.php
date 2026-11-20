@@ -46,7 +46,10 @@ class CandidateController extends Controller
                 ->with('error', 'Silakan buat atau aktifkan periode pemilihan terlebih dahulu.');
         }
 
-        return view('admin.candidates.create', compact('period'));
+        $existingNumbers = $period->candidatePairs()->pluck('candidate_number')->toArray();
+        $suggestedNumber = count($existingNumbers) > 0 ? max($existingNumbers) + 1 : 1;
+
+        return view('admin.candidates.create', compact('period', 'existingNumbers', 'suggestedNumber'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -62,18 +65,33 @@ class CandidateController extends Controller
                 Rule::unique('candidate_pairs', 'candidate_number')->where('election_period_id', $periodId),
             ],
             'chairman_name' => ['required', 'string', 'max:255'],
-            'chairman_nim' => ['required', 'string', 'max:20'],
+            'chairman_nim' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20'],
             'chairman_study_program' => ['required', 'string', 'max:100'],
             'vice_chairman_name' => ['required', 'string', 'max:255'],
-            'vice_chairman_nim' => ['required', 'string', 'max:20'],
+            'vice_chairman_nim' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20'],
             'vice_chairman_study_program' => ['required', 'string', 'max:100'],
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'vision' => ['required', 'string'],
             'mission_raw' => ['required', 'string'],
             'work_programs_raw' => ['nullable', 'string'],
         ], [
-            'candidate_number.unique' => 'Nomor urut paslon ini sudah digunakan pada periode pemilihan terkait.',
-            'mission_raw.required' => 'Misi paslon wajib diisi (minimal satu butir misi).',
+            'candidate_number.required' => 'Nomor urut paslon wajib diisi.',
+            'candidate_number.integer' => 'Nomor urut paslon harus berupa angka.',
+            'candidate_number.min' => 'Nomor urut paslon minimal 1.',
+            'candidate_number.unique' => 'Nomor urut paslon ini sudah digunakan pada periode pemilihan terkait. Silakan pilih nomor urut lain yang belum terdaftar.',
+            'chairman_name.required' => 'Nama lengkap calon ketua BEM wajib diisi.',
+            'chairman_nim.required' => 'NIM calon ketua BEM wajib diisi.',
+            'chairman_nim.regex' => 'NIM calon ketua BEM hanya boleh berisi angka (tidak boleh mengandung huruf atau simbol).',
+            'chairman_study_program.required' => 'Program studi calon ketua BEM wajib diisi.',
+            'vice_chairman_name.required' => 'Nama lengkap calon wakil ketua BEM wajib diisi.',
+            'vice_chairman_nim.required' => 'NIM calon wakil ketua BEM wajib diisi.',
+            'vice_chairman_nim.regex' => 'NIM calon wakil ketua BEM hanya boleh berisi angka (tidak boleh mengandung huruf atau simbol).',
+            'vice_chairman_study_program.required' => 'Program studi calon wakil ketua BEM wajib diisi.',
+            'photo.image' => 'Berkas foto harus berupa gambar valid.',
+            'photo.mimes' => 'Format foto harus berupa JPG, PNG, atau WEBP.',
+            'photo.max' => 'Ukuran berkas foto maksimal 2 MB (2048 KB).',
+            'vision.required' => 'Visi pasangan calon wajib diisi.',
+            'mission_raw.required' => 'Misi pasangan calon wajib diisi (minimal satu butir misi).',
         ]);
 
         // Process Mission lines
@@ -124,10 +142,15 @@ class CandidateController extends Controller
     {
         $candidate->load('electionPeriod');
 
+        $existingNumbers = CandidatePair::where('election_period_id', $candidate->election_period_id)
+            ->where('id', '!=', $candidate->id)
+            ->pluck('candidate_number')
+            ->toArray();
+
         $missionRaw = is_array($candidate->mission) ? implode("\n", $candidate->mission) : '';
         $workProgramsRaw = is_array($candidate->work_programs) ? implode("\n", $candidate->work_programs) : '';
 
-        return view('admin.candidates.edit', compact('candidate', 'missionRaw', 'workProgramsRaw'));
+        return view('admin.candidates.edit', compact('candidate', 'missionRaw', 'workProgramsRaw', 'existingNumbers'));
     }
 
     public function update(Request $request, CandidatePair $candidate): RedirectResponse
@@ -142,17 +165,33 @@ class CandidateController extends Controller
                     ->ignore($candidate->id),
             ],
             'chairman_name' => ['required', 'string', 'max:255'],
-            'chairman_nim' => ['required', 'string', 'max:20'],
+            'chairman_nim' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20'],
             'chairman_study_program' => ['required', 'string', 'max:100'],
             'vice_chairman_name' => ['required', 'string', 'max:255'],
-            'vice_chairman_nim' => ['required', 'string', 'max:20'],
+            'vice_chairman_nim' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20'],
             'vice_chairman_study_program' => ['required', 'string', 'max:100'],
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'vision' => ['required', 'string'],
             'mission_raw' => ['required', 'string'],
             'work_programs_raw' => ['nullable', 'string'],
         ], [
-            'candidate_number.unique' => 'Nomor urut paslon ini sudah digunakan pada periode pemilihan terkait.',
+            'candidate_number.required' => 'Nomor urut paslon wajib diisi.',
+            'candidate_number.integer' => 'Nomor urut paslon harus berupa angka.',
+            'candidate_number.min' => 'Nomor urut paslon minimal 1.',
+            'candidate_number.unique' => 'Nomor urut paslon ini sudah digunakan pada periode pemilihan terkait. Silakan pilih nomor urut lain yang belum terdaftar.',
+            'chairman_name.required' => 'Nama lengkap calon ketua BEM wajib diisi.',
+            'chairman_nim.required' => 'NIM calon ketua BEM wajib diisi.',
+            'chairman_nim.regex' => 'NIM calon ketua BEM hanya boleh berisi angka (tidak boleh mengandung huruf atau simbol).',
+            'chairman_study_program.required' => 'Program studi calon ketua BEM wajib diisi.',
+            'vice_chairman_name.required' => 'Nama lengkap calon wakil ketua BEM wajib diisi.',
+            'vice_chairman_nim.required' => 'NIM calon wakil ketua BEM wajib diisi.',
+            'vice_chairman_nim.regex' => 'NIM calon wakil ketua BEM hanya boleh berisi angka (tidak boleh mengandung huruf atau simbol).',
+            'vice_chairman_study_program.required' => 'Program studi calon wakil ketua BEM wajib diisi.',
+            'photo.image' => 'Berkas foto harus berupa gambar valid.',
+            'photo.mimes' => 'Format foto harus berupa JPG, PNG, atau WEBP.',
+            'photo.max' => 'Ukuran berkas foto maksimal 2 MB (2048 KB).',
+            'vision.required' => 'Visi pasangan calon wajib diisi.',
+            'mission_raw.required' => 'Misi pasangan calon wajib diisi (minimal satu butir misi).',
         ]);
 
         $mission = array_values(array_filter(array_map('trim', explode("\n", $validated['mission_raw']))));

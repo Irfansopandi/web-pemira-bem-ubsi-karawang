@@ -94,7 +94,7 @@
         <div class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-4">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 class="text-base font-bold text-slate-900">Rekapitulasi Suara Paslon Sementara</h3>
-                <span class="text-xs text-slate-400 font-mono">Live Anonymous Ballot</span>
+                <span class="text-xs text-slate-400 font-mono">Berdasarkan Kehadiran TPS</span>
             </div>
 
             <div class="space-y-4">
@@ -112,7 +112,7 @@
                             </div>
                             <div class="text-right">
                                 <span class="text-base font-black text-[#940c10]" x-text="item.percentage + '%'"></span>
-                                <p class="text-[10px] text-slate-500 font-semibold" x-text="formatNumber(item.total_votes) + ' Suara'"></p>
+                                <p class="text-[10px] text-slate-500 font-semibold" x-text="formatNumber(item.total_votes) + ' Suara' + (item.total_present ? ' (dari ' + item.total_present + ' Hadir)' : '')"></p>
                             </div>
                         </div>
                         <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
@@ -131,7 +131,14 @@
         <div class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-4">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 class="text-base font-bold text-slate-900">Aktivitas Suara Terkini (Stream TPS)</h3>
-                <a href="{{ route('admin.voters.index') }}" class="text-xs font-bold text-[#940c10] hover:underline">Semua DPT &rarr;</a>
+                <a href="{{ route('admin.voters.index') }}" 
+                    class="inline-flex items-center gap-1 text-xs font-bold text-[#940C10] hover:text-[#7A0A0D] no-underline group/link transition-colors">
+                    <span>Semua DPT</span>
+                    <svg class="w-4 h-4 transform group-hover/link:translate-x-1.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
             </div>
 
             <div class="space-y-2.5 max-h-[380px] overflow-y-auto admin-scrollbar pr-1">

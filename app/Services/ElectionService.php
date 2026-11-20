@@ -89,9 +89,20 @@ class ElectionService
 
         $totalVotes = Ballot::where('election_period_id', $period->id)->count();
 
-        return $candidates->map(function ($candidate) use ($ballotCounts, $totalVotes) {
+        // Opsi C: Dihitung berdasarkan total pemilih yang hadir/terverifikasi di TPS
+        $totalPresent = VoterParticipation::where('election_period_id', $period->id)
+            ->where(function ($query) {
+                $query->whereNotNull('verified_at')
+                    ->orWhere('has_voted', true);
+            })
+            ->count();
+
+        $baseAttendance = max($totalPresent, $totalVotes);
+
+        return $candidates->map(function ($candidate) use ($ballotCounts, $totalVotes, $baseAttendance) {
             $votes = (int) ($ballotCounts[$candidate->id] ?? 0);
-            $percentage = $totalVotes > 0 ? round(($votes / $totalVotes) * 100, 1) : 0;
+            $percentage = $baseAttendance > 0 ? round(($votes / $baseAttendance) * 100, 1) : 0;
+            $percentageOfVoted = $totalVotes > 0 ? round(($votes / $totalVotes) * 100, 1) : 0;
 
             return [
                 'id' => $candidate->id,
@@ -103,6 +114,9 @@ class ElectionService
                 'photo_url' => $candidate->getPhotoUrl(),
                 'total_votes' => $votes,
                 'percentage' => $percentage,
+                'percentage_of_voted' => $percentageOfVoted,
+                'total_present' => $baseAttendance,
+                'total_voted' => $totalVotes,
             ];
         });
     }
@@ -122,10 +136,18 @@ class ElectionService
         $totalNotVoted = max(0, $totalDpt - $totalVoted);
         $turnoutPercentage = $totalDpt > 0 ? round(($totalVoted / $totalDpt) * 100, 1) : 0;
 
+        $totalPresent = VoterParticipation::where('election_period_id', $period->id)
+            ->where(function ($query) {
+                $query->whereNotNull('verified_at')
+                    ->orWhere('has_voted', true);
+            })
+            ->count();
+
         return [
             'total_students' => $totalDpt,
             'total_voted' => $totalVoted,
             'total_not_voted' => $totalNotVoted,
+            'total_present' => max($totalPresent, $totalVoted),
             'turnout_percentage' => $turnoutPercentage,
         ];
     }

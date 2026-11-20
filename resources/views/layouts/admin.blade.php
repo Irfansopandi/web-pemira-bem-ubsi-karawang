@@ -193,8 +193,8 @@
 
                 <!-- Kelola Paslon -->
                 <a href="{{ route('admin.candidates.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ (request()->routeIs('admin.candidates.*') && !request()->has('tab')) ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ (request()->routeIs('admin.candidates.*') && !request()->has('tab')) ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.candidates.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.candidates.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
                         <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -203,59 +203,14 @@
                     <span class="truncate">Kelola Paslon</span>
                 </a>
 
-                <!-- Kelola Visi & Misi -->
-                <a href="{{ route('admin.candidates.index') }}#visi-misi"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group text-slate-300 hover:text-white hover:bg-white/[0.07]">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 text-slate-400 group-hover:text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <line x1="10" y1="9" x2="8" y2="9"></line>
-                    </svg>
-                    <span class="truncate">Kelola Visi & Misi</span>
-                </a>
-            </div>
-
-            <!-- ======================================================== -->
-            <!-- 3. MANAJEMEN PEMILIH                                     -->
-            <!-- ======================================================== -->
-            <div class="space-y-1">
-                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Manajemen Pemilih
-                </span>
-
                 <!-- Kelola Mahasiswa -->
                 <a href="{{ route('admin.voters.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ (request()->routeIs('admin.voters.*') && !request('status') && !request('tab')) ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ (request()->routeIs('admin.voters.*') && !request('status') && !request('tab')) ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.voters.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.voters.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                         <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                     </svg>
                     <span class="truncate">Kelola Mahasiswa</span>
-                </a>
-
-                <!-- Kelola DPT -->
-                <a href="{{ route('admin.voters.index', ['tab' => 'dpt']) }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ (request()->routeIs('admin.voters.*') && request('tab') === 'dpt') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ (request()->routeIs('admin.voters.*') && request('tab') === 'dpt') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                        <line x1="9" y1="9" x2="15" y2="9"></line>
-                        <line x1="9" y1="13" x2="15" y2="13"></line>
-                        <line x1="9" y1="17" x2="13" y2="17"></line>
-                    </svg>
-                    <span class="truncate">Kelola DPT</span>
-                </a>
-
-                <!-- Kehadiran Pemilih -->
-                <a href="{{ route('admin.voters.index', ['status' => 'voted']) }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ (request()->routeIs('admin.voters.*') && request('status') === 'voted') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ (request()->routeIs('admin.voters.*') && request('status') === 'voted') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <polyline points="16 11 18 13 22 9"></polyline>
-                    </svg>
-                    <span class="truncate">Kehadiran Pemilih</span>
                 </a>
             </div>
 
@@ -300,7 +255,36 @@
             </div>
 
             <!-- ======================================================== -->
-            <!-- 5. AKSES PEMILIHAN                                       -->
+            <!-- 5. SETTING                                               -->
+            <!-- ======================================================== -->
+            <div class="space-y-1">
+                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    Setting
+                </span>
+
+                <!-- Profile -->
+                <a href="{{ route('admin.profile.index') }}"
+                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.profile.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.profile.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span class="truncate">Profile</span>
+                </a>
+
+                <!-- Pengaturan -->
+                <a href="{{ route('admin.settings.index') }}"
+                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.settings.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.settings.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span class="truncate">Pengaturan</span>
+                </a>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 6. AKSES PEMILIHAN                                       -->
             <!-- ======================================================== -->
             <div class="space-y-1 pt-2 border-t border-white/10">
                 <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -339,19 +323,19 @@
         <div class="shrink-0 p-3.5 xl:p-4 border-t border-white/10 bg-[#0d0103]">
             @php $admin = Auth::guard('admin')->user(); @endphp
             <div class="bg-white/[0.05] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5 min-w-0">
+                <a href="{{ route('admin.profile.index') }}" title="Buka Profil Administrator" class="flex items-center gap-2.5 min-w-0 group hover:opacity-95 transition-opacity">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#940C10] to-[#CE9501] text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-md">
                         {{ strtoupper(substr($admin->name ?? 'AD', 0, 2)) }}
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs font-bold text-white truncate leading-tight">
+                        <p class="text-xs font-bold text-white truncate leading-tight group-hover:text-[#CE9501] transition-colors">
                             {{ $admin->name ?? 'Administrator' }}
                         </p>
                         <span class="text-[10px] font-semibold text-[#E5A900] tracking-wide block truncate">
                             KPUM UBSI
                         </span>
                     </div>
-                </div>
+                </a>
 
                 <form id="logout-form-sidebar" action="{{ route('admin.logout') }}" method="POST" class="shrink-0">
                     @csrf
@@ -494,44 +478,6 @@
                         Kembali ke Periode Aktif
                     </button>
                 </form>
-            @endif
-        </div>
-        @endif
-        </header>
-
-        <!-- Flash Alert Messages -->
-        @if(session('success') || session('error') || session('status'))
-        <div class="px-4 sm:px-6 lg:px-8 pt-4">
-            @if(session('success'))
-                <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold flex items-center gap-2.5 shadow-xs">
-                    <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                    <span>{{ session('success') }}</span>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="p-3.5 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs sm:text-sm font-semibold flex items-center gap-2.5 shadow-xs">
-                    <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    <span>{{ session('error') }}</span>
-                </div>
-            @endif
-
-            @if(session('status'))
-                <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm font-semibold flex items-center gap-2.5 shadow-xs">
-                    <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="16" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                    </svg>
-                    <span>{{ session('status') }}</span>
-                </div>
             @endif
         </div>
         @endif
@@ -810,6 +756,47 @@
         });
     </script>
     @stack('scripts')
+
+    <!-- SweetAlert2 Toast Notifications (Top-End) -->
+    @if (session('status') || session('success') || session('error') || session('info'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                @if (session('status'))
+                    Toast.fire({
+                        icon: 'info',
+                        title: {!! json_encode(session('status')) !!}
+                    });
+                @elseif (session('success'))
+                    Toast.fire({
+                        icon: 'success',
+                        title: {!! json_encode(session('success')) !!}
+                    });
+                @elseif (session('error'))
+                    Toast.fire({
+                        icon: 'error',
+                        title: {!! json_encode(session('error')) !!}
+                    });
+                @elseif (session('info'))
+                    Toast.fire({
+                        icon: 'info',
+                        title: {!! json_encode(session('info')) !!}
+                    });
+                @endif
+            });
+        </script>
+    @endif
 </body>
 </html>
 

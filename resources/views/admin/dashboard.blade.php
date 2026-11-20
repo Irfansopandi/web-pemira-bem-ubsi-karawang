@@ -131,25 +131,25 @@
                 </div>
             </a>
 
-            <!-- 3. Belum Memilih (MERAH) -->
-            <a href="{{ route('admin.voters.index', ['status' => 'not_voted']) }}"
+            <!-- 3. Sudah Hadir di TPS (MERAH) -->
+            <a href="{{ route('admin.voters.index', ['status' => 'present']) }}"
                 class="bg-[#fff8f8] p-4 sm:p-4.5 rounded-2xl border-2 border-[#940C10]/30 hover:border-[#940C10]/75 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/30 transition-all duration-150 shadow-2xs group flex items-center justify-between gap-3 select-none">
                 <div class="flex items-center gap-3.5 min-w-0">
                     <!-- Icon Box -->
                     <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <polyline points="16 11 18 13 22 9"></polyline>
                         </svg>
                     </div>
                     <!-- Info Stack -->
                     <div class="min-w-0">
-                        <p class="text-xs font-medium text-slate-500 truncate">Belum Memilih</p>
-                        <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="formatNumber(stats.total_not_voted)">
-                            {{ number_format($stats['total_not_voted']) }}
+                        <p class="text-xs font-medium text-slate-500 truncate">Sudah Hadir</p>
+                        <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="formatNumber(stats.total_present)">
+                            {{ number_format($stats['total_present'] ?? 0) }}
                         </p>
-                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Sisa Hak Suara</p>
+                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Terverifikasi TPS</p>
                     </div>
                 </div>
                 <!-- Chevron Right -->
@@ -200,12 +200,15 @@
                     <div class="flex items-center justify-between pb-4 border-b border-slate-100 flex-wrap gap-3">
                         <div>
                             <h3 class="text-base font-bold text-slate-900">Kilasan Rekapitulasi Suara Paslon</h3>
-                            <p class="text-xs text-slate-500">Perhitungan suara langsung dari kotak suara anonim</p>
+                            <p class="text-xs text-slate-500">Perhitungan suara berdasarkan pemilih yang hadir di TPS</p>
                         </div>
                         <a href="{{ route('admin.elections.results') }}" 
-                            class="inline-flex items-center gap-1.5 text-xs font-bold text-[#940c10] hover:text-[#7A0A0D] hover:underline">
+                            class="inline-flex items-center gap-1.5 text-xs font-bold text-[#940C10] hover:text-[#7A0A0D] no-underline group/link transition-colors">
                             <span>Buka Hasil Lengkap</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            <svg class="w-4 h-4 transform group-hover/link:translate-x-1.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </a>
                     </div>
 
@@ -233,7 +236,7 @@
                                     </div>
                                     <div class="text-right">
                                         <span class="text-sm font-extrabold text-[#940c10]" x-text="item.percentage + '%'"></span>
-                                        <p class="text-[10px] text-slate-500 font-semibold" x-text="formatNumber(item.total_votes) + ' Suara'"></p>
+                                        <p class="text-[10px] text-slate-500 font-semibold" x-text="formatNumber(item.total_votes) + ' Suara' + (item.total_present ? ' (dari ' + item.total_present + ' Hadir)' : '')"></p>
                                     </div>
                                 </div>
                                 <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
@@ -376,8 +379,13 @@
                             LIVE
                         </span>
                     </div>
-                    <a href="{{ route('admin.voters.index') }}" class="text-xs font-bold text-[#940c10] hover:underline">
-                        Lihat Seluruh DPT &rarr;
+                    <a href="{{ route('admin.voters.index') }}" 
+                        class="inline-flex items-center gap-1 text-xs font-bold text-[#940C10] hover:text-[#7A0A0D] no-underline group/link transition-colors">
+                        <span>Lihat Seluruh DPT</span>
+                        <svg class="w-4 h-4 transform group-hover/link:translate-x-1.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </a>
                 </div>
 
@@ -409,8 +417,13 @@
                         <h3 class="text-sm sm:text-base font-bold text-slate-900">Aktivitas Sistem Terkini</h3>
                         <p class="text-[11px] text-slate-500">5 aksi log audit keamanan terakhir</p>
                     </div>
-                    <a href="{{ route('admin.audit.index') }}" class="text-xs font-bold text-[#940c10] hover:underline">
-                        Buka Audit Trail &rarr;
+                    <a href="{{ route('admin.audit.index') }}" 
+                        class="inline-flex items-center gap-1 text-xs font-bold text-[#940C10] hover:text-[#7A0A0D] no-underline group/link transition-colors">
+                        <span>Buka Audit Trail</span>
+                        <svg class="w-4 h-4 transform group-hover/link:translate-x-1.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </a>
                 </div>
 
@@ -458,6 +471,7 @@ function liveDashboard() {
         stats: {
             total_students: {{ $stats['total_students'] ?? 0 }},
             total_voted: {{ $stats['total_voted'] ?? 0 }},
+            total_present: {{ $stats['total_present'] ?? 0 }},
             total_not_voted: {{ $stats['total_not_voted'] ?? 0 }},
             turnout_percentage: {{ $stats['turnout_percentage'] ?? 0 }}
         },

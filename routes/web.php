@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ElectionController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\PeriodController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Student\VotingController;
@@ -60,4 +62,11 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
 
     // 6. Keamanan & Aktivitas: Audit Trail & Log Aktivitas
     Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+
+    // 7. Pengaturan Akun & Sistem (SETTING)
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 });
