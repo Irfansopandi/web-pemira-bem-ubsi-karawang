@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Bilik Suara — Gunakan Hak Suara Anda', 'darkTheme' => true])
+@extends('layouts.app', ['title' => 'Bilik Suara', 'darkTheme' => true])
 
 @section('content')
 <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 flex-1 flex flex-col justify-center my-auto">

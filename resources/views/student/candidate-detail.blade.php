@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Detail Paslon 0' . $candidate->candidate_number . ' — ' . $candidate->chairman_name . ' & ' . $candidate->vice_chairman_name, 'darkTheme' => true, 'allowScroll' => true])
+@extends('layouts.app', ['title' => 'Detail Paslon 0' . $candidate->candidate_number, 'darkTheme' => true, 'allowScroll' => true])
 
 @section('content')
 <div class="w-full max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-8 flex-1 flex flex-col">

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Voting Selesai — Hak Suara Berhasil Tercatat', 'darkTheme' => true, 'hideNavbar' => true])
+@extends('layouts.app', ['title' => 'Voting Selesai', 'darkTheme' => true, 'hideNavbar' => true])
 
 @section('content')
 <div class="w-full max-w-lg sm:max-w-xl mx-auto px-4 py-6 sm:py-8 flex items-center justify-center my-auto"

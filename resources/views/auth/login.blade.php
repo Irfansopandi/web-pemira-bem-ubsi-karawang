@@ -1,4 +1,4 @@
-<x-layouts.auth title="Bilik Suara - PEMIRA BEM UBSI Karawang">
+<x-layouts.auth title="Bilik Suara">
     <div class="w-full max-w-4xl lg:max-w-5xl xl:max-w-[1040px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-7 sm:gap-8 lg:gap-10 xl:gap-12 items-stretch justify-center">
         
         <!-- ======================================================== -->

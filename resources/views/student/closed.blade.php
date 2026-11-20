@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Bilik Suara Ditutup — PEMIRA BEM UBSI Karawang', 'darkTheme' => true])
+@extends('layouts.app', ['title' => 'Bilik Suara Ditutup', 'darkTheme' => true])
 
 @section('content')
 <div class="w-full max-w-xl mx-auto px-4 py-12 flex-1 flex flex-col justify-center my-auto text-center">
