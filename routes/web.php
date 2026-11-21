@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PeriodController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoterController;
+use App\Http\Controllers\Admin\VoterVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Student\VotingController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,9 @@ Route::middleware(['auth:student'])->prefix('voting')->name('student.')->group(f
     Route::get('/tanda-terima', [VotingController::class, 'receipt'])->name('receipt');
 });
 
+// Akses Cepat Buku Tamu Digital / Verifikasi Kehadiran Pemilih (Kiosk Meja TPS)
+Route::middleware(['auth:admin'])->get('/buku-tamu', [VoterVerificationController::class, 'index'])->name('guestbook');
+
 // Area Administrator KPUM (Panel Pengelolaan Terstruktur)
 Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // 1. Dashboard Utama: Kilasan / Executive Overview
@@ -54,6 +58,12 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
 
     // 4. Manajemen Pemilih: Data Mahasiswa, DPT & Kehadiran
     Route::get('/voters', [VoterController::class, 'index'])->name('voters.index');
+
+    // 4b. Pelaksanaan TPS: Verifikasi Kehadiran Pemilih (Registrasi & Tanda Tangan Digital)
+    Route::get('/verifikasi-pemilih', [VoterVerificationController::class, 'index'])->name('verification.index');
+    Route::post('/verifikasi-pemilih/lookup', [VoterVerificationController::class, 'lookup'])->name('verification.lookup');
+    Route::post('/verifikasi-pemilih/store', [VoterVerificationController::class, 'store'])->name('verification.store');
+    Route::delete('/verifikasi-pemilih/{participation}/cancel', [VoterVerificationController::class, 'cancel'])->name('verification.cancel');
 
     // 5. Pelaksanaan Pemilihan: Monitoring Suara & Hasil Pemilihan
     Route::get('/elections/monitoring', [ElectionController::class, 'monitoring'])->name('elections.monitoring');

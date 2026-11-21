@@ -141,31 +141,34 @@ class LoginController extends Controller
                 ]);
         }
 
-        // 5. Verifikasi kehadiran fisik mahasiswa di Buku Tamu TPS
+        // 5. Verifikasi kehadiran fisik mahasiswa di Meja Registrasi TPS (Verifikasi Kehadiran Pemilih)
         $presence = $this->guestbookService->isStudentPresent($student->nim);
 
         if (! $presence['is_present']) {
             return back()
                 ->withInput(['identifier' => $identifier])
                 ->withErrors([
-                    'identifier' => "NIM {$student->nim} belum isi buku tamu TPS.",
+                    'identifier' => "NIM {$student->nim} belum melakukan Verifikasi Kehadiran di Meja Registrasi TPS. Silakan hubungi Panitia KPUM terlebih dahulu.",
                 ]);
         }
 
-        // 6. Jika lolos seluruh verifikasi, aktifkan dan catat kehadiran di TPS
+        // 6. Jika lolos seluruh verifikasi, pastikan status mahasiswa aktif
         $student->update(['is_active' => true]);
 
-        VoterParticipation::updateOrCreate(
-            [
+        // Pertahankan data verifikasi kehadiran (tanda tangan digital & panitia) jika sudah ada
+        $existingParticipation = VoterParticipation::where('election_period_id', $activePeriod->id)
+            ->where('student_nim', $student->nim)
+            ->first();
+
+        if (! $existingParticipation) {
+            VoterParticipation::create([
                 'election_period_id' => $activePeriod->id,
                 'student_nim' => $student->nim,
-            ],
-            [
                 'has_voted' => false,
                 'verified_at' => now(),
-                'tps_location' => 'TPS Kampus UBSI Karawang',
-            ]
-        );
+                'tps_location' => 'TPS Kampus UBSI Cikampek',
+            ]);
+        }
 
         // Login dan langsung masuk ke bilik suara
         Auth::guard('student')->login($student);

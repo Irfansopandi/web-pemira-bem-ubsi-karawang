@@ -173,16 +173,16 @@
                     @forelse($participations as $part)
                         @php
                             $isPresent = (bool) ($part->verified_at || $part->has_voted);
-                            $verifierText = 'Belum Mengisi Buku Tamu';
+                            $verifierText = 'Belum Verifikasi Kehadiran';
                             if ($isPresent) {
                                 if ($part->verifiedBy) {
-                                    $verifierText = 'Buku Tamu TPS (' . $part->verifiedBy->name . ')';
+                                    $verifierText = 'Verifikasi Kehadiran (' . $part->verifiedBy->name . ')';
                                 } elseif ($part->verified_at) {
-                                    $verifierText = 'Buku Tamu TPS (Terverifikasi)';
+                                    $verifierText = 'Verifikasi Kehadiran TPS (Terverifikasi)';
                                 } elseif ($part->has_voted) {
-                                    $verifierText = 'Bilik Suara (Mandiri Online)';
+                                    $verifierText = 'Bilik Suara (Mandiri)';
                                 } else {
-                                    $verifierText = 'Buku Tamu TPS';
+                                    $verifierText = 'Verifikasi Kehadiran TPS';
                                 }
                             }
                             $verifiedAtFormatted = $part->verified_at 
@@ -208,12 +208,17 @@
                             </td>
                             <td class="py-3.5 px-5">
                                 @if($isPresent)
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200" title="Tercatat hadir di Buku Tamu TPS">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
-                                        Hadir
-                                    </span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200" title="Tercatat hadir di Verifikasi Kehadiran Pemilih">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                                            Hadir
+                                        </span>
+                                        @if($part->signature_url)
+                                            <img src="{{ $part->signature_url }}" alt="TTD" class="h-5 w-10 object-contain bg-white rounded border border-slate-200 p-0.5" title="Tanda tangan terverifikasi">
+                                        @endif
+                                    </div>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" title="Belum mengisi buku tamu TPS">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" title="Belum verifikasi kehadiran TPS">
                                         <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                                         Belum Hadir
                                     </span>
@@ -232,6 +237,7 @@
                                         is_present: {{ $isPresent ? 'true' : 'false' }},
                                         verified_at: '{{ $verifiedAtFormatted }}',
                                         verifier: '{{ addslashes($verifierText) }}',
+                                        signature_url: '{{ $part->signature_url }}',
                                         tps_location: '{{ addslashes($part->tps_location ?? 'Kampus UBSI Karawang') }}'
                                     }; isDetailOpen = true;"
                                     class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-[#940C10] hover:bg-red-50 hover:border-red-200 transition-all shadow-2xs cursor-pointer"
@@ -385,6 +391,16 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Pratinjau Tanda Tangan Digital Pemilih -->
+                    <template x-if="selectedVoter?.signature_url">
+                        <div class="p-3.5 rounded-2xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Bukti Tanda Tangan Digital (Meja Verifikasi TPS)</span>
+                            <div class="p-3 bg-slate-50/70 rounded-xl border border-dashed border-slate-200 flex items-center justify-center">
+                                <img :src="selectedVoter?.signature_url" alt="Tanda Tangan Pemilih" class="max-h-24 object-contain">
+                            </div>
+                        </div>
+                    </template>
 
                     <!-- Prinsip Kerahasiaan Suara Notice -->
                     <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3">

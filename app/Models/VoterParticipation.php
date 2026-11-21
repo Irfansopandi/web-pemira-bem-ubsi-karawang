@@ -21,6 +21,8 @@ class VoterParticipation extends Model
         'encrypted_vote_receipt',
         'verified_by_admin_id',
         'verified_at',
+        'signature_path',
+        'phone',
         'tps_location',
         'ip_address',
         'user_agent',
@@ -48,6 +50,26 @@ class VoterParticipation extends Model
     public function verifiedBy(): BelongsTo
     {
         return $this->belongsTo(Admin::class, 'verified_by_admin_id');
+    }
+
+    /**
+     * Cek apakah pemilih sudah terverifikasi hadir di Meja Registrasi TPS.
+     */
+    public function isVerified(): bool
+    {
+        return ! is_null($this->verified_at);
+    }
+
+    /**
+     * URL tanda tangan digital pemilih.
+     */
+    public function getSignatureUrlAttribute(): ?string
+    {
+        if (empty($this->signature_path)) {
+            return null;
+        }
+
+        return asset('storage/' . $this->signature_path);
     }
 
     /**
