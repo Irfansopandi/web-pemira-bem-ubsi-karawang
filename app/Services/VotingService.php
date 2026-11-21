@@ -46,6 +46,16 @@ class VotingService
             throw new RuntimeException('Pasangan calon yang dipilih tidak valid untuk periode ini.');
         }
 
+        // 2b. Validate voter attendance via internal guestbook
+        $hasVerifiedAttendance = VoterParticipation::where('election_period_id', $activePeriod->id)
+            ->where('student_nim', $student->nim)
+            ->whereNotNull('verified_at')
+            ->exists();
+
+        if (! $hasVerifiedAttendance) {
+            throw new RuntimeException("NIM {$student->nim} ({$student->name}) belum mengisi Buku Tamu.");
+        }
+
         // 3. Atomically check and execute within DB Transaction with row locking
         return DB::transaction(function () use ($student, $activePeriod, $candidatePair, $request) {
             $participation = VoterParticipation::firstOrCreate(
@@ -74,13 +84,13 @@ class VotingService
                 'election_period_id' => $activePeriod->id,
                 'candidate_pair_id' => $candidatePair->id,
                 'ballot_hash' => $ballotHash,
-                'created_at' => now(),
+                'created_at' => now('Asia/Jakarta'),
             ]);
 
             // 5. Update participation status & save encrypted receipt for student post-voting summary
             $lockedParticipation->update([
                 'has_voted' => true,
-                'voted_at' => now(),
+                'voted_at' => now('Asia/Jakarta'),
                 'encrypted_vote_receipt' => Crypt::encryptString((string) $candidatePair->id),
                 'ip_address' => $request->ip(),
                 'user_agent' => substr((string) $request->userAgent(), 0, 500),

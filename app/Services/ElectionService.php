@@ -137,17 +137,14 @@ class ElectionService
         $turnoutPercentage = $totalDpt > 0 ? round(($totalVoted / $totalDpt) * 100, 1) : 0;
 
         $totalPresent = VoterParticipation::where('election_period_id', $period->id)
-            ->where(function ($query) {
-                $query->whereNotNull('verified_at')
-                    ->orWhere('has_voted', true);
-            })
+            ->whereNotNull('verified_at')
             ->count();
 
         return [
             'total_students' => $totalDpt,
             'total_voted' => $totalVoted,
             'total_not_voted' => $totalNotVoted,
-            'total_present' => max($totalPresent, $totalVoted),
+            'total_present' => $totalPresent,
             'turnout_percentage' => $turnoutPercentage,
         ];
     }

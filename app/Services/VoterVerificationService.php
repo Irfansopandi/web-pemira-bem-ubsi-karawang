@@ -83,6 +83,7 @@ class VoterVerificationService
         ?string $tpsLocation,
         ElectionPeriod $period,
         ?string $phone = null,
+        ?string $email = null,
         ?string $ipAddress = null,
         ?string $userAgent = null
     ): array {
@@ -121,9 +122,9 @@ class VoterVerificationService
             ];
         }
 
-        $location = $tpsLocation ?: 'Kampus Karawang';
+        $location = $tpsLocation ?: 'UBSI Karawang';
 
-        return DB::transaction(function () use ($student, $period, $adminId, $signaturePath, $location, $phone, $ipAddress, $userAgent) {
+        return DB::transaction(function () use ($student, $period, $adminId, $signaturePath, $location, $phone, $email, $ipAddress, $userAgent) {
             $participation = VoterParticipation::updateOrCreate(
                 [
                     'election_period_id' => $period->id,
@@ -131,7 +132,7 @@ class VoterVerificationService
                 ],
                 [
                     'has_voted' => false,
-                    'verified_at' => now(),
+                    'verified_at' => now('Asia/Jakarta'),
                     'verified_by_admin_id' => $adminId,
                     'signature_path' => $signaturePath,
                     'phone' => $phone,
@@ -141,8 +142,15 @@ class VoterVerificationService
                 ]
             );
 
-            // Aktifkan akun mahasiswa di tabel students
-            $student->update(['is_active' => true]);
+            // Perbarui identitas mahasiswa (Asal Kampus, Email Kampus, & Status Aktif)
+            $studentUpdates = ['is_active' => true];
+            if ($location) {
+                $studentUpdates['asal_kampus'] = $location;
+            }
+            if (! empty($email)) {
+                $studentUpdates['email_kampus'] = $email;
+            }
+            $student->update($studentUpdates);
 
             // Audit Trail
             if ($adminId) {

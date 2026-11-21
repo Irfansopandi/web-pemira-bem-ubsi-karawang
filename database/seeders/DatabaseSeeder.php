@@ -141,20 +141,22 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 4. Data Mahasiswa DPT (Primary Key NIM, Nama, Prodi, Kelas, Semester — Tanpa Password & Tanggal Lahir)
+        // 4. Data Mahasiswa DPT (Primary Key NIM, Nama, Prodi, Kelas, Semester, Asal Kampus, Email Kampus)
         // Disediakan mahasiswa yang sudah hadir di TPS (12220001 - 12220007) dan yang belum hadir (12220008 - 12220010)
+        // Asal kampus: "UBSI Karawang" dan "UBSI Cikampek"
+        // Email kampus: "{nim}@bsi.ac.id"
         $studentsData = [
-            ['nim' => '12220001', 'name' => 'Ahmad Fauzi', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => true],
-            ['nim' => '12220002', 'name' => 'Dinda Permata', 'study_program' => 'Teknologi Informasi', 'class_name' => '12.4B.01', 'semester' => 4, 'is_present' => true],
-            ['nim' => '12220003', 'name' => 'Budi Santoso', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_name' => '12.4C.01', 'semester' => 4, 'is_present' => true],
-            ['nim' => '12220004', 'name' => 'Siti Nurhaliza', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => true],
-            ['nim' => '12220005', 'name' => 'Rian Hidayat', 'study_program' => 'Manajemen Informatika', 'class_name' => '12.4D.01', 'semester' => 4, 'is_present' => true],
-            ['nim' => '12220006', 'name' => 'Maya Anggraini', 'study_program' => 'Teknologi Informasi', 'class_name' => '12.4B.01', 'semester' => 4, 'is_present' => true],
-            ['nim' => '12220007', 'name' => 'Reza Pratama', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_name' => '12.4C.01', 'semester' => 4, 'is_present' => true],
+            ['nim' => '12220001', 'name' => 'Ahmad Fauzi', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'asal_kampus' => 'UBSI Karawang', 'is_present' => true],
+            ['nim' => '12220002', 'name' => 'Dinda Permata', 'study_program' => 'Teknologi Informasi', 'class_name' => '12.4B.01', 'semester' => 4, 'asal_kampus' => 'UBSI Cikampek', 'is_present' => true],
+            ['nim' => '12220003', 'name' => 'Budi Santoso', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_name' => '12.4C.01', 'semester' => 4, 'asal_kampus' => 'UBSI Karawang', 'is_present' => true],
+            ['nim' => '12220004', 'name' => 'Siti Nurhaliza', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'asal_kampus' => 'UBSI Cikampek', 'is_present' => true],
+            ['nim' => '12220005', 'name' => 'Rian Hidayat', 'study_program' => 'Manajemen Informatika', 'class_name' => '12.4D.01', 'semester' => 4, 'asal_kampus' => 'UBSI Karawang', 'is_present' => true],
+            ['nim' => '12220006', 'name' => 'Maya Anggraini', 'study_program' => 'Teknologi Informasi', 'class_name' => '12.4B.01', 'semester' => 4, 'asal_kampus' => 'UBSI Cikampek', 'is_present' => true],
+            ['nim' => '12220007', 'name' => 'Reza Pratama', 'study_program' => 'Rekayasa Perangkat Lunak', 'class_name' => '12.4C.01', 'semester' => 4, 'asal_kampus' => 'UBSI Karawang', 'is_present' => true],
             // Data Mahasiswa Belum Hadir di Buku Tamu TPS (untuk pengujian validasi penolakan):
-            ['nim' => '12220008', 'name' => 'Putri Ayu', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => false],
-            ['nim' => '12220009', 'name' => 'Ilham Maulana', 'study_program' => 'Manajemen Informatika', 'class_name' => '12.4D.01', 'semester' => 4, 'is_present' => false],
-            ['nim' => '12220010', 'name' => 'Dewi Lestari', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'is_present' => false],
+            ['nim' => '12220008', 'name' => 'Putri Ayu', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'asal_kampus' => 'UBSI Cikampek', 'is_present' => false],
+            ['nim' => '12220009', 'name' => 'Ilham Maulana', 'study_program' => 'Manajemen Informatika', 'class_name' => '12.4D.01', 'semester' => 4, 'asal_kampus' => 'UBSI Karawang', 'is_present' => false],
+            ['nim' => '12220010', 'name' => 'Dewi Lestari', 'study_program' => 'Sistem Informasi', 'class_name' => '12.4A.01', 'semester' => 4, 'asal_kampus' => 'UBSI Cikampek', 'is_present' => false],
         ];
 
         foreach ($studentsData as $studentInfo) {
@@ -165,7 +167,9 @@ class DatabaseSeeder extends Seeder
                     'study_program' => $studentInfo['study_program'],
                     'class_name' => $studentInfo['class_name'],
                     'semester' => $studentInfo['semester'],
-                    'is_active' => $studentInfo['is_present'], // 1 jika sudah hadir di Buku Tamu TPS, 0 jika belum
+                    'asal_kampus' => $studentInfo['asal_kampus'],
+                    'email_kampus' => $studentInfo['nim'] . '@bsi.ac.id',
+                    'is_active' => $studentInfo['is_present'],
                 ]
             );
 
@@ -181,7 +185,7 @@ class DatabaseSeeder extends Seeder
                     'voted_at' => null,
                     'encrypted_vote_receipt' => null,
                     'verified_at' => $studentInfo['is_present'] ? now() : null, // Hadir atau Belum Hadir di Buku Tamu TPS
-                    'tps_location' => $studentInfo['is_present'] ? 'TPS 01 - Gedung Utama UBSI Karawang' : null,
+                    'tps_location' => $studentInfo['is_present'] ? $studentInfo['asal_kampus'] : null,
                 ]
             );
         }

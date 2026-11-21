@@ -60,12 +60,13 @@
             overscroll-behavior: contain !important;
         }
 
-        /* Smooth SPA Content Transition */
+        /* Smooth Page Content Transition with Blur & Fade */
         .admin-main-view {
-            transition: opacity 0.15s ease-in-out;
+            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .admin-main-view.is-loading {
-            opacity: 0.35;
+            opacity: 0.3;
+            filter: blur(4px);
             pointer-events: none;
         }
 
@@ -92,6 +93,39 @@
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-[#940c10] selection:text-white"
     x-data="{ sidebarOpen: false }">
+
+    <!-- ======================================================== -->
+    <!-- GLOBAL PAGE TRANSITION LOADER (TOP BAR & SPINNER BLUR)   -->
+    <!-- ======================================================== -->
+    <div id="admin-page-loader" class="fixed top-0 left-0 right-0 h-[3px] z-[99999] pointer-events-none opacity-0 transition-opacity duration-200">
+        <div id="admin-page-loader-bar" class="h-full bg-gradient-to-r from-[#940C10] via-[#CE9501] to-[#940C10] w-0 transition-all duration-300 ease-out shadow-[0_0_10px_rgba(206,149,1,0.9)]"></div>
+    </div>
+
+    <div id="admin-loading-spinner" class="fixed inset-0 z-[9998] pointer-events-none flex items-center justify-center opacity-0 bg-slate-900/15 backdrop-blur-[3px] transition-all duration-200">
+        <div class="inline-flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl text-slate-800 scale-95 transition-transform duration-200" id="admin-loading-spinner-box">
+            <!-- Spinner Ring Mengelilingi Logo BEM UBSI Bulat -->
+            <div class="relative w-11 h-11 flex items-center justify-center shrink-0">
+                <!-- Outer Animated Spinning Ring (Merah UBSI & Emas) -->
+                <svg class="absolute inset-0 w-full h-full animate-spin" viewBox="0 0 44 44" fill="none">
+                    <!-- Subtle Gold Track Ring -->
+                    <circle cx="22" cy="22" r="19" stroke="#CE9501" stroke-width="2.5" stroke-opacity="0.25" />
+                    <!-- Dynamic UBSI Red Arc -->
+                    <path d="M22 3 A 19 19 0 0 1 41 22" stroke="#940C10" stroke-width="3" stroke-linecap="round" />
+                    <!-- Golden Accent Dot on Leading Edge -->
+                    <circle cx="41" cy="22" r="2.2" fill="#CE9501" />
+                </svg>
+
+                <!-- Logo Bulat Resmi BEM UBSI Karawang (Tengah Tetap Tegak) -->
+                <img src="{{ asset('images/logo-bem-ubsi.png') }}" 
+                     alt="Logo BEM UBSI" 
+                     class="w-7 h-7 object-contain rounded-full shadow-xs pointer-events-none select-none">
+            </div>
+            <div class="flex flex-col">
+                <span id="admin-loader-title" class="text-sm font-extrabold text-slate-900 tracking-tight leading-tight">Memuat Halaman...</span>
+                <span id="admin-loader-subtitle" class="text-[11px] text-slate-400 font-medium">Sinkronisasi data sistem PEMIRA</span>
+            </div>
+        </div>
+    </div>
 
     <!-- ======================================================== -->
     <!-- MOBILE SIDEBAR BACKDROP OVERLAY                          -->
@@ -213,15 +247,23 @@
                     <span class="truncate">Kelola Mahasiswa</span>
                 </a>
 
-                <!-- Verifikasi Kehadiran Pemilih (Registrasi & Tanda Tangan TPS) -->
-                <a href="{{ route('admin.verification.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.verification.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.verification.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <polyline points="16 11 18 13 22 9"></polyline>
+                <!-- Verifikasi Kehadiran Pemilih (Registrasi & Tanda Tangan TPS Onsite) -->
+                <a href="{{ route('admin.verification.index') }}" target="_blank" rel="noopener noreferrer" data-no-spa="true"
+                    class="flex items-center justify-between gap-2 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.verification.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}"
+                    title="Buka Buku Tamu Digital & Meja Registrasi TPS di Tab Baru">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.verification.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <polyline points="16 11 18 13 22 9"></polyline>
+                        </svg>
+                        <span class="truncate">Verifikasi Kehadiran</span>
+                    </div>
+                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#CE9501] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
                     </svg>
-                    <span class="truncate">Verifikasi Kehadiran</span>
                 </a>
             </div>
 
@@ -392,7 +434,7 @@
             </div>
 
             <!-- Right Header: Period Selector, Jam Realtime, Status & Logout Quick Action -->
-            <div class="flex items-center gap-3 sm:gap-4" x-data="adminClock()">
+            <div class="flex items-center gap-3 sm:gap-4">
                 @php
                     $activePeriodSystem = app(\App\Services\ElectionService::class)->getActivePeriod();
                     $selectedPeriodLayout = app(\App\Services\ElectionService::class)->getSelectedPeriod();
@@ -453,9 +495,9 @@
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
-                    <span x-text="dateString" class="font-medium text-[11px]"></span>
+                    <span id="admin-live-date" class="font-medium text-[11px]">{{ \Carbon\Carbon::now('Asia/Jakarta')->locale('id')->isoFormat('dddd, D MMM Y') }}</span>
                     <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                    <span x-text="timeString" class="font-mono font-bold text-slate-900"></span>
+                    <span id="admin-live-time" class="font-mono font-bold text-slate-900">{{ \Carbon\Carbon::now('Asia/Jakarta')->format('H:i:s') }} WIB</span>
                 </div>
 
                 <!-- Tombol Logout Quick Button -->
@@ -501,54 +543,157 @@
 
     <!-- Scripts: Live Clock & SweetAlert2 Logout Confirmation -->
     <script>
-        function adminClock() {
-            return {
-                dateString: '',
-                timeString: '',
-                init() {
-                    this.tick();
-                    setInterval(() => this.tick(), 1000);
-                },
-                tick() {
-                    const now = new Date();
-                    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        function updateAdminLiveClock() {
+            const dateEl = document.getElementById('admin-live-date');
+            const timeEl = document.getElementById('admin-live-time');
+            if (!dateEl && !timeEl) return;
 
-                    this.dateString = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-                    const h = String(now.getHours()).padStart(2, '0');
-                    const m = String(now.getMinutes()).padStart(2, '0');
-                    const s = String(now.getSeconds()).padStart(2, '0');
-                    this.timeString = `${h}:${m}:${s} WIB`;
-                }
+            const now = new Date();
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+            if (dateEl) {
+                dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            }
+            if (timeEl) {
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+                timeEl.textContent = `${h}:${m}:${s} WIB`;
             }
         }
+        updateAdminLiveClock();
+        setInterval(updateAdminLiveClock, 1000);
 
-        function confirmLogout(formId) {
-            Swal.fire({
-                title: 'Konfirmasi Keluar',
-                text: 'Apakah Anda yakin ingin keluar dari Panel Administrator KPUM?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#940c10',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal',
-                reverseButtons: true,
-                customClass: {
-                    popup: 'rounded-2xl',
-                    confirmButton: 'rounded-xl font-bold px-5 py-2.5',
-                    cancelButton: 'rounded-xl font-semibold px-5 py-2.5'
+        // Keep-Alive Heartbeat: Memastikan sesi admin selalu aktif selama tab browser terbuka (mencegah auto-logout saat didiamkan)
+        setInterval(() => {
+            fetch('{{ route("admin.ping") }}', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                cache: 'no-store'
+            }).catch(() => {});
+        }, 60000); // Ping setiap 60 detik
+
+        window.confirmLogout = function confirmLogout(formId) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Konfirmasi Keluar',
+                    text: 'Apakah Anda yakin ingin keluar dari Panel Administrator KPUM?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#940c10',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Keluar',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    customClass: {
+                        popup: 'rounded-2xl',
+                        confirmButton: 'rounded-xl font-bold px-5 py-2.5',
+                        cancelButton: 'rounded-xl font-semibold px-5 py-2.5'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showPageLoader('Mengakhiri Sesi...', 'Mengalihkan ke halaman login');
+                        setTimeout(() => {
+                            form.submit();
+                        }, 120);
+                    }
+                });
+            } else {
+                if (confirm('Apakah Anda yakin ingin keluar dari Panel Administrator KPUM?')) {
+                    showPageLoader('Mengakhiri Sesi...', 'Mengalihkan ke halaman login');
+                    setTimeout(() => {
+                        form.submit();
+                    }, 120);
                 }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById(formId).submit();
-                }
-            });
-        }
+            }
+        };
 
         // ========================================================
         // ULTRA-SMOOTH SIDEBAR NAVIGATION & SCROLL PERSISTENCE
         // ========================================================
+        let loaderProgressTimer = null;
+        let loaderSafetyTimeout = null;
+
+        function showPageLoader(title = 'Memuat Halaman...', subtitle = 'Sinkronisasi data sistem PEMIRA') {
+            const mainContent = document.getElementById('admin-main-content');
+            const progressBar = document.getElementById('admin-page-loader-bar');
+            const progressContainer = document.getElementById('admin-page-loader');
+            const spinner = document.getElementById('admin-loading-spinner');
+            const spinnerBox = document.getElementById('admin-loading-spinner-box');
+            const titleEl = document.getElementById('admin-loader-title');
+            const subTitleEl = document.getElementById('admin-loader-subtitle');
+
+            if (titleEl) titleEl.textContent = title;
+            if (subTitleEl) subTitleEl.textContent = subtitle;
+
+            if (mainContent) {
+                mainContent.classList.add('is-loading');
+            }
+
+            if (progressContainer && progressBar) {
+                progressContainer.classList.remove('opacity-0');
+                progressContainer.classList.add('opacity-100');
+                progressBar.style.width = '35%';
+                if (loaderProgressTimer) clearTimeout(loaderProgressTimer);
+                loaderProgressTimer = setTimeout(() => {
+                    progressBar.style.width = '75%';
+                }, 150);
+            }
+
+            if (spinner && spinnerBox) {
+                spinner.classList.remove('opacity-0', 'pointer-events-none');
+                spinner.classList.add('opacity-100', 'pointer-events-auto');
+                spinnerBox.classList.remove('scale-95');
+                spinnerBox.classList.add('scale-100');
+            }
+
+            // Batas pengaman: hilangkan loader jika permintaan tertahan lebih dari 8 detik
+            if (loaderSafetyTimeout) clearTimeout(loaderSafetyTimeout);
+            loaderSafetyTimeout = setTimeout(() => {
+                hidePageLoader();
+            }, 8000);
+        }
+
+        function hidePageLoader() {
+            const mainContent = document.getElementById('admin-main-content');
+            const progressBar = document.getElementById('admin-page-loader-bar');
+            const progressContainer = document.getElementById('admin-page-loader');
+            const spinner = document.getElementById('admin-loading-spinner');
+            const spinnerBox = document.getElementById('admin-loading-spinner-box');
+
+            if (loaderProgressTimer) clearTimeout(loaderProgressTimer);
+            if (loaderSafetyTimeout) clearTimeout(loaderSafetyTimeout);
+
+            if (progressBar && progressContainer) {
+                progressBar.style.width = '100%';
+                setTimeout(() => {
+                    progressContainer.classList.remove('opacity-100');
+                    progressContainer.classList.add('opacity-0');
+                    setTimeout(() => {
+                        progressBar.style.width = '0%';
+                    }, 250);
+                }, 150);
+            }
+
+            if (spinner && spinnerBox) {
+                spinner.classList.remove('opacity-100', 'pointer-events-auto');
+                spinner.classList.add('opacity-0', 'pointer-events-none');
+                spinnerBox.classList.remove('scale-100');
+                spinnerBox.classList.add('scale-95');
+            }
+
+            if (mainContent) {
+                mainContent.classList.remove('is-loading');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide && window.lucide.createIcons) {
                 window.lucide.createIcons();
@@ -578,8 +723,8 @@
                 const link = e.target.closest('a');
                 if (!link) return;
 
-                // Abaikan tab baru, aksi javascript, atau tombol modifier keyboard
-                if (link.target === '_blank' || link.href.startsWith('javascript:') || e.ctrlKey || e.metaKey || e.shiftKey) {
+                // Abaikan tab baru, aksi javascript, data-no-spa, atau tombol modifier keyboard
+                if (link.target === '_blank' || link.hasAttribute('data-no-spa') || link.href.startsWith('javascript:') || e.ctrlKey || e.metaKey || e.shiftKey) {
                     return;
                 }
 
@@ -629,8 +774,9 @@
                     }
                 });
 
-                // Efek transisi halus pada area konten
-                mainContent.classList.add('is-loading');
+                // Tampilkan efek loading transisi (blur konten + floating spinner + top progress bar)
+                showPageLoader();
+                const startTime = Date.now();
 
                 try {
                     const response = await fetch(targetUrl, {
@@ -646,11 +792,17 @@
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
 
-                    // Ganti konten area main secara mulus
-                    const newMain = doc.getElementById('admin-main-content') || doc.querySelector('main');
+                    // Ganti konten area main secara mulus (hanya jika halaman tujuan adalah subhalaman admin)
+                    const newMain = doc.getElementById('admin-main-content');
                     if (newMain) {
+                        // Enforce jeda natural minimal 320ms agar efek blur & spinner terlihat jelas dan elegan
+                        const elapsed = Date.now() - startTime;
+                        if (elapsed < 320) {
+                            await new Promise(r => setTimeout(r, 320 - elapsed));
+                        }
                         mainContent.innerHTML = newMain.innerHTML;
                     } else {
+                        // Jika halaman tujuan adalah halaman mandiri (seperti Buku Tamu / Verifikasi TPS)
                         window.location.href = targetUrl;
                         return;
                     }
@@ -717,21 +869,31 @@
                     console.error('Seamless navigation error, fallback to full reload:', err);
                     window.location.href = targetUrl;
                 } finally {
-                    mainContent.classList.remove('is-loading');
+                    // Jeda sejenak agar frame halaman baru dirender sebelum efek blur memudar secara halus
+                    setTimeout(() => {
+                        hidePageLoader();
+                    }, 50);
                 }
             });
 
             // Dukungan tombol Back / Forward browser secara mulus
             window.addEventListener('popstate', async () => {
                 const url = window.location.href;
-                mainContent.classList.add('is-loading');
+                showPageLoader();
+                const popStartTime = Date.now();
                 try {
                     const res = await fetch(url);
                     if (!res.ok) { window.location.reload(); return; }
                     const html = await res.text();
                     const doc = new DOMParser().parseFromString(html, 'text/html');
                     const newMain = doc.getElementById('admin-main-content') || doc.querySelector('main');
-                    if (newMain) mainContent.innerHTML = newMain.innerHTML;
+                    if (newMain) {
+                        const elapsed = Date.now() - popStartTime;
+                        if (elapsed < 300) {
+                            await new Promise(r => setTimeout(r, 300 - elapsed));
+                        }
+                        mainContent.innerHTML = newMain.innerHTML;
+                    }
                     
                     const newHeaderTitle = doc.getElementById('admin-header-title');
                     const currentHeaderTitle = document.getElementById('admin-header-title');
@@ -761,8 +923,36 @@
                 } catch (e) {
                     window.location.reload();
                 } finally {
-                    mainContent.classList.remove('is-loading');
+                    setTimeout(() => {
+                        hidePageLoader();
+                    }, 50);
                 }
+            });
+
+            // Dukungan loading visual seketika untuk semua tautan internal di luar sidebar
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                if (link.target === '_blank' || 
+                    link.hasAttribute('download') || 
+                    link.hasAttribute('data-no-loader') || 
+                    link.getAttribute('href')?.startsWith('#') || 
+                    link.getAttribute('href')?.startsWith('javascript:') || 
+                    e.ctrlKey || e.metaKey || e.shiftKey) {
+                    return;
+                }
+
+                const href = link.href;
+                if (href && href.startsWith(window.location.origin) && !href.includes('#')) {
+                    if (href === window.location.href) return;
+                    showPageLoader();
+                }
+            });
+
+            // Otomatis hilangkan loader saat halaman selesai dibuka atau saat navigasi history
+            window.addEventListener('pageshow', () => {
+                hidePageLoader();
             });
         });
     </script>

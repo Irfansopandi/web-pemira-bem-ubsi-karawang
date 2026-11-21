@@ -16,7 +16,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Vite Assets / Fallback Tailwind CSS + Alpine.js -->
+    @if (file_exists(public_path('hot')) || file_exists(public_path('build/manifest.json')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        },
+                        colors: {
+                            'ubsi-red': '#940c10',
+                            'ubsi-red-dark': '#7A0A0D',
+                            'ubsi-gold': '#CE9501',
+                            'ubsi-gold-dark': '#B58200',
+                            'ubsi-white': '#FDFDFD',
+                        }
+                    }
+                }
+            }
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @endif
 
     <style>
         [x-cloak] { display: none !important; }
@@ -27,8 +51,8 @@
 </head>
 <body class="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased selection:bg-blue-600 selection:text-white flex flex-col justify-between"
       x-data="bukuTamuApp({
-          lookupUrl: '{{ route('admin.verification.lookup') }}',
-          storeUrl: '{{ route('admin.verification.store') }}',
+          lookupUrl: '{{ route('guestbook.lookup') }}',
+          storeUrl: '{{ route('guestbook.store') }}',
           csrfToken: '{{ csrf_token() }}'
       })">
 
@@ -79,15 +103,26 @@
                     </div>
                 </div>
 
-                <!-- Admin Link Icon (Lock) -->
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="w-9 h-9 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all shadow-2xs"
-                   title="Kembali ke Dashboard Administrator">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                </a>
+                <!-- Header Action: Dashboard Admin atau Akses Cepat Bilik Suara -->
+                @if(Auth::guard('admin')->check())
+                    <a href="{{ route('admin.dashboard') }}" 
+                       class="w-9 h-9 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-100 text-slate-500 hover:text-[#940C10] flex items-center justify-center transition-all shadow-2xs"
+                       title="Kembali ke Dashboard Administrator">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" 
+                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-[#940C10] hover:bg-red-50 text-slate-700 hover:text-[#940C10] text-xs font-bold transition-all shadow-2xs"
+                       title="Buka Halaman Bilik Suara">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+                        </svg>
+                        <span>Ke Bilik Suara</span>
+                    </a>
+                @endif
             </div>
 
         </div>
@@ -291,15 +326,15 @@
                     <!-- Grid 2 Pilihan: Karawang dan Cikampek (Sesuai Permintaan Pengguna) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                         
-                        <!-- Pilihan 1: Kampus Karawang -->
-                        <div @click="selectCampus('Kampus Karawang')"
+                        <!-- Pilihan 1: UBSI Karawang -->
+                        <div @click="selectCampus('UBSI Karawang')"
                              class="rounded-2xl border-2 p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none group relative"
-                             :class="selectedCampus === 'Kampus Karawang' 
+                             :class="selectedCampus === 'UBSI Karawang' 
                                  ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-500/10 shadow-md' 
                                  : 'border-slate-200/90 hover:border-blue-300 hover:bg-slate-50/60'">
                             
                             <!-- Checkmark Badge on Selected -->
-                            <div x-show="selectedCampus === 'Kampus Karawang'" 
+                            <div x-show="selectedCampus === 'UBSI Karawang'" 
                                  class="absolute top-4 right-4 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
@@ -313,22 +348,22 @@
                             </div>
 
                             <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                                Kampus Karawang
+                                UBSI Karawang
                             </h3>
                             <p class="text-xs text-slate-500 font-normal mt-1">
-                                Mahasiswa / Pemilih UBSI Kampus Karawang
+                                Mahasiswa / Pemilih UBSI Karawang
                             </p>
                         </div>
 
-                        <!-- Pilihan 2: Kampus Cikampek -->
-                        <div @click="selectCampus('Kampus Cikampek')"
+                        <!-- Pilihan 2: UBSI Cikampek -->
+                        <div @click="selectCampus('UBSI Cikampek')"
                              class="rounded-2xl border-2 p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none group relative"
-                             :class="selectedCampus === 'Kampus Cikampek' 
+                             :class="selectedCampus === 'UBSI Cikampek' 
                                  ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-500/10 shadow-md' 
                                  : 'border-slate-200/90 hover:border-blue-300 hover:bg-slate-50/60'">
                             
                             <!-- Checkmark Badge on Selected -->
-                            <div x-show="selectedCampus === 'Kampus Cikampek'" 
+                            <div x-show="selectedCampus === 'UBSI Cikampek'" 
                                  class="absolute top-4 right-4 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
@@ -342,7 +377,7 @@
                             </div>
 
                             <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                                Kampus Cikampek
+                                UBSI Cikampek
                             </h3>
                             <p class="text-xs text-slate-500 font-normal mt-1">
                                 Mahasiswa / Pemilih UBSI Kampus Cikampek
@@ -748,11 +783,19 @@
                 </div>
             </div>
 
-            <button type="button" 
-                    @click="closeSuccessModal()"
-                    class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
-                Kembali ke Beranda Sekarang &rarr;
-            </button>
+            <div class="space-y-2 pt-1">
+                <a href="{{ route('login') }}" 
+                   class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#940C10] to-[#7A0A0D] hover:from-[#7A0A0D] hover:to-[#5E0709] text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+                    <span>Lanjut ke Login Bilik Suara &rarr;</span>
+                </a>
+
+                <button type="button" 
+                        @click="closeSuccessModal()"
+                        class="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-semibold transition-colors">
+                    Selesai & Isi Mahasiswa Lain
+                </button>
+            </div>
         </div>
     </div>
 
@@ -873,6 +916,12 @@
                         this.fullName = data.student.name;
                         this.studyProgram = data.student.study_program;
                         this.className = `${data.student.class_name || '-'} (Semester ${data.student.semester || '-'})`;
+                        if (data.student.email_kampus) {
+                            this.email = data.student.email_kampus;
+                        }
+                        if (data.student.asal_kampus && !this.selectedCampus) {
+                            this.selectedCampus = data.student.asal_kampus;
+                        }
                     } else {
                         this.fullName = '';
                         this.studyProgram = '';

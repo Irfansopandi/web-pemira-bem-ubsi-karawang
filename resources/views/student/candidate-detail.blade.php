@@ -39,26 +39,26 @@
 
                 <!-- Overlay Nama Calon Ketua & Wakil di Bagian Bawah Foto (Tanpa Background Putih) -->
                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 sm:p-5 text-white pt-24 z-10">
-                    <div class="flex items-center justify-between gap-3 border-t border-white/20 pt-3">
+                    <div class="flex items-stretch justify-between gap-3 border-t border-white/20 pt-3">
                         <!-- Calon Ketua -->
-                        <div class="flex-1 text-center pr-2">
-                            <h3 class="text-xs sm:text-sm font-bold text-white leading-tight truncate">
+                        <div class="flex-1 flex flex-col justify-end text-center pr-2 min-w-0">
+                            <h3 class="text-xs sm:text-sm font-bold text-white leading-snug break-words">
                                 {{ $candidate->chairman_name }}
                             </h3>
-                            <p class="text-[10px] sm:text-[11px] font-medium text-[#CE9501] mt-0.5">
+                            <p class="text-[10px] sm:text-[11px] font-medium text-[#CE9501] mt-1 whitespace-nowrap">
                                 Calon Ketua BEM
                             </p>
                         </div>
 
-                        <!-- Garis Pemisah Vertikal Halus -->
-                        <div class="h-7 w-px bg-white/20"></div>
+                        <!-- Garis Pemisah Vertikal Halus (Tinggi Menyesuaikan Teks Otomatis) -->
+                        <div class="self-stretch w-px bg-white/20 shrink-0 my-0.5"></div>
 
                         <!-- Calon Wakil Ketua -->
-                        <div class="flex-1 text-center pl-2">
-                            <h3 class="text-xs sm:text-sm font-bold text-white leading-tight truncate">
+                        <div class="flex-1 flex flex-col justify-end text-center pl-2 min-w-0">
+                            <h3 class="text-xs sm:text-sm font-bold text-white leading-snug break-words">
                                 {{ $candidate->vice_chairman_name }}
                             </h3>
-                            <p class="text-[10px] sm:text-[11px] font-medium text-[#CE9501] mt-0.5">
+                            <p class="text-[10px] sm:text-[11px] font-medium text-[#CE9501] mt-1 whitespace-nowrap">
                                 Calon Wakil Ketua BEM
                             </p>
                         </div>
@@ -97,132 +97,102 @@
             </div>
 
             <!-- Card Putih Profil Lengkap Paslon -->
-            <div class="bg-white rounded-3xl p-6 sm:p-7 lg:p-8 shadow-2xl shadow-black/70 border border-white/20 space-y-6 sm:space-y-7">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl shadow-black/70 border border-slate-200/80 space-y-7">
                 
                 <!-- 1. Header Judul Paslon & Periode -->
                 <div>
-                    <h1 class="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight leading-tight">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold mb-3 border border-slate-200/80">
+                        <span class="w-2 h-2 rounded-full bg-[#940C10]"></span>
+                        <span>Pasangan Calon No. 0{{ $candidate->candidate_number }}</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight leading-tight">
                         {{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}
                     </h1>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
                         PEMIRA BEM UBSI Karawang &bull; Periode {{ $activePeriod->academic_year }}
                     </p>
                 </div>
 
-                <!-- 2. Grid Identitas Calon Ketua & Calon Wakil Ketua -->
-                <div class="bg-[#F8F9FC] rounded-2xl p-4 sm:p-5 border border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <!-- 2. Profil Identitas Calon Ketua & Wakil Ketua (Bersih, Rapi & Institusional) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 py-5 border-y border-slate-200/80">
                     <!-- Calon Ketua -->
-                    <div class="flex items-start gap-3.5">
-                        <div class="w-9 h-9 rounded-xl bg-red-100 text-[#940C10] flex items-center justify-center shrink-0 mt-0.5">
-                            <svg class="w-4 h-4 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#940C10] block">
-                                CALON KETUA
-                            </span>
-                            <p class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug mt-0.5">
-                                {{ $candidate->chairman_name }}
-                            </p>
-                            <p class="text-xs text-slate-500 font-medium mt-0.5">
-                                NIM: {{ $candidate->chairman_nim }}
-                            </p>
-                            <p class="text-xs text-slate-600 font-medium mt-0.5">
-                                {{ $candidate->chairman_study_program }}
-                            </p>
+                    <div class="space-y-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Calon Ketua BEM
+                        </span>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                            {{ $candidate->chairman_name }}
+                        </h2>
+                        <div class="text-xs text-slate-600 font-medium space-y-0.5 pt-0.5">
+                            <p class="font-mono text-slate-500">NIM: {{ $candidate->chairman_nim }}</p>
+                            <p>{{ $candidate->chairman_study_program }}</p>
                         </div>
                     </div>
 
                     <!-- Calon Wakil Ketua -->
-                    <div class="flex items-start gap-3.5 sm:border-l sm:border-slate-200 sm:pl-5">
-                        <div class="w-9 h-9 rounded-xl bg-red-100 text-[#940C10] flex items-center justify-center shrink-0 mt-0.5">
-                            <svg class="w-4 h-4 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#940C10] block">
-                                CALON WAKIL KETUA
-                            </span>
-                            <p class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug mt-0.5">
-                                {{ $candidate->vice_chairman_name }}
-                            </p>
-                            <p class="text-xs text-slate-500 font-medium mt-0.5">
-                                NIM: {{ $candidate->vice_chairman_nim }}
-                            </p>
-                            <p class="text-xs text-slate-600 font-medium mt-0.5">
-                                {{ $candidate->vice_chairman_study_program }}
-                            </p>
+                    <div class="space-y-1 sm:border-l sm:border-slate-200 sm:pl-6">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Calon Wakil Ketua BEM
+                        </span>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                            {{ $candidate->vice_chairman_name }}
+                        </h2>
+                        <div class="text-xs text-slate-600 font-medium space-y-0.5 pt-0.5">
+                            <p class="font-mono text-slate-500">NIM: {{ $candidate->vice_chairman_nim }}</p>
+                            <p>{{ $candidate->vice_chairman_study_program }}</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Visi Pasangan Calon (Diberi Batas & Jarak Proporsional) -->
-                <div class="pt-5 sm:pt-6 border-t border-slate-100 space-y-2">
-                    <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#940C10]">
-                        <!-- Target / Vision SVG Icon -->
-                        <svg class="w-4 h-4 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"/>
-                            <circle cx="12" cy="12" r="6"/>
-                            <circle cx="12" cy="12" r="2"/>
-                        </svg>
-                        <span>VISI PASANGAN CALON</span>
-                    </div>
-                    <p class="text-xs sm:text-sm italic text-slate-800 leading-relaxed font-medium pl-1">
+                <!-- 3. Visi Pasangan Calon -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Visi
+                    </h3>
+                    <blockquote class="text-sm sm:text-base text-slate-800 leading-relaxed font-medium pl-4 border-l-2 border-[#940C10] py-1 bg-slate-50/70 p-4 rounded-r-2xl">
                         “{{ $candidate->vision }}”
-                    </p>
+                    </blockquote>
                 </div>
 
-                <!-- 4. Misi Pasangan Calon (Diberi Batas & Jarak Antar Poin Nyaman) -->
-                <div class="pt-5 sm:pt-6 border-t border-slate-100 space-y-3">
-                    <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#940C10]">
-                        <!-- Flag SVG Icon -->
-                        <svg class="w-4 h-4 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-                            <line x1="4" y1="22" x2="4" y2="15"/>
-                        </svg>
-                        <span>MISI PASANGAN CALON</span>
-                    </div>
+                <!-- 4. Misi Pasangan Calon -->
+                <div class="space-y-3 pt-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Misi
+                    </h3>
                     <ol class="space-y-3">
                         @foreach($candidate->mission ?? [] as $index => $m)
                             <li class="flex items-start gap-3">
-                                <span class="w-5 h-5 rounded-full bg-red-100 text-[#940C10] font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                                    {{ $index + 1 }}
+                                <span class="font-mono font-bold text-xs text-[#940C10] shrink-0 pt-0.5 w-6">
+                                    {{ sprintf('%02d.', $index + 1) }}
                                 </span>
-                                <span class="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
                                     {{ $m }}
-                                </span>
+                                </p>
                             </li>
                         @endforeach
                     </ol>
                 </div>
 
-                <!-- 5. Program Kerja Unggulan (Diberi Batas & Jarak Antar Program Nyaman) -->
+                <!-- 5. Program Kerja Unggulan -->
                 @if(!empty($candidate->work_programs))
-                    <div class="pt-5 sm:pt-6 border-t border-slate-100 space-y-3">
-                        <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#940C10]">
-                            <!-- Briefcase SVG Icon -->
-                            <svg class="w-4 h-4 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                            </svg>
-                            <span>PROGRAM KERJA UNGGULAN</span>
-                        </div>
+                    <div class="space-y-3 pt-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                            Program Kerja Unggulan
+                        </h3>
                         <ul class="space-y-2.5">
                             @foreach($candidate->work_programs as $program)
                                 <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 rounded-full bg-[#E5A900] shrink-0 mt-1.5"></span>
-                                    <span class="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                                    <span class="text-[#940C10] font-bold text-sm shrink-0 leading-tight">&ndash;</span>
+                                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
                                         {{ $program }}
-                                    </span>
+                                    </p>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
                 @endif
+
+            </div>
 
             </div>
         </div>
@@ -249,8 +219,8 @@
                             Pasangan Calon No. 0{{ $candidate->candidate_number }}
                         </div>
 
-                        <!-- Nama Paslon (Satu Baris, Jelas & Berwibawa) -->
-                        <p class="text-base sm:text-lg font-extrabold text-white mt-2.5 mb-1 leading-snug whitespace-nowrap overflow-hidden text-ellipsis">
+                        <!-- Nama Paslon (Jelas & Berwibawa Tanpa Terpotong) -->
+                        <p class="text-base sm:text-lg font-extrabold text-white mt-2.5 mb-1 leading-snug break-words">
                             {{ addslashes($candidate->chairman_name) }} & {{ addslashes($candidate->vice_chairman_name) }}
                         </p>
 

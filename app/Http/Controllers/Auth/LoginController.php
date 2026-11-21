@@ -54,7 +54,9 @@ class LoginController extends Controller
 
                 // Bersihkan sesi mahasiswa agar halaman login tampil normal tanpa loop
                 Auth::guard('student')->logout();
-                request()->session()->invalidate();
+                if (! Auth::guard('admin')->check()) {
+                    request()->session()->invalidate();
+                }
                 request()->session()->regenerateToken();
 
                 return view('auth.login')->with('info', 'Saat ini belum ada periode pemilihan PEMIRA yang sedang dibuka.');
@@ -81,7 +83,9 @@ class LoginController extends Controller
 
                 // Bersihkan sesi dan arahkan ke login dengan pemberitahuan jelas
                 Auth::guard('student')->logout();
-                request()->session()->invalidate();
+                if (! Auth::guard('admin')->check()) {
+                    request()->session()->invalidate();
+                }
                 request()->session()->regenerateToken();
 
                 return view('auth.login')->withErrors([
@@ -183,34 +187,19 @@ class LoginController extends Controller
                 ]);
         }
 
-        // 5. Verifikasi kehadiran fisik mahasiswa di Meja Registrasi TPS (Verifikasi Kehadiran Pemilih)
+        // 5. Verifikasi kehadiran mahasiswa berdasarkan data Buku Tamu internal
         $presence = $this->guestbookService->isStudentPresent($student->nim, $activePeriod->id);
 
         if (! $presence['is_present']) {
             return back()
                 ->withInput(['identifier' => $identifier])
                 ->withErrors([
-                    'identifier' => "NIM {$student->nim} belum melakukan Verifikasi Kehadiran di Meja Registrasi TPS. Silakan hubungi Panitia KPUM terlebih dahulu.",
+                    'identifier' => "NIM {$student->nim} ({$student->name}) belum mengisi Buku Tamu.",
                 ]);
         }
 
         // 6. Jika lolos seluruh verifikasi, pastikan status mahasiswa aktif
         $student->update(['is_active' => true]);
-
-        // Pertahankan data verifikasi kehadiran (tanda tangan digital & panitia) jika sudah ada
-        $existingParticipation = VoterParticipation::where('election_period_id', $activePeriod->id)
-            ->where('student_nim', $student->nim)
-            ->first();
-
-        if (! $existingParticipation) {
-            VoterParticipation::create([
-                'election_period_id' => $activePeriod->id,
-                'student_nim' => $student->nim,
-                'has_voted' => false,
-                'verified_at' => now(),
-                'tps_location' => 'TPS Kampus UBSI Cikampek',
-            ]);
-        }
 
         // Login dan langsung masuk ke bilik suara
         Auth::guard('student')->login($student);
@@ -226,7 +215,10 @@ class LoginController extends Controller
     {
         Auth::guard('student')->logout();
 
-        $request->session()->invalidate();
+        // Jika admin juga sedang login di browser yang sama, jangan hapus sesi admin
+        if (! Auth::guard('admin')->check()) {
+            $request->session()->invalidate();
+        }
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('status', 'Anda telah keluar dari bilik suara.');

@@ -36,7 +36,6 @@ return [
     ],
 
     'guestbook' => [
-        'base_url' => env('GUESTBOOK_BASE_URL', ''),
         'check_enabled' => env('GUESTBOOK_CHECK_ENABLED', true),
     ],
 
