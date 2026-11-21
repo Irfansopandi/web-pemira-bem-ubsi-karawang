@@ -43,6 +43,15 @@ class LoginController extends Controller
                     }
                 }
 
+                // Cek apakah mahasiswa pernah voting di periode manapun (arsip)
+                $anyVoted = VoterParticipation::where('student_nim', $student->nim)
+                    ->where('has_voted', true)
+                    ->exists();
+
+                if ($anyVoted) {
+                    return redirect()->route('student.receipt');
+                }
+
                 // Bersihkan sesi mahasiswa agar halaman login tampil normal tanpa loop
                 Auth::guard('student')->logout();
                 request()->session()->invalidate();
@@ -51,13 +60,33 @@ class LoginController extends Controller
                 return view('auth.login')->with('info', 'Saat ini belum ada periode pemilihan PEMIRA yang sedang dibuka.');
             }
 
-            // Jika ada periode aktif, cek apakah mahasiswa sudah pernah memilih
+            // Jika ada periode aktif, cek apakah mahasiswa sudah pernah memilih pada periode ini
             $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
                 ->where('student_nim', $student->nim)
                 ->first();
 
             if ($participation && $participation->has_voted) {
                 return redirect()->route('student.receipt');
+            }
+
+            // Jika bilik suara periode aktif ditutup tetapi mahasiswa pernah voting di periode lain
+            if ($activePeriod->isVotingClosed()) {
+                $pastVoted = VoterParticipation::where('student_nim', $student->nim)
+                    ->where('has_voted', true)
+                    ->exists();
+
+                if ($pastVoted) {
+                    return redirect()->route('student.receipt');
+                }
+
+                // Bersihkan sesi dan arahkan ke login dengan pemberitahuan jelas
+                Auth::guard('student')->logout();
+                request()->session()->invalidate();
+                request()->session()->regenerateToken();
+
+                return view('auth.login')->withErrors([
+                    'identifier' => "Bilik suara periode {$activePeriod->academic_year} saat ini sedang ditutup oleh Panitia KPUM.",
+                ]);
             }
 
             return redirect()->route('student.voting');
@@ -68,7 +97,7 @@ class LoginController extends Controller
 
     /**
      * Proses autentikasi mahasiswa pemilih (cukup input NIM).
-     * Terintegrasi dengan buku tamu TPS eksternal.
+     * Terintegrasi dengan buku tamu TPS eksternal & terisolasi per periode.
      */
     public function login(Request $request): RedirectResponse
     {
@@ -83,7 +112,7 @@ class LoginController extends Controller
                 ]);
         }
 
-        // 2. Cari mahasiswa di DPT
+        // 2. Cari mahasiswa di DPT berdasarkan NIM
         $student = Student::where('nim', $identifier)->first();
 
         if (! $student) {
@@ -134,6 +163,19 @@ class LoginController extends Controller
 
         // 4b. Cek status bilik suara (Jika belum memilih dan bilik suara ditutup, tolak login)
         if ($activePeriod->isVotingClosed()) {
+            // Periksa jika mahasiswa pernah memilih di periode sebelumnya (misal arsip)
+            $pastVotedParticipation = VoterParticipation::where('student_nim', $student->nim)
+                ->where('has_voted', true)
+                ->latest('voted_at')
+                ->first();
+
+            if ($pastVotedParticipation) {
+                Auth::guard('student')->login($student);
+                $request->session()->regenerate();
+
+                return redirect()->route('student.receipt')->with('info', 'Bilik suara saat ini sedang ditutup. Menampilkan tanda terima suara Anda pada periode sebelumnya.');
+            }
+
             return back()
                 ->withInput(['identifier' => $identifier])
                 ->withErrors([
@@ -142,7 +184,7 @@ class LoginController extends Controller
         }
 
         // 5. Verifikasi kehadiran fisik mahasiswa di Meja Registrasi TPS (Verifikasi Kehadiran Pemilih)
-        $presence = $this->guestbookService->isStudentPresent($student->nim);
+        $presence = $this->guestbookService->isStudentPresent($student->nim, $activePeriod->id);
 
         if (! $presence['is_present']) {
             return back()

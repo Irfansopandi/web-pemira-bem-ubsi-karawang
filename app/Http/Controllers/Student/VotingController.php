@@ -134,15 +134,28 @@ class VotingController extends Controller
     public function receipt(): View|RedirectResponse
     {
         $student = Auth::guard('student')->user();
-        $activePeriod = $this->electionService->getActivePeriod() ?? $this->electionService->getLatestPeriod();
+        $activePeriod = $this->electionService->getActivePeriod();
 
-        if (! $activePeriod) {
-            return redirect('/login');
+        // 1. Coba cari partisipasi yang sudah memilih di periode aktif
+        $participation = null;
+        if ($activePeriod) {
+            $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
+                ->where('student_nim', $student->nim)
+                ->where('has_voted', true)
+                ->first();
         }
 
-        $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
-            ->where('student_nim', $student->nim)
-            ->first();
+        // 2. Jika tidak ada di periode aktif, cari dari periode manapun di mana mahasiswa ini sudah pernah voting
+        if (! $participation) {
+            $participation = VoterParticipation::where('student_nim', $student->nim)
+                ->where('has_voted', true)
+                ->latest('voted_at')
+                ->first();
+
+            if ($participation) {
+                $activePeriod = ElectionPeriod::find($participation->election_period_id);
+            }
+        }
 
         if (! $participation || ! $participation->has_voted) {
             return redirect()->route('student.voting')

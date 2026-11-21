@@ -1,17 +1,17 @@
-@extends('layouts.app', ['title' => 'Bilik Suara', 'darkTheme' => true])
+@extends('layouts.app', ['title' => 'Bilik Suara', 'darkTheme' => true, 'allowScroll' => true])
 
 @section('content')
-<div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 flex-1 flex flex-col justify-center my-auto">
+<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 lg:py-9 flex-1 flex flex-col justify-start">
 
     <!-- Header Halaman Voting Sesuai Desain Referensi -->
-    <div class="mb-4 sm:mb-5 lg:mb-6">
-        <!-- Identitas Acara & Periode Pemilihan (Teks Bersih Tanpa Badge) -->
-        <span class="text-xs font-semibold uppercase tracking-wider text-[#CE9501] block mb-1.5 sm:mb-2">
-            PEMIRA BEM UBSI KARAWANG &bull; TAHUN AKADEMIK {{ $activePeriod->academic_year }}
+    <div class="mb-6 sm:mb-8 text-center sm:text-left">
+        <!-- Judul Periode Pemilihan (Teks Murni Tanpa Badge & Tanpa Border) -->
+        <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#CE9501] block mb-2">
+            PEMIRA BEM UBSI KARAWANG &bull; PERIODE {{ $activePeriod->academic_year }}
         </span>
 
         <!-- Title dengan Red Glowing Ballot Box Icon -->
-        <div class="flex items-center gap-3 mb-1.5 sm:mb-2">
+        <div class="flex items-center justify-center sm:justify-start gap-3 mb-2">
             <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-[#D71920] to-[#7A0A0D] shadow-md shadow-red-700/50 border border-red-400/30 flex items-center justify-center shrink-0">
                 <!-- Ballot Box with Checkmark SVG -->
                 <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -28,13 +28,21 @@
         </div>
 
         <!-- Deskripsi Petunjuk Pemilihan -->
-        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            Silakan pilih pasangan calon di bawah ini untuk melihat profil lengkap, visi, misi, program kerja unggulan, dan menyalurkan hak suara Anda.
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed mx-auto sm:mx-0">
+            Silakan pilih pasangan calon di bawah ini untuk melihat profil lengkap, visi, misi, program kerja unggulan, dan menyalurkan hak suara Anda pada periode <strong>{{ $activePeriod->academic_year }}</strong>.
         </p>
     </div>
 
-    <!-- Candidate Ballot Cards Grid (Full Foto Sesuai Desain Awal & 1 Badge Paslon No.) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 {{ $candidates->count() > 2 ? 'xl:grid-cols-3' : '' }} gap-6 sm:gap-7 lg:gap-8">
+    <!-- Candidate Ballot Cards Grid (Proporsional & Seimbang Sesuai Jumlah Paslon) -->
+    @php
+        $candidateCount = $candidates->count();
+        $gridClass = match($candidateCount) {
+            1 => 'grid-cols-1 max-w-md mx-auto',
+            2 => 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto',
+            default => 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto',
+        };
+    @endphp
+    <div class="grid {{ $gridClass }} gap-6 sm:gap-7 lg:gap-8 justify-center w-full">
         @foreach($candidates as $candidate)
             <a href="{{ route('student.candidate.detail', $candidate->id) }}"
                class="group relative block aspect-[3/4] sm:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl shadow-black/80 transition-all duration-300 border border-white/10 hover:border-[#CE9501]/60 bg-gradient-to-b from-[#52000D] via-[#7A0A0D] to-[#940C10] transform hover:-translate-y-1.5 cursor-pointer">

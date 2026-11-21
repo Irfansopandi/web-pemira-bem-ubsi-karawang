@@ -10,18 +10,21 @@ class GuestbookService
 {
     /**
      * Memeriksa apakah mahasiswa dengan NIM ini sudah mengisi buku tamu TPS.
+     * Dapat dispesifikasikan untuk periode pemilihan tertentu.
      *
      * @return array{checked: bool, is_present: bool, message: string}
      */
-    public function isStudentPresent(string $nim): array
+    public function isStudentPresent(string $nim, ?int $periodId = null): array
     {
         $enabled = (bool) config('services.guestbook.check_enabled', true);
         $baseUrl = rtrim((string) config('services.guestbook.base_url', ''), '/');
 
-        // 1. Cek apakah ada record verifikasi kehadiran lokal / seeder testing (hadir semua di seeder)
-        $isSeederVerified = VoterParticipation::where('student_nim', $nim)
-            ->whereNotNull('verified_at')
-            ->exists();
+        // 1. Cek apakah ada record verifikasi kehadiran lokal / seeder testing (terisolasi per periode jika ada periodId)
+        $query = VoterParticipation::where('student_nim', $nim)->whereNotNull('verified_at');
+        if ($periodId) {
+            $query->where('election_period_id', $periodId);
+        }
+        $isSeederVerified = $query->exists();
 
         // 2. Jika pemeriksaan buku tamu dinonaktifkan
         if (! $enabled) {

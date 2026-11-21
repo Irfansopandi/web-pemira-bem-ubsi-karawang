@@ -18,9 +18,9 @@
                     <span class="text-xs font-bold uppercase tracking-wider text-[#940C10]">Manajemen Pemilihan</span>
                     @if($period)
                         <span class="text-slate-300">•</span>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ $period->is_active ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-slate-100 text-slate-700 border border-slate-300' }}">
-                            <span class="w-1.5 h-1.5 rounded-full {{ $period->is_active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400' }}"></span>
-                            Periode: {{ $period->name }}
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ $period->isSystemActive() ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-slate-100 text-slate-700 border border-slate-300' }}">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $period->isSystemActive() ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400' }}"></span>
+                            Periode: {{ $period->academic_year }} ({{ $period->isSystemActive() ? 'Aktif' : 'Arsip' }})
                         </span>
                     @endif
                 </div>
