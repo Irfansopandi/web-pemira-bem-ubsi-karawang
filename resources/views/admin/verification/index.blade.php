@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Buku Tamu Digital & Verifikasi Pemilih - PEMIRA BEM UBSI</title>
+    <title>Buku Tamu Digital PEMIRA - BEM UBSI Kab. Karawang</title>
 
     <!-- Favicon Resmi -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v=2">
 
-    <!-- Fonts: Plus Jakarta Sans / Inter -->
+    <!-- Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased selection:bg-blue-600 selection:text-white flex flex-col justify-between"
+<body class="min-h-screen bg-[#FDFDFD] text-slate-800 antialiased selection:bg-[#940c10] selection:text-white flex flex-col justify-between"
       x-data="bukuTamuApp({
           lookupUrl: '{{ route('admin.verification.lookup') }}',
           storeUrl: '{{ route('admin.verification.store') }}',
@@ -35,53 +35,70 @@
     <!-- ======================================================== -->
     <!-- TOP NAVIGATION BAR (PERSISTENT ACROSS ALL SCREENS)       -->
     <!-- ======================================================== -->
-    <header class="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40 shadow-xs">
+    <header class="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40 shadow-2xs">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
             
-            <!-- Left: Back Button & Branding -->
+            <!-- Left: Back Button & Institutional Branding -->
             <div class="flex items-center gap-3 sm:gap-4">
                 <!-- Tombol Kembali (Hanya tampil jika sedang dalam langkah wizard formulir) -->
                 <button type="button" 
                         x-show="currentStep > 0" 
                         x-cloak
                         @click="prevStep()"
-                        class="w-10 h-10 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-all shadow-2xs"
+                        class="w-10 h-10 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-all shadow-2xs cursor-pointer"
                         title="Kembali ke langkah sebelumnya">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
                 </button>
 
-                <!-- Logo & Identitas Institusi -->
+                <!-- Logo & Identitas Resmi (Logo BEM & Kabinet) -->
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo UBSI" class="w-10 h-10 object-contain drop-shadow-xs">
-                    <div>
-                        <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none"
-                              x-text="currentStep === 0 ? 'UNIVERSITAS BINA SARANA INFORMATIKA' : 'Form Buku Tamu Digital'">
-                            UNIVERSITAS BINA SARANA INFORMATIKA
+                    <span class="sr-only">UNIVERSITAS BINA SARANA INFORMATIKA</span>
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-2xs">
+                        <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet PEMIRA UBSI" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-2xs">
+                    </div>
+                    <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+                        <span class="text-sm sm:text-base font-extrabold text-[#940c10] tracking-tight">
+                            BEM UBSI KAB. KARAWANG
                         </span>
-                        <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight leading-tight mt-0.5">
-                            Buku Tamu Digital <span class="text-blue-600">PEMIRA</span>
-                        </h1>
+                        <span class="text-slate-300 font-light hidden sm:inline">|</span>
+                        <span class="text-xs sm:text-sm font-bold text-slate-900 tracking-tight hidden sm:inline">
+                            Buku Tamu Digital <span class="text-[#940c10] font-black">PEMIRA</span>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right: Live Clock & Admin Lock Icon -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Clock Pill -->
-                <div class="bg-slate-50 border border-slate-200/80 px-3.5 sm:px-4 py-1.5 rounded-xl shadow-2xs text-right">
-                    <div class="text-xs sm:text-sm font-black font-mono text-blue-600 tracking-wider" x-text="timeString">
-                        00:00:00
-                    </div>
-                    <div class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-tight" x-text="dateString">
-                        SAB, 21 NOV 2026 - WIB (24 JAM)
-                    </div>
+            <!-- Right: Live Date & Clock Pill + Admin Lock Icon -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <!-- Date & Clock Pill -->
+                <div class="inline-flex items-center gap-3 sm:gap-3.5 px-4 sm:px-5 py-2 rounded-2xl sm:rounded-full bg-white border border-slate-200/90 shadow-2xs">
+                    <!-- Red Calendar Icon -->
+                    <svg class="w-5 h-5 text-[#940c10] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2.5" ry="2.5"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <circle cx="8" cy="14" r="0.75" fill="currentColor"></circle>
+                        <circle cx="12" cy="14" r="0.75" fill="currentColor"></circle>
+                        <circle cx="16" cy="14" r="0.75" fill="currentColor"></circle>
+                        <circle cx="8" cy="17.5" r="0.75" fill="currentColor"></circle>
+                        <circle cx="12" cy="17.5" r="0.75" fill="currentColor"></circle>
+                        <circle cx="16" cy="17.5" r="0.75" fill="currentColor"></circle>
+                    </svg>
+                    <!-- Date String (Dark Charcoal, Clean Sans-Serif) -->
+                    <span class="text-sm sm:text-[15px] font-medium text-slate-900 tracking-normal whitespace-nowrap" x-text="dateString">Minggu, 22 Nov 2026</span>
+                    <!-- Divider Line -->
+                    <span class="text-slate-300 font-light text-sm sm:text-base select-none">|</span>
+                    <!-- Time String (Deep Red UBSI, Bold Sans-Serif) -->
+                    <span class="text-sm sm:text-[15px] font-extrabold text-[#940c10] tracking-normal whitespace-nowrap" x-text="timeString">18 : 48 : 41 WIB</span>
                 </div>
 
                 <!-- Admin Link Icon (Lock) -->
                 <a href="{{ route('admin.dashboard') }}" 
-                   class="w-9 h-9 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all shadow-2xs"
+                   class="w-10 h-10 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all shadow-2xs shrink-0"
                    title="Kembali ke Dashboard Administrator">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -99,90 +116,75 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
 
         <!-- ==================================================== -->
-        <!-- SCREEN 0: WELCOME SCREEN (BERANDA - PERSIS GAMBAR 2) -->
+        <!-- SCREEN 0: WELCOME SCREEN (BERANDA - PERSIS DESAIN)  -->
         <!-- ==================================================== -->
         <div x-show="currentStep === 0" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 scale-98"
              x-transition:enter-end="opacity-100 scale-100"
-             class="space-y-8 my-auto">
+             class="w-full my-auto py-2 sm:py-6">
             
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 
-                <!-- Left Column: Hero Text & Big CTA Button -->
-                <div class="lg:col-span-7 space-y-6">
+                <!-- Left Column: Hero Text, CTA Button & Logos -->
+                <div class="lg:col-span-7 space-y-6 sm:space-y-7">
+                    
+                    <!-- Top Pill Tag -->
                     <div>
-                        <span class="text-base sm:text-lg font-bold text-slate-600 block">
-                            Selamat Datang di
-                        </span>
-                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-600 tracking-tight uppercase leading-tight mt-1">
-                            UNIVERSITAS BINA SARANA INFORMATIKA
-                        </h2>
-                        <div class="inline-flex items-center gap-2 mt-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-wider">
-                            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                            <span>KAMPUS KARAWANG & CIKAMPEK</span>
+                        <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-red-50 border border-red-200/70 text-[#940c10] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+                            PEMIRA BEM UBSI KAMPUS KABUPATEN KARAWANG 2026/2027
                         </div>
                     </div>
 
-                    <p class="text-sm sm:text-base text-slate-500 font-normal leading-relaxed">
-                        Silakan isi buku tamu sebagai bukti kehadiran Anda sebelum menuju bilik suara dalam Pesta Demokrasi Mahasiswa BEM UBSI.
+                    <!-- Main Heading -->
+                    <div>
+                        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-[1.18]">
+                            Selamat Datang di<br>
+                            <span class="text-[#940c10] font-black">Buku Tamu Digital</span><br>
+                            <span class="text-[#940c10] font-black">PEMIRA BEM UBSI</span><br>
+                            <span class="text-[#940c10] font-black">Kab. Karawang!</span>
+                        </h1>
+                    </div>
+
+                    <!-- Subtitle / Instruction -->
+                    <p class="text-sm sm:text-base text-slate-600 font-normal leading-relaxed max-w-xl">
+                        Silakan isi buku tamu sebagai bukti kehadiran Anda dalam rangkaian kegiatan Pesta Demokrasi Mahasiswa (PEMIRA) BEM UBSI Kampus Kabupaten Karawang.
                     </p>
 
-                    <!-- Big CTA Button ("Isi Buku Tamu" / "Sentuh untuk memulai") -->
+                    <!-- Big Red CTA Button ("Isi Buku Tamu" / "Sentuh untuk memulai") -->
                     <div>
                         <button type="button" 
                                 @click="goToStep(1)"
-                                class="inline-flex items-center gap-4 px-6 sm:px-8 py-4 sm:py-5 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white shadow-xl shadow-blue-600/25 transition-all group">
-                            <!-- Icon Edit Box -->
-                            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/20 group-hover:bg-white/25 flex items-center justify-center transition-colors shrink-0">
+                                class="inline-flex items-center gap-4 px-6 sm:px-8 py-4 sm:py-4.5 rounded-2xl bg-gradient-to-r from-[#940c10] to-[#a30f14] hover:from-[#7a0a0d] hover:to-[#940c10] active:scale-[0.98] text-white shadow-xl shadow-red-950/20 transition-all duration-200 group cursor-pointer">
+                            <!-- Icon Squircle -->
+                            <div class="w-12 h-12 rounded-xl bg-white/15 border border-white/20 group-hover:bg-white/25 flex items-center justify-center transition-colors shrink-0 shadow-2xs">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                 </svg>
                             </div>
+                            <!-- Text -->
                             <div class="text-left">
-                                <span class="text-lg sm:text-xl font-black tracking-tight block">
+                                <span class="text-lg sm:text-xl font-black tracking-tight block text-white leading-tight">
                                     Isi Buku Tamu
                                 </span>
-                                <span class="text-xs sm:text-sm text-blue-100 font-medium block">
+                                <span class="text-xs sm:text-sm text-red-100/90 font-medium block mt-0.5 leading-tight">
                                     Sentuh untuk memulai
                                 </span>
                             </div>
                         </button>
                     </div>
 
-                    <!-- Partner / Ormawa Logos Strip -->
-                    <div class="pt-6 border-t border-slate-200/80">
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-3">
-                            Penyelenggara & Kolaborator Resmi
-                        </span>
-                        <div class="flex items-center gap-5 sm:gap-6 opacity-80 grayscale hover:grayscale-0 transition-all flex-wrap">
-                            <img src="{{ asset('images/logo-ubsi.png') }}" alt="UBSI" class="h-8 object-contain">
-                            <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="BEM UBSI" class="h-8 object-contain">
-                            <img src="{{ asset('images/logo-kabinet.png') }}" alt="Kabinet PEMIRA" class="h-8 object-contain">
-                        </div>
-                    </div>
+
+
                 </div>
 
-                <!-- Right Column: Campus Banner Card -->
-                <div class="lg:col-span-5">
-                    <div class="relative rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 group">
-                        <img src="{{ asset('images/kampus/Cikampek.png') }}" 
-                             alt="UBSI Kampus Cikampek & Karawang" 
-                             class="w-full h-72 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700 brightness-90">
-                        
-                        <!-- Overlay Gradient & Text -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent flex flex-col justify-end p-6 sm:p-8 text-white">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-widest self-start mb-2">
-                                KAMPUS DIGITAL KREATIF
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-                                UBSI KAMPUS CIKAMPEK & KARAWANG
-                            </h3>
-                            <p class="text-xs text-slate-300 font-normal mt-1">
-                                Pusat Pendidikan Vokasi & Teknologi Unggul Berdaya Saing Global
-                            </p>
-                        </div>
+                <!-- Right Column: Official PEMIRA Banner Card -->
+                <div class="lg:col-span-5 flex justify-center lg:justify-end">
+                    <div class="relative w-full max-w-lg lg:max-w-none rounded-[28px] overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200/60 group">
+                        <img src="{{ asset('images/buku-tamu-banner-2x.png') }}" 
+                             alt="PEMIRA BEM UBSI Kampus Kabupaten Karawang" 
+                             class="w-full h-auto object-contain block select-none group-hover:scale-[1.01] transition-transform duration-500">
                     </div>
                 </div>
 
@@ -200,21 +202,21 @@
              class="space-y-6 sm:space-y-8 my-auto">
 
             <!-- ================================================ -->
-            <!-- STEPPER HEADER (PERSIS GAMBAR 3, 4, 5)           -->
+            <!-- STEPPER HEADER (PROGRESS INDIKATOR)              -->
             <!-- ================================================ -->
             <div class="max-w-2xl mx-auto px-4">
                 <div class="relative flex items-center justify-between">
                     <!-- Connecting Background Line -->
                     <div class="absolute top-5 left-10 right-10 h-0.5 bg-slate-200 -z-0"></div>
                     <!-- Connecting Progress Line -->
-                    <div class="absolute top-5 left-10 h-0.5 bg-blue-600 -z-0 transition-all duration-300"
+                    <div class="absolute top-5 left-10 h-0.5 bg-[#940c10] -z-0 transition-all duration-300"
                          :style="'width: ' + ((currentStep - 1) * 50) + '%'"></div>
 
-                    <!-- Step 1: Asal Kampus (Pengganti Kategori Tamu Sesuai Permintaan) -->
+                    <!-- Step 1: Asal Kampus -->
                     <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-xs"
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-2xs"
                              :class="{
-                                 'bg-blue-600 text-white': currentStep === 1 || currentStep > 1,
+                                 'bg-[#940c10] text-white shadow-md shadow-red-950/20': currentStep === 1 || currentStep > 1,
                                  'bg-white border-2 border-slate-300 text-slate-400': currentStep < 1
                              }">
                             <template x-if="currentStep > 1">
@@ -227,16 +229,16 @@
                             </template>
                         </div>
                         <span class="mt-2 text-xs font-bold text-center"
-                              :class="currentStep >= 1 ? 'text-blue-600' : 'text-slate-400'">
+                              :class="currentStep >= 1 ? 'text-[#940c10]' : 'text-slate-400'">
                             Asal Kampus
                         </span>
                     </div>
 
                     <!-- Step 2: Data Diri -->
                     <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-xs"
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-2xs"
                              :class="{
-                                 'bg-blue-600 text-white': currentStep >= 2,
+                                 'bg-[#940c10] text-white shadow-md shadow-red-950/20': currentStep >= 2,
                                  'bg-white border-2 border-slate-300 text-slate-400': currentStep < 2
                              }">
                             <template x-if="currentStep > 2">
@@ -249,22 +251,22 @@
                             </template>
                         </div>
                         <span class="mt-2 text-xs font-bold text-center"
-                              :class="currentStep >= 2 ? 'text-blue-600' : 'text-slate-400'">
+                              :class="currentStep >= 2 ? 'text-[#940c10]' : 'text-slate-400'">
                             Data Diri
                         </span>
                     </div>
 
                     <!-- Step 3: Konfirmasi -->
                     <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-xs"
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-2xs"
                              :class="{
-                                 'bg-blue-600 text-white': currentStep === 3,
+                                 'bg-[#940c10] text-white shadow-md shadow-red-950/20': currentStep === 3,
                                  'bg-white border-2 border-slate-300 text-slate-400': currentStep < 3
                              }">
                             <span>3</span>
                         </div>
                         <span class="mt-2 text-xs font-bold text-center"
-                              :class="currentStep === 3 ? 'text-blue-600' : 'text-slate-400'">
+                              :class="currentStep === 3 ? 'text-[#940c10]' : 'text-slate-400'">
                             Konfirmasi
                         </span>
                     </div>
@@ -272,7 +274,7 @@
             </div>
 
             <!-- ================================================ -->
-            <!-- STEP 1: PILIH ASAL KAMPUS (PERSIS GAMBAR 3)      -->
+            <!-- STEP 1: PILIH ASAL KAMPUS                        -->
             <!-- ================================================ -->
             <div x-show="currentStep === 1" 
                  x-transition:enter="transition ease-out duration-300"
@@ -288,24 +290,24 @@
                         </p>
                     </div>
 
-                    <!-- Grid 2 Pilihan: Karawang dan Cikampek (Sesuai Permintaan Pengguna) -->
+                    <!-- Grid 2 Pilihan: Karawang dan Cikampek -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                         
                         <!-- Pilihan 1: Kampus Karawang -->
                         <div @click="selectCampus('Kampus Karawang')"
                              class="rounded-2xl border-2 p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none group relative"
                              :class="selectedCampus === 'Kampus Karawang' 
-                                 ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-500/10 shadow-md' 
-                                 : 'border-slate-200/90 hover:border-blue-300 hover:bg-slate-50/60'">
+                                 ? 'border-[#940c10] bg-red-50/40 ring-4 ring-red-500/10 shadow-md' 
+                                 : 'border-slate-200/90 hover:border-red-300 hover:bg-slate-50/60'">
                             
                             <!-- Checkmark Badge on Selected -->
                             <div x-show="selectedCampus === 'Kampus Karawang'" 
-                                 class="absolute top-4 right-4 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                                 class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#940c10] text-white flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
 
                             <!-- Avatar Circle Icon -->
-                            <div class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full bg-red-100 text-[#940c10] flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
@@ -316,7 +318,7 @@
                                 Kampus Karawang
                             </h3>
                             <p class="text-xs text-slate-500 font-normal mt-1">
-                                Mahasiswa / Pemilih UBSI Kampus Karawang
+                                Mahasiswa / Pemilih UBSI Kampus Kabupaten Karawang
                             </p>
                         </div>
 
@@ -324,17 +326,17 @@
                         <div @click="selectCampus('Kampus Cikampek')"
                              class="rounded-2xl border-2 p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none group relative"
                              :class="selectedCampus === 'Kampus Cikampek' 
-                                 ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-500/10 shadow-md' 
-                                 : 'border-slate-200/90 hover:border-blue-300 hover:bg-slate-50/60'">
+                                 ? 'border-[#940c10] bg-red-50/40 ring-4 ring-red-500/10 shadow-md' 
+                                 : 'border-slate-200/90 hover:border-red-300 hover:bg-slate-50/60'">
                             
                             <!-- Checkmark Badge on Selected -->
                             <div x-show="selectedCampus === 'Kampus Cikampek'" 
-                                 class="absolute top-4 right-4 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                                 class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#940c10] text-white flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
 
-                            <!-- Avatar Circle Icon (Purple Accent) -->
-                            <div class="w-16 h-16 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+                            <!-- Avatar Circle Icon (Accent Gold) -->
+                            <div class="w-16 h-16 rounded-full bg-amber-100 text-[#CE9501] flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
@@ -355,14 +357,14 @@
                     <div class="flex items-center justify-between pt-6 border-t border-slate-100">
                         <button type="button" 
                                 @click="goToStep(0)"
-                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors">
+                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
                             Batal
                         </button>
                         
                         <button type="button" 
                                 @click="goToStep(2)"
                                 :disabled="!selectedCampus"
-                                class="px-6 sm:px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md flex items-center gap-2">
+                                class="px-6 sm:px-8 py-3 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <span>Selanjutnya</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
@@ -372,7 +374,7 @@
             </div>
 
             <!-- ================================================ -->
-            <!-- STEP 2: DATA DIRI (PERSIS GAMBAR 4)              -->
+            <!-- STEP 2: DATA DIRI MAHASISWA                      -->
             <!-- ================================================ -->
             <div x-show="currentStep === 2" 
                  x-transition:enter="transition ease-out duration-300"
@@ -419,7 +421,7 @@
                         </div>
                     </template>
 
-                    <!-- Form Inputs (2 Kolom Layout Sesuai Gambar 4) -->
+                    <!-- Form Inputs (2 Kolom Layout) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                         
                         <!-- NIM (Nomor Induk Mahasiswa) -->
@@ -434,11 +436,11 @@
                                        @keydown.enter.prevent="searchStudent()"
                                        placeholder="Masukkan 8 digit NIM Anda (Contoh: 12220001)"
                                        maxlength="20"
-                                       class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono font-bold text-slate-900 placeholder:font-sans placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-2xs">
+                                       class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono font-bold text-slate-900 placeholder:font-sans placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] focus:border-transparent transition-all shadow-2xs">
                                 
                                 <div class="absolute right-2.5 flex items-center gap-1.5">
                                     <template x-if="isLoading">
-                                        <svg class="animate-spin w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin w-5 h-5 text-[#940c10]" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                         </svg>
@@ -446,7 +448,7 @@
                                     <button type="button" 
                                             @click="searchStudent()"
                                             :disabled="isLoading || nim.trim().length === 0"
-                                            class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white rounded-lg text-xs font-bold transition-colors">
+                                            class="px-3.5 py-1.5 bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer">
                                         Cek DPT
                                     </button>
                                 </div>
@@ -466,7 +468,7 @@
                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 placeholder-slate-400 focus:outline-none cursor-default shadow-2xs">
                         </div>
 
-                        <!-- Asal Kampus / Instansi -->
+                        <!-- Asal Kampus / Alamat -->
                         <div class="space-y-1.5">
                             <label class="block text-xs font-bold text-slate-800">
                                 Asal Kampus / Alamat <span class="text-red-500">*</span>
@@ -509,7 +511,7 @@
                             <input type="text" 
                                    x-model="phone" 
                                    placeholder="Contoh: 081234567890"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-2xs">
+                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs">
                         </div>
 
                         <!-- Email -->
@@ -520,7 +522,7 @@
                             <input type="email" 
                                    x-model="email" 
                                    placeholder="nama@email.com"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-2xs">
+                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs">
                         </div>
 
                     </div>
@@ -529,14 +531,14 @@
                     <div class="flex items-center justify-between pt-6 border-t border-slate-100">
                         <button type="button" 
                                 @click="goToStep(1)"
-                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors">
+                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
                             Kembali
                         </button>
                         
                         <button type="button" 
                                 @click="goToStep(3)"
                                 :disabled="status !== 'ready' || !student"
-                                class="px-6 sm:px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md flex items-center gap-2">
+                                class="px-6 sm:px-8 py-3 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <span>Selanjutnya</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
@@ -546,7 +548,7 @@
             </div>
 
             <!-- ================================================ -->
-            <!-- STEP 3: KONFIRMASI DATA (PERSIS GAMBAR 5)         -->
+            <!-- STEP 3: KONFIRMASI DATA & TANDA TANGAN DIGITAL   -->
             <!-- ================================================ -->
             <div x-show="currentStep === 3" 
                  x-transition:enter="transition ease-out duration-300"
@@ -558,18 +560,18 @@
                             Konfirmasi Data
                         </h2>
                         <p class="text-xs sm:text-sm text-slate-500 font-normal mt-1">
-                            Periksa kembali data Anda sebelum menyimpan kehadiran.
+                            Periksa kembali data Anda sebelum membubuhkan tanda tangan kehadiran.
                         </p>
                     </div>
 
-                    <!-- Ringkasan Data Card (Sesuai Layout Gambar 5) -->
-                    <div class="bg-[#F8FAFC] rounded-2xl p-5 sm:p-6 border border-slate-200/80 space-y-4">
+                    <!-- Ringkasan Data Card -->
+                    <div class="bg-[#FDFDFD] rounded-2xl p-5 sm:p-6 border border-slate-200/80 space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                             
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Asal Kampus</span>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-[#940c10]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="9" cy="7" r="4"></circle>
                                     </svg>
@@ -584,7 +586,7 @@
 
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">NIM (Nomor Induk Mahasiswa)</span>
-                                <span class="font-mono font-bold text-blue-600 text-sm mt-1 block" x-text="nim"></span>
+                                <span class="font-mono font-bold text-[#940c10] text-sm mt-1 block" x-text="nim"></span>
                             </div>
 
                             <div>
@@ -609,7 +611,7 @@
 
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Status Partisipasi</span>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 mt-1">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 mt-1">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                     Siap Menggunakan Hak Suara
                                 </span>
@@ -618,7 +620,7 @@
                         </div>
                     </div>
 
-                    <!-- Tanda Tangan Digital (Canvas Pad Sesuai Gambar 5) -->
+                    <!-- Tanda Tangan Digital (Canvas Pad) -->
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <div>
@@ -630,10 +632,10 @@
                                 </span>
                             </div>
 
-                            <!-- Tombol Ulangi (Persis Gambar 5 dengan icon sampah) -->
+                            <!-- Tombol Ulangi -->
                             <button type="button" 
                                     @click="clearSignature()"
-                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs font-bold text-slate-600 transition-colors shadow-2xs">
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs font-bold text-slate-600 transition-colors shadow-2xs cursor-pointer">
                                 <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M3 6h18"></path>
                                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -642,11 +644,11 @@
                             </button>
                         </div>
 
-                        <!-- Canvas Box (Dotted border, background clean, center pen icon) -->
+                        <!-- Canvas Box -->
                         <div class="relative bg-white rounded-2xl border-2 border-dashed border-slate-300 overflow-hidden"
-                             :class="{ 'ring-2 ring-blue-500/20 border-blue-500': hasSignature }">
+                             :class="{ 'ring-2 ring-red-500/20 border-[#940c10]': hasSignature }">
                             
-                            <!-- Placeholder icon & text (Coret di sini untuk tanda tangan) -->
+                            <!-- Placeholder icon & text -->
                             <div x-show="!hasSignature" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-slate-400 select-none">
                                 <svg class="w-7 h-7 text-slate-300 mb-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 1 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
@@ -670,14 +672,14 @@
                     <div class="flex items-center justify-between pt-6 border-t border-slate-100">
                         <button type="button" 
                                 @click="goToStep(2)"
-                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors">
+                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
                             Kembali
                         </button>
                         
                         <button type="button" 
                                 @click="submitVerification()"
                                 :disabled="isSubmitting || !hasSignature"
-                                class="px-7 sm:px-9 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-extrabold text-white transition-all shadow-md flex items-center gap-2">
+                                class="px-7 sm:px-9 py-3.5 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-extrabold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <template x-if="isSubmitting">
                                 <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -701,10 +703,10 @@
     </main>
 
     <!-- ======================================================== -->
-    <!-- FOOTER KIOSK                                             -->
+    <!-- FOOTER RESMI (PERSIS DESAIN)                             -->
     <!-- ======================================================== -->
-    <footer class="w-full bg-white border-t border-slate-200/80 py-3 px-4 sm:px-8 text-center text-xs text-slate-400">
-        <p>&copy; {{ date('Y') }} Komisi Pemilihan Umum Mahasiswa (KPUM) BEM Universitas BSI Karawang. Seluruh hak cipta dilindungi.</p>
+    <footer class="w-full bg-white border-t border-slate-200/80 py-4 px-4 sm:px-8 text-center text-xs text-slate-500">
+        <p>&copy; 2026 Panitia PEMIRA BEM UBSI Kampus Kabupaten Karawang. Seluruh hak cipta dilindungi.</p>
     </footer>
 
     <!-- ======================================================== -->
@@ -731,8 +733,8 @@
                 </span>
                 <h3 class="text-lg sm:text-xl font-black text-slate-900 mt-2" x-text="lastVerifiedName"></h3>
                 <p class="text-xs text-slate-500 font-mono mt-0.5" x-text="'NIM: ' + lastVerifiedNim"></p>
-                <div class="mt-3 p-3.5 rounded-xl bg-blue-50 text-xs text-blue-900 font-medium border border-blue-100">
-                    Hak suara Anda telah <strong class="text-blue-700">AKTIF</strong>. Silakan segera menuju ke <strong>Bilik Suara</strong> untuk mencoblos.
+                <div class="mt-3 p-3.5 rounded-xl bg-red-50 text-xs text-[#940c10] font-medium border border-red-100">
+                    Hak suara Anda telah <strong class="text-[#940c10]">AKTIF</strong>. Silakan segera menuju ke <strong>Bilik Suara</strong> untuk mencoblos.
                 </div>
             </div>
 
@@ -743,14 +745,14 @@
                     <span class="font-bold text-slate-900" x-text="countdown + ' Detik'"></span>
                 </div>
                 <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="h-full bg-blue-600 transition-all duration-1000 ease-linear rounded-full"
+                    <div class="h-full bg-[#940c10] transition-all duration-1000 ease-linear rounded-full"
                          :style="'width: ' + ((countdown / 5) * 100) + '%'"></div>
                 </div>
             </div>
 
             <button type="button" 
                     @click="closeSuccessModal()"
-                    class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                    class="w-full py-3 px-4 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] text-white text-xs font-bold transition-colors cursor-pointer">
                 Kembali ke Beranda Sekarang &rarr;
             </button>
         </div>
@@ -779,8 +781,8 @@
             hasSignature: false,
 
             // Clock State
-            timeString: '00:00:00',
-            dateString: 'SAB, 21 NOV 2026 - WIB (24 JAM)',
+            timeString: '00 : 00 : 00 WIB',
+            dateString: 'Minggu, 22 Nov 2026',
 
             // Modal State
             showSuccessModal: false,
@@ -804,15 +806,15 @@
                 const hours = String(now.getHours()).padStart(2, '0');
                 const minutes = String(now.getMinutes()).padStart(2, '0');
                 const seconds = String(now.getSeconds()).padStart(2, '0');
-                this.timeString = `${hours}.${minutes}.${seconds}`;
+                this.timeString = `${hours} : ${minutes} : ${seconds} WIB`;
 
-                const days = ['MIN', 'SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'];
-                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
                 const dayName = days[now.getDay()];
                 const dayDate = now.getDate();
                 const monthName = months[now.getMonth()];
                 const year = now.getFullYear();
-                this.dateString = `${dayName}, ${dayDate} ${monthName} ${year} - WIB (24 JAM)`;
+                this.dateString = `${dayName}, ${dayDate} ${monthName} ${year}`;
             },
 
             goToStep(step) {
@@ -899,7 +901,7 @@
 
                 this.ctx = this.canvas.getContext('2d');
                 this.ctx.scale(dpr, dpr);
-                this.ctx.strokeStyle = '#2563EB'; // Royal Blue signature ink
+                this.ctx.strokeStyle = '#940c10'; // UBSI Red digital ink
                 this.ctx.lineWidth = 2.8;
                 this.ctx.lineCap = 'round';
                 this.ctx.lineJoin = 'round';

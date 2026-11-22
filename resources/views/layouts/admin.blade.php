@@ -386,7 +386,7 @@
                         {{ $title ?? 'Dashboard Administrator' }}
                     </h1>
                     <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
-                        Komisi Pemilihan Umum Mahasiswa — BEM Universitas BSI Karawang
+                        Panitia PEMIRA — BEM Universitas BSI Karawang
                     </p>
                 </div>
             </div>

@@ -59,12 +59,12 @@
                     <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
                         <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Perguruan Tinggi</span>
                         <p class="font-extrabold text-slate-900">Universitas Bina Sarana Informatika</p>
-                        <p class="text-[11px] text-slate-500">Kampus Karawang</p>
+                        <p class="text-[11px] text-slate-500">Kampus Kabupaten Karawang</p>
                     </div>
 
                     <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
                         <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Lembaga Penyelenggara</span>
-                        <p class="font-extrabold text-slate-900">Komisi Pemilihan Umum Mahasiswa</p>
+                        <p class="font-extrabold text-slate-900">Panitia PEMIRA</p>
                         <p class="text-[11px] text-slate-500">BEM UBSI Karawang</p>
                     </div>
 

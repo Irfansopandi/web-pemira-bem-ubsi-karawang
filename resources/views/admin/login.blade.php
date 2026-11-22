@@ -133,7 +133,7 @@
                 <div class="absolute right-0 top-0 bottom-0 w-5/12 sm:w-1/2 pointer-events-none select-none overflow-hidden z-0">
                     <img 
                         src="{{ asset('images/kampus/Karawang.png') }}" 
-                        alt="UBSI Kampus Karawang" 
+                        alt="UBSI Kampus Kabupaten Karawang" 
                         class="w-full h-full object-cover object-center opacity-30 mix-blend-luminosity filter contrast-125 [mask-image:linear-gradient(to_left,rgba(0,0,0,1)_20%,rgba(0,0,0,0)_100%)] [-webkit-mask-image:linear-gradient(to_left,rgba(0,0,0,1)_20%,rgba(0,0,0,0)_100%)]"
                     >
                     <div class="absolute inset-0 bg-gradient-to-l from-transparent via-[#7A0A0D]/50 to-[#7A0A0D]"></div>
