@@ -466,7 +466,7 @@
 @endphp
 
 <script>
-function liveDashboard() {
+window.liveDashboard = function liveDashboard() {
     return {
         stats: {
             total_students: {{ $stats['total_students'] ?? 0 }},

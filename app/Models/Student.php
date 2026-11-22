@@ -26,6 +26,8 @@ class Student extends Authenticatable
         'study_program',
         'class_name',
         'semester',
+        'asal_kampus',
+        'email_kampus',
         'is_active',
     ];
 

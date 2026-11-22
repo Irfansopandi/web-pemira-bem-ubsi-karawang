@@ -149,18 +149,16 @@ class PeriodController extends Controller
             // Lock semua baris periode untuk mencegah race condition
             ElectionPeriod::lockForUpdate()->get();
 
-            // Arsipkan dan kunci bilik suara seluruh periode lain
+            // Arsipkan seluruh periode lain
             ElectionPeriod::where('id', '!=', $period->id)->update([
                 'is_active' => false,
                 'status' => 'archived',
-                'voting_status' => 'closed',
             ]);
 
-            // Tetapkan periode target menjadi aktif
+            // Tetapkan periode target menjadi aktif (pertahankan status bilik yang sudah disetel)
             $period->update([
                 'is_active' => true,
                 'status' => 'active',
-                'voting_status' => 'closed', // Tetap ditutup sampai admin membukanya secara sadar
             ]);
 
             // Alihkan konteks tampilan admin ke periode ini

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CandidatePair;
 use App\Models\VoterParticipation;
 use App\Services\ElectionService;
+use App\Services\GuestbookService;
 use App\Services\VotingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class VotingController extends Controller
 {
     public function __construct(
         protected ElectionService $electionService,
-        protected VotingService $votingService
+        protected VotingService $votingService,
+        protected GuestbookService $guestbookService,
     ) {}
 
     public function index(): View|RedirectResponse
@@ -50,6 +52,15 @@ class VotingController extends Controller
 
         if ($participation && $participation->has_voted) {
             return redirect()->route('student.receipt');
+        }
+
+        // Validasi kehadiran Buku Tamu internal di backend
+        $presence = $this->guestbookService->isStudentPresent($student->nim, $activePeriod->id);
+        if (! $presence['is_present']) {
+            Auth::guard('student')->logout();
+            return redirect()->route('login')->withErrors([
+                'identifier' => "NIM {$student->nim} ({$student->name}) belum mengisi Buku Tamu.",
+            ]);
         }
 
         // Check if voting booth is closed
@@ -134,15 +145,28 @@ class VotingController extends Controller
     public function receipt(): View|RedirectResponse
     {
         $student = Auth::guard('student')->user();
-        $activePeriod = $this->electionService->getActivePeriod() ?? $this->electionService->getLatestPeriod();
+        $activePeriod = $this->electionService->getActivePeriod();
 
-        if (! $activePeriod) {
-            return redirect('/login');
+        // 1. Coba cari partisipasi yang sudah memilih di periode aktif
+        $participation = null;
+        if ($activePeriod) {
+            $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
+                ->where('student_nim', $student->nim)
+                ->where('has_voted', true)
+                ->first();
         }
 
-        $participation = VoterParticipation::where('election_period_id', $activePeriod->id)
-            ->where('student_nim', $student->nim)
-            ->first();
+        // 2. Jika tidak ada di periode aktif, cari dari periode manapun di mana mahasiswa ini sudah pernah voting
+        if (! $participation) {
+            $participation = VoterParticipation::where('student_nim', $student->nim)
+                ->where('has_voted', true)
+                ->latest('voted_at')
+                ->first();
+
+            if ($participation) {
+                $activePeriod = ElectionPeriod::find($participation->election_period_id);
+            }
+        }
 
         if (! $participation || ! $participation->has_voted) {
             return redirect()->route('student.voting')

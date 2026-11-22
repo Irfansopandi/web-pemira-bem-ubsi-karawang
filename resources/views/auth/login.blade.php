@@ -263,15 +263,21 @@
 
                     <!-- ALERT ERROR: Validasi / Buku Tamu -->
                     @if ($errors->any())
+                        @php
+                            $errorMessage = $errors->first('identifier') ?: $errors->first();
+                        @endphp
                         <div class="py-2.5 px-3 rounded-xl bg-red-50/90 border border-red-200 text-red-700 flex items-start gap-2.5 shadow-sm">
                             <svg class="w-4 h-4 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
                             <p class="text-[11px] sm:text-xs leading-snug">
                                 <span class="font-bold text-red-800">Perhatian:</span>
-                                <span class="text-red-700 font-medium">
-                                    {{ $errors->first('identifier') ?: $errors->first() }}
-                                </span>
+                                @if (preg_match('/^(NIM\s+\d+\s*\([^)]+\))\s*(.*)$/u', $errorMessage, $matches))
+                                    <strong class="font-bold text-red-900">{{ $matches[1] }}</strong>
+                                    <span class="text-red-700 font-medium">{{ $matches[2] }}</span>
+                                @else
+                                    <span class="text-red-700 font-medium">{{ $errorMessage }}</span>
+                                @endif
                             </p>
                         </div>
                     @endif
@@ -341,15 +347,15 @@
                         </div>
                     </form>
 
-                    <!-- Footer Kartu Kanan: Bantuan TPS (Dinaikkan dekat tombol agar tidak menyisakan space kosong raksasa) -->
+                    <!-- Footer Kartu Kanan: Bantuan TPS -->
                     <div class="pt-3 mt-4 border-t border-slate-100 flex items-center justify-center text-xs text-slate-500">
-                        <span class="flex items-center gap-1.5 whitespace-nowrap">
+                        <span class="flex items-center gap-1.5 whitespace-nowrap text-[11px]">
                             <svg class="w-3.5 h-3.5 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="M12 16v-4" />
                                 <path d="M12 8h.01" />
                             </svg>
-                            <span>Butuh bantuan? Hubungi panitia di lokasi TPS.</span>
+                            <span>Butuh bantuan? Panitia TPS siap membantu.</span>
                         </span>
                     </div>
                 </div>

@@ -71,6 +71,8 @@ class VoterVerificationController extends Controller
                 'study_program' => $student->study_program,
                 'class_name' => $student->class_name,
                 'semester' => $student->semester,
+                'asal_kampus' => $student->asal_kampus,
+                'email_kampus' => $student->email_kampus,
             ] : null,
             'participation' => $participation ? [
                 'has_voted' => (bool) $participation->has_voted,
@@ -92,6 +94,7 @@ class VoterVerificationController extends Controller
             'signature' => 'required|string',
             'tps_location' => 'required|string|max:100',
             'phone' => 'nullable|string|max:30',
+            'email' => 'nullable|email|max:150',
         ], [
             'nim.required' => 'NIM mahasiswa wajib diisi.',
             'signature.required' => 'Tanda tangan digital wajib dibubuhkan di canvas.',
@@ -117,6 +120,7 @@ class VoterVerificationController extends Controller
             tpsLocation: $tpsLocation,
             period: $period,
             phone: $request->input('phone'),
+            email: $request->input('email'),
             ipAddress: $request->ip(),
             userAgent: $request->userAgent()
         );

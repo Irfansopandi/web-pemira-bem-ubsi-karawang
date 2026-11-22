@@ -36,11 +36,16 @@ Route::middleware(['auth:student'])->prefix('voting')->name('student.')->group(f
     Route::get('/tanda-terima', [VotingController::class, 'receipt'])->name('receipt');
 });
 
-// Akses Cepat Buku Tamu Digital / Verifikasi Kehadiran Pemilih (Kiosk Meja TPS)
-Route::middleware(['auth:admin'])->get('/buku-tamu', [VoterVerificationController::class, 'index'])->name('guestbook');
+// Buku Tamu Digital Internal PEMIRA (Diakses Mahasiswa & Meja Registrasi TPS Onsite)
+Route::get('/buku-tamu', [VoterVerificationController::class, 'index'])->name('guestbook');
+Route::post('/buku-tamu/lookup', [VoterVerificationController::class, 'lookup'])->name('guestbook.lookup');
+Route::post('/buku-tamu/store', [VoterVerificationController::class, 'store'])->name('guestbook.store');
 
 // Area Administrator KPUM (Panel Pengelolaan Terstruktur)
 Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Keep-Alive Ping untuk menjaga sesi admin tetap aktif saat didiamkan
+    Route::get('/ping', fn () => response()->json(['status' => 'alive']))->name('ping');
+
     // 1. Dashboard Utama: Kilasan / Executive Overview
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -58,6 +63,8 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
 
     // 4. Manajemen Pemilih: Data Mahasiswa, DPT & Kehadiran
     Route::get('/voters', [VoterController::class, 'index'])->name('voters.index');
+    Route::get('/voters/template', [VoterController::class, 'downloadTemplate'])->name('voters.template');
+    Route::post('/voters/import', [VoterController::class, 'import'])->name('voters.import');
 
     // 4b. Pelaksanaan TPS: Verifikasi Kehadiran Pemilih (Registrasi & Tanda Tangan Digital)
     Route::get('/verifikasi-pemilih', [VoterVerificationController::class, 'index'])->name('verification.index');

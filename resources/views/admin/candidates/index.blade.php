@@ -18,7 +18,7 @@
                     <span class="text-xs font-bold uppercase tracking-wider text-[#940C10]">Manajemen Pemilihan</span>
                     @if($period)
                         <span class="text-slate-300">•</span>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ $period->is_active ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-slate-100 text-slate-700 border border-slate-300' }}">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ $period->is_active ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-700' }}">
                             <span class="w-1.5 h-1.5 rounded-full {{ $period->is_active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400' }}"></span>
                             Periode: {{ $period->name }}
                         </span>
@@ -37,7 +37,10 @@
             @if($period)
                 <a href="{{ route('admin.candidates.create', ['period_id' => $period->id]) }}"
                     class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940C10] hover:bg-[#7A0A0D] text-white text-xs font-bold shadow-xs hover:shadow-md transition-all">
-                    <i data-lucide="plus" class="w-4 h-4 text-[#CE9501]"></i>
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
                     <span>Daftarkan Paslon Baru</span>
                 </a>
             @endif
@@ -60,16 +63,24 @@
                 <!-- Action Edit & Delete Buttons di Pojok Kanan Atas -->
                 <div class="absolute top-3.5 right-3.5 z-20 flex items-center gap-2">
                     <a href="{{ route('admin.candidates.edit', $candidate) }}"
-                        class="p-2 sm:p-2.5 rounded-xl bg-black/60 hover:bg-[#940C10] border border-white/20 hover:border-[#CE9501] text-white shadow-lg shadow-black/50 backdrop-blur-md transition-all duration-200 group/btn"
+                        class="p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-[#940C10] border border-white/30 hover:border-[#CE9501] text-white shadow-xl shadow-black/60 backdrop-blur-md transition-all duration-200 group/btn inline-flex items-center justify-center cursor-pointer"
                         title="Edit Paslon, Visi & Misi">
-                        <i data-lucide="edit-3" class="w-4 h-4 text-white group-hover/btn:text-[#CE9501]"></i>
+                        <svg class="w-4 h-4 text-white group-hover/btn:text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
                     </a>
 
                     <button type="button"
                         @click="handleDelete('{{ route('admin.candidates.destroy', $candidate) }}', '{{ $candidate->candidate_number }}', '{{ addslashes($candidate->chairman_name) }}')"
-                        class="p-2 sm:p-2.5 rounded-xl bg-black/60 hover:bg-red-600 border border-white/20 hover:border-red-400 text-red-200 hover:text-white shadow-lg shadow-black/50 backdrop-blur-md transition-all duration-200"
+                        class="p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-red-600 border border-white/30 hover:border-red-400 text-white shadow-xl shadow-black/60 backdrop-blur-md transition-all duration-200 cursor-pointer inline-flex items-center justify-center"
                         title="Hapus Paslon">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
                     </button>
                 </div>
 
@@ -115,14 +126,19 @@
                                 'edit_url' => route('admin.candidates.edit', $candidate)
                             ]) }})"
                             class="text-xs sm:text-sm text-amber-300 hover:text-white font-semibold flex items-center gap-1.5 transition-colors cursor-pointer">
-                            <i data-lucide="eye" class="w-4 h-4 text-[#CE9501]"></i>
+                            <svg class="w-4 h-4 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
                             <span>Visi, Misi & Proker</span>
                         </button>
 
                         <a href="{{ route('admin.candidates.edit', $candidate) }}"
                             class="text-xs text-slate-300 hover:text-[#CE9501] font-medium flex items-center gap-1 transition-colors">
                             <span>Sunting</span>
-                            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path d="m9 18 6-6-6-6"></path>
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -130,7 +146,12 @@
         @empty
             <div class="col-span-full text-center py-16 bg-white rounded-3xl border border-gray-200 space-y-4">
                 <div class="w-16 h-16 rounded-2xl bg-red-50 text-[#940C10] flex items-center justify-center mx-auto">
-                    <i data-lucide="user-x" class="w-8 h-8"></i>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <line x1="17" y1="8" x2="23" y2="14"></line>
+                        <line x1="23" y1="8" x2="17" y2="14"></line>
+                    </svg>
                 </div>
                 <h3 class="text-lg font-bold text-gray-900">Belum Ada Pasangan Calon</h3>
                 <p class="text-xs text-gray-500 max-w-sm mx-auto">Silakan daftarkan pasangan calon Ketua & Calon Wakil Ketua BEM untuk periode pemilihan ini.</p>
@@ -138,7 +159,10 @@
                     <div class="pt-2">
                         <a href="{{ route('admin.candidates.create', ['period_id' => $period->id]) }}" 
                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#940C10] text-white text-xs font-bold hover:bg-[#7A0A0D] shadow-xs">
-                            <i data-lucide="plus" class="w-4 h-4 text-[#CE9501]"></i>
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
                             <span>Daftarkan Paslon Pertama</span>
                         </a>
                     </div>
@@ -195,61 +219,50 @@
 
                 <!-- Modal Content -->
                 <div class="space-y-6">
-                    <!-- Info Paslon Ketua & Wakil -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-[#940C10]">Calon Ketua BEM</span>
+                    <!-- Info Paslon Ketua & Wakil (Bersih Tanpa Box Bertingkat) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 py-4 border-y border-slate-100">
+                        <div class="space-y-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Calon Ketua BEM</span>
                             <p class="text-sm font-bold text-slate-900" x-text="activeCandidate?.chairman_name"></p>
-                            <p class="text-xs text-slate-600 font-mono" x-text="'NIM: ' + (activeCandidate?.chairman_nim || '-')"></p>
-                            <p class="text-[11px] text-slate-500" x-text="activeCandidate?.chairman_prodi"></p>
+                            <p class="text-xs text-slate-500 font-medium" x-text="'NIM: ' + (activeCandidate?.chairman_nim || '-') + ' • ' + (activeCandidate?.chairman_prodi || '-')"></p>
                         </div>
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-[#CE9501]">Calon Wakil Ketua BEM</span>
+                        <div class="space-y-1 sm:border-l sm:border-slate-100 sm:pl-5">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Calon Wakil Ketua BEM</span>
                             <p class="text-sm font-bold text-slate-900" x-text="activeCandidate?.vice_name"></p>
-                            <p class="text-xs text-slate-600 font-mono" x-text="'NIM: ' + (activeCandidate?.vice_nim || '-')"></p>
-                            <p class="text-[11px] text-slate-500" x-text="activeCandidate?.vice_prodi"></p>
+                            <p class="text-xs text-slate-500 font-medium" x-text="'NIM: ' + (activeCandidate?.vice_nim || '-') + ' • ' + (activeCandidate?.vice_prodi || '-')"></p>
                         </div>
                     </div>
 
                     <!-- Visi -->
                     <div class="space-y-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-                            <span>Visi Pasangan Calon</span>
-                        </span>
-                        <p class="text-xs italic text-slate-800 bg-red-50/50 p-4 rounded-2xl border border-red-100 leading-relaxed font-medium"
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Visi</h4>
+                        <blockquote class="text-xs sm:text-sm text-slate-800 bg-slate-50 p-4 rounded-xl border-l-2 border-[#940C10] leading-relaxed font-medium"
                            x-text="'“' + (activeCandidate?.vision || '') + '”'">
-                        </p>
+                        </blockquote>
                     </div>
 
                     <!-- Misi -->
-                    <div class="space-y-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            <span>Misi Pasangan Calon</span>
-                        </span>
-                        <ul class="space-y-2 text-xs text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <div class="space-y-2.5">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Misi</h4>
+                        <ol class="space-y-2 text-xs text-slate-700">
                             <template x-for="(misi, idx) in (activeCandidate?.mission || [])" :key="idx">
                                 <li class="flex items-start gap-2.5">
-                                    <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5" x-text="idx + 1"></span>
+                                    <span class="font-mono font-bold text-xs text-[#940C10] shrink-0 pt-0.5 w-5" x-text="(idx + 1 < 10 ? '0' : '') + (idx + 1) + '.'"></span>
                                     <span class="leading-relaxed" x-text="misi"></span>
                                 </li>
                             </template>
-                        </ul>
+                        </ol>
                     </div>
 
                     <!-- Program Kerja Unggulan -->
                     <template x-if="activeCandidate?.work_programs && activeCandidate?.work_programs.length > 0">
-                        <div class="space-y-2">
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                                <span>Program Kerja Unggulan</span>
-                            </span>
-                            <ul class="space-y-2 text-xs text-slate-700 bg-amber-50/40 p-4 rounded-2xl border border-amber-100">
+                        <div class="space-y-2.5">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Program Kerja Unggulan</h4>
+                            <ul class="space-y-2 text-xs text-slate-700">
                                 <template x-for="(proker, idx) in activeCandidate.work_programs" :key="idx">
                                     <li class="flex items-start gap-2.5">
-                                        <span class="w-5 h-5 rounded-full bg-[#CE9501]/20 text-[#940C10] font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5" x-text="idx + 1"></span>
-                                        <span class="font-medium leading-relaxed" x-text="proker"></span>
+                                        <span class="text-[#940C10] font-bold text-sm shrink-0 leading-tight">&ndash;</span>
+                                        <span class="leading-relaxed" x-text="proker"></span>
                                     </li>
                                 </template>
                             </ul>
@@ -277,7 +290,7 @@
 </div>
 
 <script>
-    function candidateManagement() {
+    window.candidateManagement = function candidateManagement() {
         return {
             detailModalOpen: false,
             activeCandidate: null,

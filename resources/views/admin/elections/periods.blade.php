@@ -24,17 +24,17 @@
                     <span class="text-xs font-bold uppercase tracking-wider text-[#940C10]">Manajemen Pemilihan</span>
                     @if($activePeriod)
                         <span class="text-slate-300">•</span>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-300">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                             Aktif: {{ $activePeriod->academic_year }}
                         </span>
                         @if($activePeriod->isVotingOpen())
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-300">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800">
                                 <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                 Bilik Suara Dibuka
                             </span>
                         @else
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-700">
                                 <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                                 Bilik Suara Ditutup
                             </span>
@@ -71,12 +71,9 @@
                 <p class="text-xs text-slate-500">Isolasi data antarperiode: kandidat, DPT, suara, dan log pemilihan tersimpan mandiri</p>
             </div>
             @if($selectedPeriod)
-            <div class="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl flex items-center gap-2 shrink-0">
+            <div class="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0">
                 <span class="text-slate-500">Konteks Tampilan:</span>
-                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-red-100/70 text-[#940C10] font-bold text-xs">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#940C10]"></span>
-                    {{ $selectedPeriod->name }}
-                </span>
+                <span class="font-bold text-slate-800">{{ $selectedPeriod->name }}</span>
             </div>
             @endif
         </div>
@@ -111,7 +108,7 @@
                                 <div class="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
                                     <span class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">{{ $p->name }}</span>
                                     @if($isSelected)
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-50 text-[#940C10] text-[10px] font-extrabold tracking-wide border border-red-200/90 whitespace-nowrap shrink-0 shadow-2xs">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-50 text-[#940C10] text-[10px] font-extrabold tracking-wide whitespace-nowrap shrink-0 shadow-2xs">
                                             <svg class="w-3 h-3 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                                                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
@@ -132,12 +129,12 @@
                             <!-- Status Periode: Aktif vs Arsip -->
                             <td class="py-3.5 px-5 text-center">
                                 @if($isActive)
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-300">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
                                         Aktif
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-300">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-100 text-slate-600">
                                         <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                                         Arsip
                                     </span>
@@ -147,12 +144,12 @@
                             <!-- Status Bilik: DIBUKA vs DITUTUP -->
                             <td class="py-3.5 px-5 text-center">
                                 @if($p->isVotingOpen())
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-300">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-800">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                                         DIBUKA
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-800 border border-red-300">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-800">
                                         <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                         DITUTUP
                                     </span>
@@ -557,7 +554,7 @@
 </div>
 
 <script>
-    function periodManagement() {
+    window.periodManagement = function periodManagement() {
         return {
             modalCreateOpen: false,
             modalEditOpen: false,

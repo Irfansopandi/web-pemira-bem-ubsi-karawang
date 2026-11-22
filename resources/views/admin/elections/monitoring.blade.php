@@ -178,7 +178,7 @@
 @endphp
 
 <script>
-function liveMonitoring() {
+window.liveMonitoring = function liveMonitoring() {
     return {
         stats: {
             total_students: {{ $stats['total_students'] ?? 0 }},
