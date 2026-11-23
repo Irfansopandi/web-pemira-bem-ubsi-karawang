@@ -7,6 +7,7 @@ use App\Models\ElectionPeriod;
 use App\Models\VoterParticipation;
 use App\Services\ElectionService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -35,6 +36,7 @@ class ElectionController extends Controller
                     'total_students' => 0,
                     'total_voted' => 0,
                     'total_not_voted' => 0,
+                    'total_present' => 0,
                     'turnout_percentage' => 0,
                 ],
                 'tally' => [],
@@ -46,12 +48,14 @@ class ElectionController extends Controller
         $stats = $this->electionService->getParticipationStats($period);
         $tally = $this->electionService->getTally($period);
 
-        $limit = max(1, min((int) $request->input('limit', 10), 20));
+        // Ambil data aktivitas suara sah terbaru di atas (DESC)
+        $limit = max(10, min((int) $request->input('limit', 100), 200));
 
         $recentParticipations = VoterParticipation::with('student')
             ->where('election_period_id', $period->id)
             ->where('has_voted', true)
-            ->latest('voted_at')
+            ->orderByDesc('voted_at')
+            ->orderByDesc('id')
             ->limit($limit)
             ->get()
             ->map(function ($part) {
@@ -59,6 +63,8 @@ class ElectionController extends Controller
                     'name' => $part->student->name ?? 'Mahasiswa',
                     'nim' => $part->student_nim,
                     'study_program' => $part->student->study_program ?? '-',
+                    'voted_at_time' => $part->voted_at ? $part->voted_at->timezone('Asia/Jakarta')->format('H:i') . ' WIB' : '-',
+                    'voted_at_full' => $part->voted_at ? $part->voted_at->timezone('Asia/Jakarta')->format('H:i:s') . ' WIB' : '-',
                     'voted_at_diff' => $part->voted_at ? $part->voted_at->diffForHumans() : '-',
                 ];
             });
@@ -85,30 +91,26 @@ class ElectionController extends Controller
         $stats = $period ? $this->electionService->getParticipationStats($period) : null;
         $tally = $period ? $this->electionService->getTally($period) : collect();
 
-        // Data aktivitas pemilih terkini (10 entri terbaru)
+        // Data aktivitas suara sah berurutan terbaru di atas (DESC)
         $recentVoters = $period
             ? VoterParticipation::with('student', 'verifiedBy')
                 ->where('election_period_id', $period->id)
                 ->where('has_voted', true)
-                ->latest('voted_at')
-                ->limit(10)
+                ->orderByDesc('voted_at')
+                ->orderByDesc('id')
+                ->limit(100)
                 ->get()
             : collect();
 
         return view('admin.elections.monitoring', compact('period', 'allPeriods', 'stats', 'tally', 'recentVoters'));
     }
 
-    public function results(Request $request): View
+    public function results(Request $request): RedirectResponse
     {
         if ($request->has('period_id')) {
             session(['admin_selected_period_id' => $request->period_id]);
         }
-        $period = $this->electionService->getSelectedPeriod();
 
-        $allPeriods = ElectionPeriod::orderByDesc('is_active')->orderByDesc('id')->get();
-        $stats = $period ? $this->electionService->getParticipationStats($period) : null;
-        $tally = $period ? $this->electionService->getTally($period) : collect();
-
-        return view('admin.elections.results', compact('period', 'allPeriods', 'stats', 'tally'));
+        return redirect()->to(route('admin.elections.monitoring') . '#hasil-rekapitulasi');
     }
 }

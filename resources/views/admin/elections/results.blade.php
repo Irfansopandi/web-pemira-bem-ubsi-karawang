@@ -4,31 +4,39 @@
 <div class="space-y-6 sm:space-y-8">
 
     <!-- Header Halaman -->
-    <div class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#940C10] to-[#7A0A0D] text-white flex items-center justify-center font-bold shadow-md shadow-red-950/20 shrink-0">
-                <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                </svg>
-            </div>
+    <div class="bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 sm:gap-6">
+        <div class="flex items-start sm:items-center gap-3.5 sm:gap-4">
+            <!-- Icon Tanpa Border Sesuai Standar Minimalis UBSI -->
+            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-[#940C10] shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
             <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-[#940C10]">Pelaksanaan Pemilihan</span>
-                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">Hasil Pemilihan & Rekapitulasi Suara</h1>
-                <p class="text-xs text-slate-500 font-medium">Periode: {{ $period->name ?? 'Belum ada periode aktif' }}</p>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold uppercase tracking-wider text-[#940C10]">Monitoring & Laporan</span>
+                    @if($period)
+                        <span class="text-slate-300">•</span>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ ($period->isSystemActive() ?? $period->is_active) ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-700' }}">
+                            <span class="w-1.5 h-1.5 rounded-full {{ ($period->isSystemActive() ?? $period->is_active) ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400' }}"></span>
+                            Periode: {{ $period->academic_year ?? $period->name }}
+                        </span>
+                    @endif
+                </div>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">Hasil Pemilihan & Rekapitulasi Suara</h1>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">Berita Acara dan Rekapitulasi Akhir Pemungutan Suara PEMIRA BEM UBSI Karawang</p>
             </div>
         </div>
 
-        <div class="flex items-center gap-3 flex-wrap">
+        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap w-full sm:w-auto">
             <a href="{{ route('admin.dashboard') }}"
-                class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 transition-all shadow-2xs">
+                class="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-200/90 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all shadow-2xs">
                 <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
                 <span>Dashboard</span>
             </a>
             <a href="{{ route('admin.elections.monitoring') }}"
-                class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold shadow-xs transition-all">
-                <svg class="w-4 h-4 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#940C10] hover:bg-[#7A0A0D] active:scale-95 text-white text-xs font-bold shadow-xs hover:shadow-md transition-all">
+                <svg class="w-4 h-4 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                 <span>Live Monitoring</span>
             </a>
         </div>

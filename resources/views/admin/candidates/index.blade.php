@@ -92,18 +92,32 @@
 
                 <!-- Gradient Overlay & Info Paslon di Bagian Bawah -->
                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 sm:p-5 text-white pt-28 z-10 flex flex-col justify-end">
-                    <!-- Nama Kandidat (Ketua di Atas, Wakil di Bawah) -->
-                    <div class="space-y-0.5 mb-2.5">
-                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#CE9501]">Calon Ketua & Wakil Ketua</span>
-                        <h2 class="text-sm sm:text-base lg:text-lg font-black text-white group-hover:text-[#CE9501] transition-colors leading-tight">
-                            {{ $candidate->chairman_name }}
-                        </h2>
-                        <p class="text-xs sm:text-sm font-medium text-slate-300 group-hover:text-amber-200 transition-colors leading-tight">
-                            & {{ $candidate->vice_chairman_name }}
-                        </p>
-                        <p class="text-[11px] text-slate-400 font-mono pt-0.5">
-                            {{ $candidate->chairman_study_program }} &bull; {{ $candidate->vice_chairman_study_program }}
-                        </p>
+                    <!-- Nama Calon Ketua & Wakil Ketua Berdampingan dengan Garis Pemisah Vertikal Sesuai Halaman Voting -->
+                    <div class="border-t border-white/20 pt-2.5 mb-2.5">
+                        <div class="flex items-stretch justify-between gap-2 sm:gap-3">
+                            <!-- Calon Ketua -->
+                            <div class="flex-1 flex flex-col justify-end text-center pr-1 sm:pr-2 min-w-0">
+                                <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-[#CE9501] transition-colors leading-snug break-words">
+                                    {{ $candidate->chairman_name }}
+                                </h3>
+                                <p class="text-[10px] sm:text-[11px] font-medium text-[#CE9501] mt-0.5 whitespace-nowrap">
+                                    Calon Ketua BEM
+                                </p>
+                            </div>
+
+                            <!-- Garis Pemisah Vertikal Halus (Tinggi Menyesuaikan Teks Otomatis) -->
+                            <div class="self-stretch w-px bg-white/20 shrink-0 my-0.5"></div>
+
+                            <!-- Calon Wakil Ketua -->
+                            <div class="flex-1 flex flex-col justify-end text-center pl-1 sm:pl-2 min-w-0">
+                                <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-[#CE9501] transition-colors leading-snug break-words">
+                                    {{ $candidate->vice_chairman_name }}
+                                </h3>
+                                <p class="text-[10px] sm:text-[11px] font-medium text-[#CE9501] mt-0.5 whitespace-nowrap">
+                                    Calon Wakil Ketua BEM
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Judul Aksi / Modal Trigger & Edit Link -->

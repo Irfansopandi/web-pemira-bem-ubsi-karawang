@@ -134,11 +134,18 @@ class ElectionService
         $totalVoted = max($totalBallots, $totalParticipated);
 
         $totalNotVoted = max(0, $totalDpt - $totalVoted);
-        $turnoutPercentage = $totalDpt > 0 ? round(($totalVoted / $totalDpt) * 100, 1) : 0;
 
+        // 3. Mahasiswa Hadir di TPS: dihitung dari mahasiswa yang telah hadir/terverifikasi di TPS atau telah memilih
         $totalPresent = VoterParticipation::where('election_period_id', $period->id)
-            ->whereNotNull('verified_at')
+            ->where(function ($query) {
+                $query->whereNotNull('verified_at')
+                    ->orWhere('has_voted', true);
+            })
             ->count();
+        $totalPresent = max($totalPresent, $totalVoted);
+
+        // Tingkat partisipasi dihitung dari mahasiswa yang sudah hadir di TPS terhadap Total DPT
+        $turnoutPercentage = $totalDpt > 0 ? round(($totalPresent / $totalDpt) * 100, 1) : 0;
 
         return [
             'total_students' => $totalDpt,

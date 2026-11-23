@@ -176,7 +176,7 @@
                         <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="stats.turnout_percentage + '%'">
                             {{ $stats['turnout_percentage'] }}%
                         </p>
-                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Persentase Masuk</p>
+                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Kehadiran TPS</p>
                     </div>
                 </div>
                 <!-- Chevron Right -->
@@ -202,7 +202,7 @@
                             <h3 class="text-base font-bold text-slate-900">Kilasan Rekapitulasi Suara Paslon</h3>
                             <p class="text-xs text-slate-500">Perhitungan suara berdasarkan pemilih yang hadir di TPS</p>
                         </div>
-                        <a href="{{ route('admin.elections.results') }}" 
+                        <a href="{{ route('admin.elections.monitoring') }}#hasil-rekapitulasi" 
                             class="inline-flex items-center gap-1.5 text-xs font-bold text-[#940C10] hover:text-[#7A0A0D] no-underline group/link transition-colors">
                             <span>Buka Hasil Lengkap</span>
                             <svg class="w-4 h-4 transform group-hover/link:translate-x-1.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">

@@ -284,17 +284,6 @@
                     <span class="truncate">Monitoring Pemungutan Suara</span>
                 </a>
 
-                <!-- Hasil Pemilihan -->
-                <a href="{{ route('admin.elections.results') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.elections.results') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
-                    <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.elections.results') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                    </svg>
-                    <span class="truncate">Hasil Pemilihan</span>
-                </a>
-
                 <!-- Audit Trail & Log -->
                 <a href="{{ route('admin.audit.index') }}"
                     class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.audit.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
