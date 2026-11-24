@@ -55,7 +55,7 @@
             <span class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#059669]">Hak Suara Berhasil Tercatat</span>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug">Terima Kasih, {{ $student->name }}!</h1>
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mx-auto font-normal">
-                Partisipasi Anda dalam PEMIRA BEM UBSI Karawang telah berhasil diamankan. Suara Anda telah dimasukkan ke dalam kotak suara secara anonim.
+                Partisipasi Anda dalam PEMIRA BEM UBSI Kab.Karawang telah berhasil diamankan. Suara Anda telah dimasukkan ke dalam kotak suara secara anonim.
             </p>
         </div>
 

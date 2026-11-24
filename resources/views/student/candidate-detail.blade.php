@@ -92,7 +92,7 @@
             <div class="h-9 hidden sm:flex items-center justify-end">
                 <div class="flex items-center gap-2 text-xs font-medium text-slate-300">
                     <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-5 h-5 object-contain">
-                    <span class="tracking-wide">PEMIRA BEM UBSI Karawang</span>
+                    <span class="tracking-wide">PEMIRA BEM UBSI Kab.Karawang</span>
                 </div>
             </div>
 
@@ -109,7 +109,7 @@
                         {{ $candidate->chairman_name }} & {{ $candidate->vice_chairman_name }}
                     </h1>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
-                        PEMIRA BEM UBSI Karawang &bull; Periode {{ $activePeriod->academic_year }}
+                        PEMIRA BEM UBSI Kab.Karawang &bull; Periode {{ $activePeriod->academic_year }}
                     </p>
                 </div>
 

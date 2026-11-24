@@ -28,7 +28,7 @@ Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin
 Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
 // Area Mahasiswa (Bilik Suara)
-Route::middleware(['auth:student'])->prefix('voting')->name('student.')->group(function () {
+Route::middleware(['auth:student', 'prevent-back'])->prefix('voting')->name('student.')->group(function () {
     Route::get('/', [VotingController::class, 'index'])->name('voting');
     Route::get('/kandidat/{candidate}', [VotingController::class, 'showCandidate'])->name('candidate.detail');
     Route::post('/submit', [VotingController::class, 'store'])->name('voting.store');
@@ -42,7 +42,14 @@ Route::post('/buku-tamu/lookup', [VoterVerificationController::class, 'lookup'])
 Route::post('/buku-tamu/store', [VoterVerificationController::class, 'store'])->name('guestbook.store');
 
 // Area Administrator KPUM (Panel Pengelolaan Terstruktur)
-Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['admin', 'prevent-back'])->prefix('admin')->name('admin.')->group(function () {
+    // Akses langsung /admin dialihkan ke dashboard admin
+    Route::get('/', fn () => redirect()->route('admin.dashboard'));
+
+    // Alias URL ramah Bahasa Indonesia
+    Route::get('/mahasiswa', fn () => redirect()->route('admin.voters.index'))->name('mahasiswa.alias');
+    Route::get('/paslon', fn () => redirect()->route('admin.candidates.index'))->name('paslon.alias');
+    Route::get('/periode', fn () => redirect()->route('admin.periods.index'))->name('periode.alias');
     // Keep-Alive Ping untuk menjaga sesi admin tetap aktif saat didiamkan
     Route::get('/ping', fn () => response()->json(['status' => 'alive']))->name('ping');
 
@@ -86,4 +93,6 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings/logo', [SettingController::class, 'updateLogo'])->name('settings.logo.update');
+    Route::delete('/settings/logo', [SettingController::class, 'deleteLogo'])->name('settings.logo.delete');
 });

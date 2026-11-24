@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ isset($title) ? $title . ' - PEMIRA BEM UBSI KARAWANG' : 'PEMIRA BEM UBSI KARAWANG' }}</title>
+    <title>{{ isset($title) ? $title . ' - PEMIRA BEM UBSI Kab.Karawang' : 'PEMIRA BEM UBSI Kab.Karawang' }}</title>
 
     <!-- Favicon Resmi BEM UBSI Karawang (Full-Bleed Maksimal & Tajam) -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
@@ -84,6 +84,8 @@
             background: rgba(206, 149, 1, 0.8);
         }
     </style>
+
+    @stack('styles')
 </head>
 <body class="min-h-screen {{ ($darkTheme ?? false) && !($allowScroll ?? false) ? 'lg:h-screen lg:overflow-hidden' : '' }} flex flex-col {{ $bodyClass ?? ($darkTheme ?? false ? 'bg-[#0c0103] text-white' : 'bg-[#FDFDFD] text-[#1A1A1A]') }} font-sans antialiased selection:bg-[#940c10] selection:text-white relative overflow-x-hidden overflow-y-auto">
 
@@ -157,7 +159,7 @@
                     <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow">
                     <div class="flex flex-col">
                         <span class="text-sm sm:text-base font-bold text-white leading-tight">PEMIRA BEM UBSI</span>
-                        <span class="text-[11px] text-slate-300 font-normal hidden sm:block">Universitas Bina Sarana Informatika Karawang</span>
+                        <span class="text-[11px] text-slate-300 font-normal hidden sm:block">Universitas Bina Sarana Informatika Kab.Karawang</span>
                     </div>
                 </div>
 
@@ -420,6 +422,8 @@
             });
         </script>
     @endif
+
+    @stack('scripts')
 
 </body>
 </html>

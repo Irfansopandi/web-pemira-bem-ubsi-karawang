@@ -124,6 +124,7 @@ class VoterVerificationTest extends TestCase
         $response = $this->actingAs($this->admin, 'admin')
             ->postJson(route('admin.verification.store'), [
                 'nim' => '12220001',
+                'email' => 'budi@bsi.ac.id',
                 'signature' => $fakeSignature,
                 'tps_location' => 'TPS Kampus UBSI Cikampek',
             ]);
@@ -168,6 +169,7 @@ class VoterVerificationTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->postJson(route('admin.verification.store'), [
                 'nim' => '12220001',
+                'email' => 'budi@bsi.ac.id',
                 'signature' => $fakeSignature,
                 'tps_location' => 'Kampus Karawang',
             ]);
@@ -187,6 +189,7 @@ class VoterVerificationTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->postJson(route('admin.verification.store'), [
                 'nim' => '12220001',
+                'email' => 'budi@bsi.ac.id',
                 'signature' => $fakeSignature,
                 'tps_location' => 'Kampus Karawang',
             ]);
@@ -208,6 +211,7 @@ class VoterVerificationTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->postJson(route('admin.verification.store'), [
                 'nim' => '12220001',
+                'email' => 'budi@bsi.ac.id',
                 'signature' => $fakeSignature,
                 'tps_location' => 'Kampus Karawang',
             ]);
@@ -215,7 +219,7 @@ class VoterVerificationTest extends TestCase
         $participation = VoterParticipation::where('student_nim', '12220001')->first();
 
         $response = $this->actingAs($this->admin, 'admin')
-            ->delete(route('admin.verification.cancel', $participation));
+            ->delete(route('admin.verification.cancel', ['participation' => $participation->id]));
 
         $response->assertSessionHas('success');
         $participation->refresh();

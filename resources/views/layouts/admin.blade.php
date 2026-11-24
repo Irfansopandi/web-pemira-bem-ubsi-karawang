@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ isset($title) ? $title . ' - Admin PEMIRA BEM UBSI' : 'Panel Administrator - PEMIRA BEM UBSI Karawang' }}</title>
+    <title>{{ isset($title) ? $title . ' - Admin PEMIRA BEM UBSI' : 'Panel Administrator - PEMIRA BEM UBSI Kab.Karawang' }}</title>
 
     <!-- Favicon Resmi BEM UBSI Karawang -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
@@ -164,8 +164,8 @@
                 <!-- 3 Logo Resmi UBSI Karawang (Tengah / Centered) -->
                 <div class="flex items-center justify-center gap-3">
                     <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Karawang" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet PEMIRA" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet PEMIRA" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
                 </div>
 
                 <!-- Judul Brand Sidebar (Tengah / Centered) -->
@@ -174,7 +174,7 @@
                         PEMIRA BEM UBSI
                     </h2>
                     <p class="text-[10px] xl:text-[11px] font-bold text-[#E5A900] tracking-widest uppercase mt-0.5">
-                        KAMPUS KARAWANG
+                        KABUPATEN KARAWANG
                     </p>
                 </div>
             </div>
@@ -417,7 +417,7 @@
                         {{ $title ?? 'Dashboard Administrator' }}
                     </h1>
                     <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
-                        Panitia PEMIRA — BEM Universitas BSI Karawang
+                        Panitia PEMIRA — BEM UBSI Kab.Karawang
                     </p>
                 </div>
             </div>

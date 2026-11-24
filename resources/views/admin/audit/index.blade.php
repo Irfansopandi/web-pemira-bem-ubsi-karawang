@@ -15,7 +15,7 @@
             <div>
                 <span class="text-xs font-bold uppercase tracking-wider text-[#940C10]">Keamanan & Aktivitas</span>
                 <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">Audit Trail & Log Aktivitas Sistem</h1>
-                <p class="text-xs text-slate-500 font-medium">Rekaman Jejak Digital & Integritas Pengelolaan Sistem PEMIRA BEM UBSI Karawang</p>
+                <p class="text-xs text-slate-500 font-medium">Rekaman Jejak Digital & Integritas Pengelolaan Sistem PEMIRA BEM UBSI Kab.Karawang</p>
             </div>
         </div>
 

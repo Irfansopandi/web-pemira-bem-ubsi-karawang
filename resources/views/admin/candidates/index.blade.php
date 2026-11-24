@@ -28,7 +28,7 @@
                     Kelola Pasangan Calon (Paslon)
                 </h1>
                 <p class="text-xs text-slate-500 font-medium mt-0.5">
-                    Daftar Paslon Ketua & Calon Wakil Ketua BEM UBSI Karawang, Profil, Visi, Misi & Program Kerja
+                    Daftar Paslon Ketua & Calon Wakil Ketua BEM UBSI Kab.Karawang, Profil, Visi, Misi & Program Kerja
                 </p>
             </div>
         </div>

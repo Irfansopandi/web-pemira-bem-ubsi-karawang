@@ -24,7 +24,7 @@
                     @endif
                 </div>
                 <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">Hasil Pemilihan & Rekapitulasi Suara</h1>
-                <p class="text-xs text-slate-500 font-medium mt-0.5">Berita Acara dan Rekapitulasi Akhir Pemungutan Suara PEMIRA BEM UBSI Karawang</p>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">Berita Acara dan Rekapitulasi Akhir Pemungutan Suara PEMIRA BEM UBSI Kab.Karawang</p>
             </div>
         </div>
 

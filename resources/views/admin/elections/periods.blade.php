@@ -283,7 +283,7 @@
                     @csrf
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Periode Pemilihan <span class="text-red-500">*</span></label>
-                        <input type="text" name="name" required placeholder="Contoh: PEMIRA BEM UBSI Karawang 2027/2028"
+                        <input type="text" name="name" required placeholder="Contoh: PEMIRA BEM UBSI Kab.Karawang 2027/2028"
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
                     </div>
 

@@ -19,7 +19,7 @@
                         PORTAL ADMINISTRATOR
                     </h3>
                     <p class="text-[10px] xl:text-[11px] font-bold text-[#E5A900] tracking-wider uppercase mt-0.5 truncate">
-                        KPUM UBSI Karawang
+                        KPUM BEM UBSI Kab.Karawang
                     </p>
                 </div>
             </div>
@@ -146,8 +146,8 @@
                 <!-- 3 Logo Resmi -->
                 <div class="relative z-10 flex items-center justify-center gap-3.5 sm:gap-4 mb-2 sm:mb-2.5">
                     <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM UBSI Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet BEM UBSI Kab.Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
                 </div>
 
                 <!-- Judul Diapit Daun Emas -->
@@ -206,14 +206,20 @@
                 <div class="space-y-3.5 my-auto">
                     <!-- ALERT ERROR -->
                     @if ($errors->any())
-                        <div class="p-3 rounded-xl bg-red-50/90 border border-red-200 text-red-700 flex items-start gap-2.5 shadow-sm">
-                            <svg class="w-4 h-4 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        @php
+                            $errorMessage = $errors->first('general') ?: ($errors->first('identifier') ?: $errors->first('password'));
+                            $isLoginRequired = str_contains($errorMessage, 'Silakan masuk terlebih dahulu') || str_contains($errorMessage, 'Akses ditolak');
+                        @endphp
+                        <div class="p-3 rounded-xl {{ $isLoginRequired ? 'bg-amber-50/90 border border-amber-200 text-amber-800' : 'bg-red-50/90 border border-red-200 text-red-700' }} flex items-start gap-2.5 shadow-sm">
+                            <svg class="w-4 h-4 {{ $isLoginRequired ? 'text-amber-600' : 'text-red-600' }} shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
                             <div class="text-xs">
-                                <span class="font-bold block text-red-800">Autentikasi Administrator Gagal</span>
-                                <span class="text-[11px] text-red-600 font-normal leading-relaxed">
-                                    {{ $errors->first('general') ?: ($errors->first('identifier') ?: $errors->first('password')) }}
+                                <span class="font-bold block {{ $isLoginRequired ? 'text-amber-900' : 'text-red-800' }}">
+                                    {{ $isLoginRequired ? 'Akses Terbatas — Memerlukan Login' : 'Autentikasi Administrator Gagal' }}
+                                </span>
+                                <span class="text-[11px] {{ $isLoginRequired ? 'text-amber-700' : 'text-red-600' }} font-normal leading-relaxed">
+                                    {{ $errorMessage }}
                                 </span>
                             </div>
                         </div>

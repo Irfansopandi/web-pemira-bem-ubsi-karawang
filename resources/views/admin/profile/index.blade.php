@@ -25,12 +25,8 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.dashboard') }}"
-                class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 transition-all shadow-2xs">
-                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
-                <span>Kembali ke Dashboard</span>
-            </a>
+        <div>
+            <!-- Button Kembali ke Dashboard dihapus sesuai permintaan -->
         </div>
     </div>
 
@@ -127,7 +123,8 @@
         </div>
 
         <!-- Kartu Keamanan Sandi (5 Cols) -->
-        <div class="lg:col-span-5 bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+        <div class="lg:col-span-5 bg-white rounded-2xl xl:rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-6"
+            x-data="{ showCurrentPassword: false, showNewPassword: false, showConfirmPassword: false }">
             <div class="pb-4 border-b border-slate-100">
                 <div class="flex items-center gap-2.5">
                     <svg class="w-5 h-5 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -143,22 +140,85 @@
                 @csrf
                 @method('PUT')
 
+                <!-- Field 1: Kata Sandi Saat Ini -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">Kata Sandi Saat Ini <span class="text-red-500">*</span></label>
-                    <input type="password" name="current_password" required placeholder="Masukkan kata sandi lama"
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+                    <div class="relative">
+                        <input :type="showCurrentPassword ? 'text' : 'password'" name="current_password" required placeholder="Masukkan kata sandi lama"
+                            class="w-full pl-4 pr-11 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+                        <button type="button" @click="showCurrentPassword = !showCurrentPassword"
+                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors cursor-pointer"
+                            title="Tampilkan / Sembunyikan Kata Sandi">
+                            <template x-if="!showCurrentPassword">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </template>
+                            <template x-if="showCurrentPassword">
+                                <svg class="w-4 h-4 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
+                            </template>
+                        </button>
+                    </div>
                 </div>
 
+                <!-- Field 2: Kata Sandi Baru -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">Kata Sandi Baru <span class="text-red-500">*</span></label>
-                    <input type="password" name="password" required placeholder="Minimal 6 karakter"
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+                    <div class="relative">
+                        <input :type="showNewPassword ? 'text' : 'password'" name="password" required placeholder="Minimal 6 karakter"
+                            class="w-full pl-4 pr-11 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+                        <button type="button" @click="showNewPassword = !showNewPassword"
+                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors cursor-pointer"
+                            title="Tampilkan / Sembunyikan Kata Sandi">
+                            <template x-if="!showNewPassword">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </template>
+                            <template x-if="showNewPassword">
+                                <svg class="w-4 h-4 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
+                            </template>
+                        </button>
+                    </div>
                 </div>
 
+                <!-- Field 3: Ulangi Kata Sandi Baru -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">Ulangi Kata Sandi Baru <span class="text-red-500">*</span></label>
-                    <input type="password" name="password_confirmation" required placeholder="Konfirmasi kata sandi baru"
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+                    <div class="relative">
+                        <input :type="showConfirmPassword ? 'text' : 'password'" name="password_confirmation" required placeholder="Konfirmasi kata sandi baru"
+                            class="w-full pl-4 pr-11 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10]/20 focus:border-[#940C10] transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+                        <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors cursor-pointer"
+                            title="Tampilkan / Sembunyikan Kata Sandi">
+                            <template x-if="!showConfirmPassword">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </template>
+                            <template x-if="showConfirmPassword">
+                                <svg class="w-4 h-4 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
+                            </template>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-[11px] text-amber-900 leading-relaxed">

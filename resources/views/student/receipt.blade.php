@@ -9,12 +9,12 @@
                 <!-- 2 Logo Resmi: BEM UBSI di Kiri & Kabinet di Kanannya -->
                 <div class="flex items-center gap-2.5 shrink-0">
                     <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-md">
-                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-md">
+                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet BEM" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-md">
                 </div>
                 <div>
                     <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#CE9501]">Sertifikat Partisipasi Resmi</span>
                     <h1 class="text-xl sm:text-2xl font-bold text-white leading-tight">Tanda Terima Pemilih</h1>
-                    <p class="text-xs text-red-100/90 font-normal mt-0.5">PEMIRA BEM Universitas BSI Karawang {{ $activePeriod->academic_year }}</p>
+                    <p class="text-xs text-red-100/90 font-normal mt-0.5">PEMIRA BEM UBSI Kab.Karawang {{ $activePeriod->academic_year }}</p>
                 </div>
             </div>
 
@@ -68,7 +68,7 @@
                                 {{ $chosenCandidate->chairman_name }} & {{ $chosenCandidate->vice_chairman_name }}
                             </h3>
                             <p class="text-xs text-slate-500 mt-1 font-medium">
-                                Calon Ketua & Calon Wakil Ketua BEM UBSI Karawang
+                                Calon Ketua & Calon Wakil Ketua BEM UBSI Kab.Karawang
                             </p>
 
                             <!-- Rincian Calon Ketua & Wakil (NIM & Prodi Terpisah Baris Rapi) -->

@@ -65,7 +65,7 @@
 
         <!-- Keterangan Pengantar yang Lebih Ringkas & Bersih -->
         <p class="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed max-w-2xl">
-            Selamat datang di Dashboard Utama PEMIRA BEM UBSI Karawang. Berikut ringkasan kilasan pesta demokrasi kampus hari ini.
+            Selamat datang di Dashboard Utama PEMIRA BEM UBSI Kab.Karawang. Berikut ringkasan kilasan pesta demokrasi kampus hari ini.
         </p>
     </div>
 

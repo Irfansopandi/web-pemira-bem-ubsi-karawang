@@ -49,7 +49,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-[#FDFDFD] text-slate-800 antialiased selection:bg-[#940c10] selection:text-white flex flex-col justify-between"
+<body class="min-h-screen bg-[#FDFDFD] text-slate-800 antialiased selection:bg-[#940c10] selection:text-white flex flex-col justify-between relative overflow-x-hidden"
       x-data="bukuTamuApp({
           lookupUrl: '{{ route('guestbook.lookup') }}',
           storeUrl: '{{ route('guestbook.store') }}',
@@ -57,9 +57,54 @@
       })">
 
     <!-- ======================================================== -->
+    <!-- AMBIENT INSTITUTIONAL BACKGROUND (LIVELY & DYNAMIC)      -->
+    <!-- ======================================================== -->
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden select-none">
+        <!-- 1. Ambient Lighting Glow Orbs (Nuansa Merah & Emas UBSI) -->
+        <div class="absolute -top-32 -left-32 w-[550px] h-[550px] bg-[#940c10]/[0.06] rounded-full blur-[100px]"></div>
+        <div class="absolute top-1/4 -right-32 w-[600px] h-[600px] bg-[#CE9501]/[0.08] rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-40 left-1/4 w-[700px] h-[700px] bg-[#940c10]/[0.05] rounded-full blur-[130px]"></div>
+
+        <!-- 2. Subtle Modern Dot Matrix Pattern with Radial Mask -->
+        <div class="absolute inset-0 bg-[radial-gradient(#940c10_1.2px,transparent_1.2px)] [background-size:28px_28px] opacity-[0.045] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_45%,#000_50%,transparent_100%)]"></div>
+
+        <!-- 3. Watermark Logo Kabinet Transparan (Subtle Institutional Watermark) -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none flex items-center justify-center">
+            <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" 
+                 alt="Watermark Logo Kabinet PEMIRA" 
+                 class="w-[420px] sm:w-[560px] lg:w-[680px] h-auto object-contain opacity-[0.055] filter mix-blend-multiply">
+        </div>
+
+        <!-- 4. Elegant Decorative Curved Lines / Wave Ribbon Motif (Aksen Dinamis PEMIRA) -->
+        <svg class="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="none">
+            <path d="M-100,200 C300,50 600,320 1000,160 C1250,60 1450,180 1550,220" stroke="url(#lineGradRed)" stroke-width="1.8" stroke-dasharray="4 4" />
+            <path d="M-50,260 C350,110 650,380 1050,220 C1300,120 1500,240 1600,280" stroke="url(#lineGradGold)" stroke-width="2" />
+            <path d="M-100,750 C250,850 600,680 950,800 C1200,890 1450,750 1550,700" stroke="url(#lineGradRed)" stroke-width="2" />
+            <path d="M-50,810 C300,910 650,740 1000,860 C1250,950 1500,810 1600,760" stroke="url(#lineGradGold)" stroke-width="1.5" stroke-dasharray="6 6" />
+
+            <defs>
+                <linearGradient id="lineGradRed" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#940c10" stop-opacity="0.35" />
+                    <stop offset="50%" stop-color="#940c10" stop-opacity="0.15" />
+                    <stop offset="100%" stop-color="#940c10" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="lineGradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#CE9501" stop-opacity="0.45" />
+                    <stop offset="50%" stop-color="#CE9501" stop-opacity="0.2" />
+                    <stop offset="100%" stop-color="#CE9501" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <!-- 4. Corner Watermark Geometric Rings (Aksen Halus di Sudut) -->
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 rounded-full border border-[#CE9501]/10 pointer-events-none"></div>
+        <div class="absolute -right-36 -bottom-36 w-[500px] h-[500px] rounded-full border border-[#940c10]/10 pointer-events-none"></div>
+    </div>
+
+    <!-- ======================================================== -->
     <!-- TOP NAVIGATION BAR (PERSISTENT ACROSS ALL SCREENS)       -->
     <!-- ======================================================== -->
-    <header class="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40 shadow-2xs">
+    <header class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40 shadow-2xs">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
             
             <!-- Left: Back Button & Institutional Branding -->
@@ -81,7 +126,7 @@
                     <span class="sr-only">UNIVERSITAS BINA SARANA INFORMATIKA</span>
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-2xs">
-                        <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet PEMIRA UBSI" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-2xs">
+                        <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet PEMIRA UBSI" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-2xs">
                     </div>
                     <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap">
                         <span class="text-sm sm:text-base font-extrabold text-[#940c10] tracking-tight">
@@ -173,11 +218,16 @@
 
                     <!-- Main Heading -->
                     <div>
-                        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-[1.18]">
-                            Selamat Datang di<br>
-                            <span class="text-[#940c10] font-black">Buku Tamu Digital</span><br>
-                            <span class="text-[#940c10] font-black">PEMIRA BEM UBSI</span><br>
-                            <span class="text-[#940c10] font-black">Kab. Karawang!</span>
+                        <h1 class="tracking-tight">
+                            <!-- Judul Pembuka di Atas -->
+                            <span class="block text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-slate-900 mb-2 sm:mb-2.5">
+                                Selamat Datang di
+                            </span>
+                            <!-- Teks Judul Merah Rapi & Bernapas (Tidak Padat) -->
+                            <span class="block text-3xl sm:text-4xl lg:text-[42px] font-black text-[#940c10] leading-[1.25] sm:leading-[1.28]">
+                                Buku Tamu Digital PEMIRA<br>
+                                BEM UBSI Kab. Karawang!
+                            </span>
                         </h1>
                     </div>
 
@@ -459,7 +509,7 @@
                     <!-- Form Inputs (2 Kolom Layout) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                         
-                        <!-- NIM (Nomor Induk Mahasiswa) -->
+                        <!-- NIM (Nomor Induk Mahasiswa - Hanya Angka) -->
                         <div class="space-y-1.5 sm:col-span-2">
                             <label class="block text-xs font-bold text-slate-800">
                                 Nomor Induk Mahasiswa (NIM) <span class="text-red-500">*</span>
@@ -467,10 +517,13 @@
                             <div class="relative flex items-center">
                                 <input type="text" 
                                        x-model="nim" 
-                                       @input="onNimInput()"
-                                       @keydown.enter.prevent="searchStudent()"
-                                       placeholder="Masukkan 8 digit NIM Anda (Contoh: 12220001)"
+                                       inputmode="numeric"
+                                       pattern="[0-9]*"
                                        maxlength="20"
+                                       @input="nim = $event.target.value.replace(/\D/g, ''); onNimInput()"
+                                       @keydown="if (!/[0-9]/.test($event.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'].includes($event.key) && !$event.ctrlKey && !$event.metaKey) $event.preventDefault()"
+                                       @keydown.enter.prevent="searchStudent()"
+                                       placeholder="Masukkan 8 digit NIM Anda (192609234)"
                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono font-bold text-slate-900 placeholder:font-sans placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] focus:border-transparent transition-all shadow-2xs">
                                 
                                 <div class="absolute right-2.5 flex items-center gap-1.5">
@@ -488,7 +541,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <span class="text-[11px] text-slate-400 block">Ketik NIM Anda untuk memuat nama, prodi, dan kelas dari DPT secara otomatis.</span>
+                            <span class="text-[11px] text-slate-400 block">Ketik NIM Anda (hanya angka) untuk memuat nama, prodi, dan kelas dari DPT secara otomatis.</span>
                         </div>
 
                         <!-- Nama Lengkap -->
@@ -538,26 +591,43 @@
                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
                         </div>
 
-                        <!-- Informasi Kontak Tambahan: No Telepon / WA -->
+                        <!-- Informasi Kontak Tambahan: No Telepon / WA (Hanya Angka) -->
                         <div class="space-y-1.5">
                             <label class="block text-xs font-bold text-slate-800">
                                 No. Telepon / WhatsApp <span class="text-slate-400 font-normal">(Opsional)</span>
                             </label>
-                            <input type="text" 
+                            <input type="tel" 
                                    x-model="phone" 
-                                   placeholder="Contoh: 081234567890"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs">
+                                   inputmode="numeric"
+                                   pattern="[0-9]*"
+                                   maxlength="16"
+                                   @input="phone = $event.target.value.replace(/\D/g, '')"
+                                   @keydown="if (!/[0-9]/.test($event.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'].includes($event.key) && !$event.ctrlKey && !$event.metaKey) $event.preventDefault()"
+                                   placeholder="Contoh: 08*********"
+                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs transition-all">
                         </div>
 
-                        <!-- Email -->
+                        <!-- Email (Wajib Diisi & Validasi Format @) -->
                         <div class="space-y-1.5">
                             <label class="block text-xs font-bold text-slate-800">
-                                Email <span class="text-slate-400 font-normal">(Opsional)</span>
+                                Email <span class="text-red-500">*</span>
                             </label>
-                            <input type="email" 
-                                   x-model="email" 
-                                   placeholder="nama@email.com"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs">
+                            <div class="relative">
+                                <input type="email" 
+                                       x-model="email" 
+                                       @input="validateEmail()"
+                                       @blur="validateEmail()"
+                                       required
+                                       placeholder="nim@bsi.ac.id"
+                                       :class="emailError ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-[#940c10]'"
+                                       class="w-full px-4 py-3 rounded-xl border text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 shadow-2xs transition-all">
+                            </div>
+                            <template x-if="emailError">
+                                <p class="text-[11px] text-red-600 font-medium flex items-center gap-1 mt-1">
+                                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                    <span x-text="emailError"></span>
+                                </p>
+                            </template>
                         </div>
 
                     </div>
@@ -571,8 +641,8 @@
                         </button>
                         
                         <button type="button" 
-                                @click="goToStep(3)"
-                                :disabled="status !== 'ready' || !student"
+                                @click="handleStep2Next()"
+                                :disabled="status !== 'ready' || !student || !isEmailValid"
                                 class="px-6 sm:px-8 py-3 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <span>Selanjutnya</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -815,6 +885,7 @@
             className: '',
             phone: '',
             email: '',
+            emailError: '',
             
             isLoading: false,
             isSubmitting: false,
@@ -822,6 +893,38 @@
             statusMessage: '',
             student: null,
             hasSignature: false,
+
+            get isEmailValid() {
+                if (!this.email) return false;
+                const clean = this.email.trim();
+                return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(clean);
+            },
+
+            validateEmail() {
+                const clean = this.email ? this.email.trim() : '';
+                if (!clean) {
+                    this.emailError = 'Alamat email wajib diisi.';
+                    return false;
+                }
+                if (!clean.includes('@')) {
+                    this.emailError = 'Email harus mengandung tanda "@" (contoh: nama@email.com).';
+                    return false;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+                if (!emailRegex.test(clean)) {
+                    this.emailError = 'Format email tidak valid (contoh: nama@email.com).';
+                    return false;
+                }
+                this.emailError = '';
+                return true;
+            },
+
+            handleStep2Next() {
+                if (!this.validateEmail()) {
+                    return;
+                }
+                this.goToStep(3);
+            },
 
             // Clock State
             timeString: '00 : 00 : 00 WIB',
@@ -884,8 +987,9 @@
             },
 
             onNimInput() {
+                this.nim = this.nim.replace(/\D/g, '');
                 const clean = this.nim.trim();
-                if (clean.length === 8 && /^\d+$/.test(clean)) {
+                if (clean.length === 8) {
                     this.searchStudent();
                 }
             },
@@ -920,6 +1024,7 @@
                         this.className = `${data.student.class_name || '-'} (Semester ${data.student.semester || '-'})`;
                         if (data.student.email_kampus) {
                             this.email = data.student.email_kampus;
+                            this.validateEmail();
                         }
                         if (data.student.asal_kampus && !this.selectedCampus) {
                             this.selectedCampus = data.student.asal_kampus;
@@ -1018,6 +1123,11 @@
             async submitVerification() {
                 if (!this.student || !this.hasSignature || this.isSubmitting) return;
 
+                if (!this.validateEmail()) {
+                    this.goToStep(2);
+                    return;
+                }
+
                 const signatureData = this.canvas.toDataURL('image/png');
                 this.isSubmitting = true;
 
@@ -1033,8 +1143,8 @@
                             nim: this.student.nim,
                             signature: signatureData,
                             tps_location: this.selectedCampus,
-                            phone: this.phone,
-                            email: this.email
+                            phone: this.phone ? this.phone.replace(/\D/g, '') : null,
+                            email: this.email ? this.email.trim() : ''
                         })
                     });
 

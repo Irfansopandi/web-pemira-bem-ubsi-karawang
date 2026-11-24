@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Login' }} - PEMIRA BEM UBSI KARAWANG</title>
+    <title>{{ $title ?? 'Login' }} - PEMIRA BEM UBSI Kab.Karawang</title>
 
     <!-- Favicon Resmi BEM UBSI Karawang -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">

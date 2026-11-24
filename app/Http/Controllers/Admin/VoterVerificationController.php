@@ -90,15 +90,19 @@ class VoterVerificationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'nim' => 'required|string',
+            'nim' => ['required', 'string', 'regex:/^[0-9]+$/'],
             'signature' => 'required|string',
             'tps_location' => 'required|string|max:100',
-            'phone' => 'nullable|string|max:30',
-            'email' => 'nullable|email|max:150',
+            'phone' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:25'],
+            'email' => ['required', 'email:filter', 'max:150'],
         ], [
             'nim.required' => 'NIM mahasiswa wajib diisi.',
+            'nim.regex' => 'NIM hanya boleh berisi angka.',
             'signature.required' => 'Tanda tangan digital wajib dibubuhkan di canvas.',
             'tps_location.required' => 'Asal kampus wajib dipilih (Karawang atau Cikampek).',
+            'phone.regex' => 'Nomor telepon/WhatsApp hanya boleh berisi angka.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid (harus mengandung @ dan domain yang benar).',
         ]);
 
         $period = $this->electionService->getSelectedPeriod();

@@ -17,6 +17,12 @@ class LoginController extends Controller
      */
     public function showLoginForm(): View|RedirectResponse
     {
+        if (Auth::guard('student')->check()) {
+            return redirect()->route('login')->withErrors([
+                'identifier' => 'Akses ditolak. Anda sedang login sebagai mahasiswa.',
+            ]);
+        }
+
         if (Auth::guard('admin')->check()) {
             return redirect()->intended(route('admin.dashboard'));
         }
@@ -95,7 +101,9 @@ class LoginController extends Controller
     {
         Auth::guard('admin')->logout();
 
-        $request->session()->invalidate();
+        if (! Auth::guard('student')->check()) {
+            $request->session()->invalidate();
+        }
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login')->with('status', 'Anda telah berhasil keluar dari sistem administrator.');

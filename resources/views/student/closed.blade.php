@@ -28,7 +28,7 @@
             </h1>
 
             <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-6">
-                Bilik suara digital untuk <strong class="text-white">{{ $activePeriod->name }}</strong> saat ini sedang ditutup atau belum dimulai oleh Panitia PEMIRA BEM Universitas BSI Karawang.
+                Bilik suara digital untuk <strong class="text-white">{{ $activePeriod->name }}</strong> saat ini sedang ditutup atau belum dimulai oleh Panitia PEMIRA BEM UBSI Kab.Karawang.
             </p>
 
             <div class="p-4 rounded-2xl bg-black/30 border border-white/10 text-xs text-slate-400 mb-8 text-left space-y-1.5">

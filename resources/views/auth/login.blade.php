@@ -24,7 +24,7 @@
                         ALUR E-VOTING TPS
                     </h3>
                     <p class="text-[10px] xl:text-[11px] font-bold text-[#E5A900] tracking-wider uppercase mt-0.5 truncate">
-                        PEMIRA BEM UBSI Karawang
+                        PEMIRA BEM UBSI Kab.Karawang
                     </p>
                 </div>
             </div>
@@ -184,8 +184,8 @@
                 <!-- 3 Logo Resmi: Universitas BSI, BEM UBSI, Kabinet/PEMIRA -->
                 <div class="relative z-10 flex items-center justify-center gap-3.5 sm:gap-4 mb-2 sm:mb-2.5">
                     <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/logo-kabinet.png') }}" alt="Logo Kabinet BEM UBSI Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet BEM UBSI Kab.Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
                 </div>
 
                 <!-- Judul Utama Diapit Golden Laurel Wreath (Daun Emas) -->
@@ -210,7 +210,7 @@
                             PEMILIHAN UMUM RAYA
                         </h2>
                         <p class="text-[11px] sm:text-xs font-bold text-[#E5A900] tracking-widest uppercase mt-0.5">
-                            BEM UBSI KAMPUS KARAWANG
+                            BEM UBSI KABUPATEN KARAWANG
                         </p>
                     </div>
 

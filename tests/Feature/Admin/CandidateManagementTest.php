@@ -74,7 +74,7 @@ class CandidateManagementTest extends TestCase
         $response = $this->actingAs($student, 'student')
             ->get(route('admin.candidates.index'));
 
-        $response->assertRedirect(route('admin.login'));
+        $response->assertRedirect(route('login'));
     }
 
     public function test_admin_can_view_candidate_list(): void
