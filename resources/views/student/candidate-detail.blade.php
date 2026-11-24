@@ -209,25 +209,46 @@
     <script>
         function confirmVote() {
             Swal.fire({
-                title: 'Konfirmasi Pilihan',
                 html: `
-                    <div style="font-family: 'Plus Jakarta Sans', sans-serif;" class="text-center">
-                        <p class="text-xs text-slate-300 font-normal mb-2 mt-1">Anda akan memberikan suara untuk:</p>
-                        
-                        <!-- Badge Paslon (Kuning Emas UBSI yang Jelas & Kontras Tinggi) -->
-                        <div class="inline-flex items-center px-4 py-1 rounded-full bg-[#E5A900] text-slate-950 text-xs font-bold shadow-md whitespace-nowrap">
-                            Pasangan Calon No. 0{{ $candidate->candidate_number }}
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif;" class="text-center pt-2">
+                        <!-- Icon Container: Gold/Red Ballot Box -->
+                        <div class="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center mx-auto mb-4 text-[#CE9501] shadow-2xs">
+                            <svg class="w-8 h-8 text-[#940c10]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10z" />
+                                <path d="M2 10h20" />
+                                <path d="M9 10v-1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" />
+                                <path d="M8 5h8v4H8z" fill="#CE9501" fill-opacity="0.25" />
+                                <polyline points="10 7 11.5 8.5 14 6" stroke="#940c10" stroke-width="2" />
+                            </svg>
                         </div>
 
-                        <!-- Nama Paslon (Jelas & Berwibawa Tanpa Terpotong) -->
-                        <p class="text-base sm:text-lg font-extrabold text-white mt-2.5 mb-1 leading-snug break-words">
+                        <!-- Title -->
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
+                            Konfirmasi Pilihan Suara
+                        </h3>
+
+                        <p class="text-xs text-slate-500 font-normal mb-3 mt-1.5">Anda akan menyalurkan hak suara resmi untuk:</p>
+                        
+                        <!-- Badge Paslon -->
+                        <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#940c10] text-white text-xs font-black shadow-xs mb-2.5">
+                            <span class="w-2 h-2 rounded-full bg-[#CE9501] animate-pulse"></span>
+                            <span>Pasangan Calon No. 0{{ $candidate->candidate_number }}</span>
+                        </div>
+
+                        <!-- Nama Paslon -->
+                        <p class="text-base sm:text-lg font-black text-slate-900 mt-1 mb-2 leading-snug break-words px-2">
                             {{ addslashes($candidate->chairman_name) }} & {{ addslashes($candidate->vice_chairman_name) }}
                         </p>
 
-                        <!-- Deskripsi Kerahasiaan Suara -->
-                        <p class="text-xs text-slate-400 leading-relaxed mt-2 px-2">
-                            Pilihan bersifat <strong class="text-slate-200">final & anonim</strong>. Suara akan tercatat ke dalam bilik suara digital secara aman dan dijamin kerahasiaannya.
-                        </p>
+                        <!-- Box Peringatan Kerahasiaan Suara -->
+                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-[11px] sm:text-xs text-slate-600 leading-relaxed mt-3 max-w-sm mx-auto text-left flex items-start gap-2.5">
+                            <svg class="w-4 h-4 text-[#CE9501] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <span>Pilihan bersifat <strong class="text-slate-900">final & anonim</strong>. Suara akan dicatat secara otomatis ke dalam kotak suara digital terenkripsi.</span>
+                        </div>
                     </div>
                 `,
                 showCancelButton: true,
@@ -236,13 +257,14 @@
                 focusCancel: true,
                 reverseButtons: true,
                 buttonsStyling: false,
+                background: '#ffffff',
+                backdrop: 'rgba(15, 23, 42, 0.75)',
                 customClass: {
-                    popup: 'rounded-3xl border border-white/10 bg-[#1e0306] text-white shadow-2xl p-6 sm:p-8 max-w-lg w-full',
-                    title: 'text-xl font-bold text-white p-0 m-0',
-                    htmlContainer: 'p-0 m-0 mt-3',
-                    actions: 'mt-6 flex items-center justify-center gap-3 w-full',
-                    confirmButton: 'whitespace-nowrap px-5 py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-[#940c10] hover:bg-[#7A0A0D] shadow-md transition-all cursor-pointer',
-                    cancelButton: 'whitespace-nowrap px-5 py-3 rounded-xl font-semibold text-xs sm:text-sm text-slate-300 bg-white/10 hover:bg-white/20 transition-all cursor-pointer'
+                    popup: 'rounded-3xl border border-slate-100 bg-white shadow-2xl p-6 sm:p-8 max-w-lg w-full',
+                    htmlContainer: 'p-0 m-0',
+                    actions: 'mt-6 flex flex-col-reverse sm:flex-row items-center justify-center gap-3 w-full',
+                    confirmButton: 'w-full sm:flex-1 whitespace-nowrap px-5 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#940c10] to-[#7a0a0d] hover:from-[#7a0a0d] hover:to-[#5e0709] shadow-md shadow-red-950/20 active:scale-[0.98] transition-all cursor-pointer text-center',
+                    cancelButton: 'w-full sm:flex-1 whitespace-nowrap px-5 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 border border-slate-200 transition-all cursor-pointer text-center'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -252,9 +274,12 @@
                         allowOutsideClick: false,
                         allowEscapeKey: false,
                         showConfirmButton: false,
+                        background: '#ffffff',
+                        backdrop: 'rgba(15, 23, 42, 0.75)',
                         customClass: {
-                            popup: 'rounded-3xl border border-white/10 bg-[#1e0306] text-white shadow-2xl p-6',
-                            title: 'text-lg font-bold text-white'
+                            popup: 'rounded-3xl border border-slate-100 bg-white shadow-2xl p-6 text-slate-900',
+                            title: 'text-lg font-bold text-slate-900',
+                            htmlContainer: 'text-xs text-slate-600 mt-1'
                         },
                         didOpen: () => {
                             Swal.showLoading();

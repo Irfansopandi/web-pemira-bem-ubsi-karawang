@@ -572,19 +572,42 @@
 
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Konfirmasi Keluar',
-                    text: 'Apakah Anda yakin ingin keluar dari Panel Administrator KPUM?',
-                    icon: 'question',
+                    html: `
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif;" class="text-center pt-2">
+                            <!-- Icon Container: Red Squircle with Logout Icon -->
+                            <div class="w-16 h-16 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center mx-auto mb-4 text-[#940c10] shadow-2xs">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
+                                Konfirmasi Keluar
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mt-2 max-w-xs sm:max-w-sm mx-auto">
+                                Apakah Anda yakin ingin keluar dari Panel Administrator Panitia PEMIRA?
+                            </p>
+                        </div>
+                    `,
                     showCancelButton: true,
-                    confirmButtonColor: '#940c10',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, Keluar',
+                    confirmButtonText: 'Iya, Keluar Sekarang',
                     cancelButtonText: 'Batal',
+                    focusCancel: true,
                     reverseButtons: true,
+                    buttonsStyling: false,
+                    background: '#ffffff',
+                    backdrop: 'rgba(15, 23, 42, 0.75)',
                     customClass: {
-                        popup: 'rounded-2xl',
-                        confirmButton: 'rounded-xl font-bold px-5 py-2.5',
-                        cancelButton: 'rounded-xl font-semibold px-5 py-2.5'
+                        popup: 'rounded-3xl border border-slate-100 bg-white shadow-2xl p-6 sm:p-7 max-w-md w-full',
+                        htmlContainer: 'p-0 m-0',
+                        actions: 'mt-6 flex items-center justify-center gap-3 w-full',
+                        confirmButton: 'whitespace-nowrap px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#940c10] to-[#7a0a0d] hover:from-[#7a0a0d] hover:to-[#5e0709] shadow-md shadow-red-950/20 active:scale-[0.98] transition-all cursor-pointer flex-1 text-center',
+                        cancelButton: 'whitespace-nowrap px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 border border-slate-200 transition-all cursor-pointer flex-1 text-center'
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -595,7 +618,7 @@
                     }
                 });
             } else {
-                if (confirm('Apakah Anda yakin ingin keluar dari Panel Administrator KPUM?')) {
+                if (confirm('Apakah Anda yakin ingin keluar dari Panel Administrator Panitia PEMIRA?')) {
                     showPageLoader('Mengakhiri Sesi...', 'Mengalihkan ke halaman login');
                     setTimeout(() => {
                         form.submit();
