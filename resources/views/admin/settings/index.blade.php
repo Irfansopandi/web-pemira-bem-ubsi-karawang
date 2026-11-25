@@ -223,24 +223,24 @@
                     }
                 }">
                 
-                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-                    <div class="flex items-center gap-2.5">
-                        <svg class="w-5 h-5 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <div class="flex items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <svg class="w-5 h-5 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                             <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
                             <circle cx="9" cy="9" r="2"/>
                             <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
                         </svg>
-                        <div>
+                        <div class="min-w-0">
                             <h2 class="text-base font-black text-slate-900 leading-tight">Logo Kabinet PEMIRA</h2>
                             <p class="text-[11px] text-slate-500 font-medium">Kustomisasi identitas logo kabinet kepengurusan</p>
                         </div>
                     </div>
                     @if($isCustomLogo)
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-800 border border-emerald-300">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-50 text-emerald-800 border border-emerald-300 whitespace-nowrap shrink-0">
                             Logo Kustom Aktif
                         </span>
                     @else
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-slate-100 text-slate-700 border border-slate-300">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-slate-100 text-slate-700 border border-slate-300 whitespace-nowrap shrink-0">
                             Logo Bawaan
                         </span>
                     @endif
@@ -251,7 +251,7 @@
                     <div class="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                         <img :src="previewUrl || '{{ $currentLogoUrl }}'" 
                             alt="Logo Kabinet" 
-                            class="max-w-full max-h-full object-contain drop-shadow-md transition-transform duration-200 group-hover:scale-105">
+                            class="w-full h-full object-contain drop-shadow-md transition-transform duration-200 group-hover:scale-105">
                     </div>
                     <span class="text-[10px] font-bold text-slate-400 mt-2 block" x-text="previewUrl ? 'Pratinjau File yang Dipilih' : 'Logo Kabinet yang Sedang Aktif'"></span>
                 </div>

@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <script>
+        try {
+            if (localStorage.getItem('admin_sidebar_collapsed') === '1') {
+                document.documentElement.classList.add('sidebar-collapsed-boot');
+            }
+        } catch (e) {}
+    </script>
+
     <title>{{ isset($title) ? $title . ' - Admin PEMIRA BEM UBSI' : 'Panel Administrator - PEMIRA BEM UBSI Kab.Karawang' }}</title>
 
     <!-- Favicon Resmi BEM UBSI Karawang -->
@@ -89,10 +97,137 @@
         .admin-scrollbar::-webkit-scrollbar-thumb:hover {
             background: rgba(148, 12, 16, 0.6);
         }
+
+        /* Collapsible Sidebar Desktop Styles (Scoped to lg+ so mobile drawer is untouched) */
+        .sidebar-label,
+        .sidebar-extra-icon,
+        .sidebar-subtext,
+        .sidebar-section-title,
+        .sidebar-brand-text,
+        .sidebar-side-logo {
+            transition: opacity 200ms ease, max-width 250ms ease, max-height 250ms ease, width 250ms ease, margin 200ms ease;
+        }
+        @media (min-width: 1024px) {
+            html.sidebar-collapsed-boot aside {
+                width: 5rem !important;
+            }
+            html.sidebar-collapsed-boot #admin-main-wrapper {
+                padding-left: 5rem !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-side-logo,
+            aside.sidebar-is-collapsed .sidebar-side-logo {
+                width: 0 !important;
+                max-width: 0 !important;
+                opacity: 0 !important;
+                overflow: hidden !important;
+                pointer-events: none !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-logo-row,
+            aside.sidebar-is-collapsed .sidebar-logo-row {
+                gap: 0 !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-brand-text,
+            aside.sidebar-is-collapsed .sidebar-brand-text {
+                max-height: 0 !important;
+                opacity: 0 !important;
+                margin-top: 0 !important;
+                overflow: hidden !important;
+                pointer-events: none !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-header-box,
+            aside.sidebar-is-collapsed .sidebar-header-box {
+                padding: 1.15rem 0.75rem !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-nav-box,
+            aside.sidebar-is-collapsed .sidebar-nav-box {
+                padding-left: 0.65rem !important;
+                padding-right: 0.65rem !important;
+                space-y: 0.75rem;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-section-title,
+            aside.sidebar-is-collapsed .sidebar-section-title {
+                display: block;
+                opacity: 0 !important;
+                max-height: 0 !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                pointer-events: none !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-label,
+            html.sidebar-collapsed-boot aside .sidebar-extra-icon,
+            html.sidebar-collapsed-boot aside .sidebar-subtext,
+            aside.sidebar-is-collapsed .sidebar-label,
+            aside.sidebar-is-collapsed .sidebar-extra-icon,
+            aside.sidebar-is-collapsed .sidebar-subtext {
+                opacity: 0 !important;
+                width: 0 !important;
+                max-width: 0 !important;
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                pointer-events: none !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-link,
+            aside.sidebar-is-collapsed .sidebar-link {
+                justify-content: center !important;
+                gap: 0 !important;
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-link-inner,
+            aside.sidebar-is-collapsed .sidebar-link-inner {
+                gap: 0 !important;
+                justify-content: center !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-footer-box,
+            aside.sidebar-is-collapsed .sidebar-footer-box {
+                padding: 0.75rem 0.65rem !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-footer-card,
+            aside.sidebar-is-collapsed .sidebar-footer-card {
+                justify-content: center !important;
+                padding: 0.5rem !important;
+                gap: 0 !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-footer-profile,
+            aside.sidebar-is-collapsed .sidebar-footer-profile {
+                justify-content: center !important;
+                gap: 0 !important;
+            }
+            html.sidebar-collapsed-boot aside .sidebar-footer-logout,
+            aside.sidebar-is-collapsed .sidebar-footer-logout {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-[#940c10] selection:text-white"
-    x-data="{ sidebarOpen: false }">
+    x-data="{
+        sidebarOpen: false,
+        sidebarCollapsed: false,
+        init() {
+            try {
+                if (localStorage.getItem('admin_sidebar_collapsed') === '1') {
+                    this.sidebarCollapsed = true;
+                }
+            } catch (e) {}
+            this.$nextTick(() => {
+                document.documentElement.classList.remove('sidebar-collapsed-boot');
+            });
+        },
+        toggleDesktopSidebar() {
+            this.sidebarCollapsed = !this.sidebarCollapsed;
+            const tooltip = document.getElementById('admin-sidebar-tooltip');
+            if (tooltip) {
+                tooltip.style.opacity = '0';
+            }
+            try {
+                localStorage.setItem('admin_sidebar_collapsed', this.sidebarCollapsed ? '1' : '0');
+            } catch (e) {}
+        }
+    }">
 
     <!-- ======================================================== -->
     <!-- GLOBAL PAGE TRANSITION LOADER (TOP BAR & SPINNER BLUR)   -->
@@ -147,12 +282,15 @@
     <!-- SIDEBAR KIRI (OFFICIAL UBSI INSTITUTIONAL DARK THEME)     -->
     <!-- ======================================================== -->
     <aside 
-        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-        class="fixed top-0 bottom-0 left-0 z-50 w-64 xl:w-72 bg-[#120204] text-white border-r border-white/10 flex flex-col justify-between transition-transform duration-300 ease-in-out shadow-2xl shadow-black/80 lg:shadow-none">
+        :class="[
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+            sidebarCollapsed ? 'lg:w-20 sidebar-is-collapsed' : 'w-64 xl:w-72'
+        ]"
+        class="fixed top-0 bottom-0 left-0 z-50 w-64 bg-[#120204] text-white border-r border-white/10 flex flex-col justify-between transition-[width,transform] duration-250 ease-in-out shadow-2xl shadow-black/80 lg:shadow-none">
         
         <!-- Header Sidebar: 3 Logo Resmi & Brand Title -->
         <div class="shrink-0">
-            <div class="relative p-5 xl:p-6 border-b border-white/10 bg-gradient-to-b from-[#220308] to-[#120204]">
+            <div class="sidebar-header-box relative p-5 xl:p-6 border-b border-white/10 bg-gradient-to-b from-[#220308] to-[#120204] transition-all duration-250">
                 <!-- Tombol Tutup Sidebar di Mobile -->
                 <button @click="sidebarOpen = false" class="lg:hidden absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -161,19 +299,19 @@
                     </svg>
                 </button>
 
-                <!-- 3 Logo Resmi UBSI Karawang (Tengah / Centered) -->
-                <div class="flex items-center justify-center gap-3">
-                    <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet PEMIRA" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                <!-- 3 Logo Resmi UBSI Karawang (Tengah / Centered; Saat Collapsed Hanya Logo BEM) -->
+                <div class="sidebar-logo-row flex items-center justify-center gap-3 transition-all duration-250">
+                    <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="sidebar-side-logo w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-all duration-200 shrink-0">
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-transform duration-200 shrink-0">
+                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet PEMIRA" class="sidebar-side-logo w-9 h-9 xl:w-10 xl:h-10 object-contain drop-shadow-sm hover:scale-105 transition-all duration-200 shrink-0">
                 </div>
 
                 <!-- Judul Brand Sidebar (Tengah / Centered) -->
-                <div class="mt-3 text-center">
-                    <h2 class="text-sm xl:text-base font-extrabold tracking-wider text-white uppercase leading-tight">
+                <div class="sidebar-brand-text mt-3 text-center max-h-20">
+                    <h2 class="text-sm xl:text-base font-extrabold tracking-wider text-white uppercase leading-tight whitespace-nowrap">
                         PEMIRA BEM UBSI
                     </h2>
-                    <p class="text-[10px] xl:text-[11px] font-bold text-[#E5A900] tracking-widest uppercase mt-0.5">
+                    <p class="text-[10px] xl:text-[11px] font-bold text-[#E5A900] tracking-widest uppercase mt-0.5 whitespace-nowrap">
                         KABUPATEN KARAWANG
                     </p>
                 </div>
@@ -181,26 +319,26 @@
         </div>
 
         <!-- Navigasi Menu Sidebar (Flex-1 Scrollable) -->
-        <nav id="admin-sidebar-nav" class="flex-1 p-3.5 xl:p-4 space-y-5 xl:space-y-6 overflow-y-auto admin-scrollbar">
+        <nav id="admin-sidebar-nav" class="sidebar-nav-box flex-1 p-3.5 xl:p-4 space-y-5 xl:space-y-6 overflow-y-auto overflow-x-hidden admin-scrollbar transition-all duration-250">
             
             <!-- ======================================================== -->
             <!-- 1. MENU UTAMA                                            -->
             <!-- ======================================================== -->
             <div class="space-y-1">
-                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span class="sidebar-section-title px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                     Menu Utama
                 </span>
 
                 <!-- Dashboard -->
-                <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.dashboard') }}" data-tooltip="Dashboard"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.dashboard') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <rect x="3" y="3" width="7" height="9" rx="1"></rect>
                         <rect x="14" y="3" width="7" height="5" rx="1"></rect>
                         <rect x="14" y="12" width="7" height="9" rx="1"></rect>
                         <rect x="3" y="16" width="7" height="5" rx="1"></rect>
                     </svg>
-                    <span class="truncate">Dashboard</span>
+                    <span class="sidebar-label truncate">Dashboard</span>
                 </a>
             </div>
 
@@ -208,13 +346,13 @@
             <!-- 2. MANAJEMEN PEMILIHAN                                   -->
             <!-- ======================================================== -->
             <div class="space-y-1">
-                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span class="sidebar-section-title px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                     Manajemen Pemilihan
                 </span>
 
                 <!-- Kelola Periode -->
-                <a href="{{ route('admin.periods.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.periods.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.periods.index') }}" data-tooltip="Kelola Periode"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.periods.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.periods.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -222,44 +360,43 @@
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                         <polyline points="12 14 12 17 14 17"></polyline>
                     </svg>
-                    <span class="truncate">Kelola Periode</span>
+                    <span class="sidebar-label truncate">Kelola Periode</span>
                 </a>
 
                 <!-- Kelola Paslon -->
-                <a href="{{ route('admin.candidates.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.candidates.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.candidates.index') }}" data-tooltip="Kelola Paslon"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.candidates.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.candidates.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
                         <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                    <span class="truncate">Kelola Paslon</span>
+                    <span class="sidebar-label truncate">Kelola Paslon</span>
                 </a>
 
                 <!-- Kelola Mahasiswa -->
-                <a href="{{ route('admin.voters.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.voters.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.voters.index') }}" data-tooltip="Kelola Mahasiswa"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.voters.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.voters.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                         <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                     </svg>
-                    <span class="truncate">Kelola Mahasiswa</span>
+                    <span class="sidebar-label truncate">Kelola Mahasiswa</span>
                 </a>
 
                 <!-- Verifikasi Kehadiran Pemilih (Registrasi & Tanda Tangan TPS Onsite) -->
-                <a href="{{ route('admin.verification.index') }}" target="_blank" rel="noopener noreferrer" data-no-spa="true"
-                    class="flex items-center justify-between gap-2 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.verification.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}"
-                    title="Buka Buku Tamu Digital & Meja Registrasi TPS di Tab Baru">
-                    <div class="flex items-center gap-3 min-w-0">
+                <a href="{{ route('admin.verification.index') }}" target="_blank" rel="noopener noreferrer" data-no-spa="true" data-tooltip="Verifikasi Kehadiran"
+                    class="sidebar-link flex items-center justify-between gap-2 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.verification.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                    <div class="sidebar-link-inner flex items-center gap-3 min-w-0">
                         <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.verification.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                             <circle cx="9" cy="7" r="4"></circle>
                             <polyline points="16 11 18 13 22 9"></polyline>
                         </svg>
-                        <span class="truncate">Verifikasi Kehadiran</span>
+                        <span class="sidebar-label truncate">Verifikasi Kehadiran</span>
                     </div>
-                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#CE9501] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="sidebar-extra-icon w-3.5 h-3.5 text-slate-400 group-hover:text-[#CE9501] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         <polyline points="15 3 21 3 21 9"></polyline>
                         <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -271,28 +408,28 @@
             <!-- 4. MONITORING & LAPORAN                                   -->
             <!-- ======================================================== -->
             <div class="space-y-1">
-                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span class="sidebar-section-title px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                     Monitoring & Laporan
                 </span>
 
                 <!-- Monitoring Pemungutan Suara -->
-                <a href="{{ route('admin.elections.monitoring') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.elections.monitoring') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.elections.monitoring') }}" data-tooltip="Monitoring Pemungutan Suara"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.elections.monitoring') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.elections.monitoring') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                     </svg>
-                    <span class="truncate">Monitoring Pemungutan Suara</span>
+                    <span class="sidebar-label truncate">Monitoring Pemungutan Suara</span>
                 </a>
 
                 <!-- Audit Trail & Log -->
-                <a href="{{ route('admin.audit.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.audit.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.audit.index') }}" data-tooltip="Audit Trail & Log"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.audit.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.audit.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         <path d="M12 8v4"></path>
                         <path d="M12 16h.01"></path>
                     </svg>
-                    <span class="truncate">Audit Trail & Log</span>
+                    <span class="sidebar-label truncate">Audit Trail & Log</span>
                 </a>
             </div>
 
@@ -300,28 +437,28 @@
             <!-- 5. SETTING                                               -->
             <!-- ======================================================== -->
             <div class="space-y-1">
-                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span class="sidebar-section-title px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                     Setting
                 </span>
 
                 <!-- Profile -->
-                <a href="{{ route('admin.profile.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.profile.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.profile.index') }}" data-tooltip="Profile"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.profile.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.profile.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <span class="truncate">Profile</span>
+                    <span class="sidebar-label truncate">Profile</span>
                 </a>
 
                 <!-- Pengaturan -->
-                <a href="{{ route('admin.settings.index') }}"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.settings.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
+                <a href="{{ route('admin.settings.index') }}" data-tooltip="Pengaturan"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-200 group {{ request()->routeIs('admin.settings.*') ? 'bg-gradient-to-r from-[#940C10] to-[#7A0A0D] text-white shadow-md shadow-red-950/60 font-bold' : 'text-slate-300 hover:text-white hover:bg-white/[0.07]' }}">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0 {{ request()->routeIs('admin.settings.*') ? 'text-[#CE9501]' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
                     </svg>
-                    <span class="truncate">Pengaturan</span>
+                    <span class="sidebar-label truncate">Pengaturan</span>
                 </a>
             </div>
 
@@ -329,21 +466,21 @@
             <!-- 6. AKSES PEMILIHAN                                       -->
             <!-- ======================================================== -->
             <div class="space-y-1 pt-2 border-t border-white/10">
-                <span class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span class="sidebar-section-title px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                     Akses Pemilihan
                 </span>
 
                 <!-- Bilik Suara Mahasiswa -->
-                <a href="{{ route('login') }}" target="_blank" rel="noopener noreferrer"
-                    class="flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/[0.07] transition-all duration-200 group">
+                <a href="{{ route('login') }}" target="_blank" rel="noopener noreferrer" data-tooltip="Bilik Suara Mahasiswa"
+                    class="sidebar-link flex items-center gap-3 px-3 xl:px-3.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/[0.07] transition-all duration-200 group">
                     <svg class="w-4 h-4 xl:w-4.5 xl:h-4.5 text-[#CE9501] group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         <polyline points="15 3 21 3 21 9"></polyline>
                         <line x1="10" y1="14" x2="21" y2="3"></line>
                     </svg>
-                    <div class="flex-1 min-w-0">
+                    <div class="sidebar-label flex-1 min-w-0">
                         <span class="block truncate">Bilik Suara Mahasiswa</span>
-                        <span class="text-[10px] text-slate-400 block font-normal">Buka di tab baru</span>
+                        <span class="sidebar-subtext text-[10px] text-slate-400 block font-normal">Buka di tab baru</span>
                     </div>
                 </a>
             </div>
@@ -362,14 +499,14 @@
         </script>
 
         <!-- Footer Sidebar: Profil Admin & Tombol Logout -->
-        <div class="shrink-0 p-3.5 xl:p-4 border-t border-white/10 bg-[#0d0103]">
+        <div class="sidebar-footer-box shrink-0 p-3.5 xl:p-4 border-t border-white/10 bg-[#0d0103] transition-all duration-250">
             @php $admin = Auth::guard('admin')->user(); @endphp
-            <div class="bg-white/[0.05] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3">
-                <a href="{{ route('admin.profile.index') }}" title="Buka Profil Administrator" class="flex items-center gap-2.5 min-w-0 group hover:opacity-95 transition-opacity">
+            <div class="sidebar-footer-card bg-white/[0.05] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3 transition-all duration-200">
+                <a href="{{ route('admin.profile.index') }}" title="Buka Profil Administrator" class="sidebar-footer-profile flex items-center gap-2.5 min-w-0 group hover:opacity-95 transition-opacity">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#940C10] to-[#CE9501] text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-md">
                         {{ strtoupper(substr($admin->name ?? 'AD', 0, 2)) }}
                     </div>
-                    <div class="min-w-0">
+                    <div class="sidebar-label min-w-0">
                         <p class="text-xs font-bold text-white truncate leading-tight group-hover:text-[#CE9501] transition-colors">
                             {{ $admin->name ?? 'Administrator' }}
                         </p>
@@ -379,7 +516,7 @@
                     </div>
                 </a>
 
-                <form id="logout-form-sidebar" action="{{ route('admin.logout') }}" method="POST" class="shrink-0">
+                <form id="logout-form-sidebar" action="{{ route('admin.logout') }}" method="POST" class="sidebar-footer-logout shrink-0">
                     @csrf
                     <button type="button" onclick="confirmLogout('logout-form-sidebar')" title="Keluar / Logout"
                         class="w-8 h-8 rounded-lg bg-red-600/20 hover:bg-red-600/40 text-red-300 hover:text-white border border-red-500/30 flex items-center justify-center transition-all cursor-pointer">
@@ -394,17 +531,87 @@
         </div>
     </aside>
 
+    <!-- Floating Tooltip untuk Ikon Menu saat Sidebar Collapsed (Fixed agar tidak terpotong overflow sidebar) -->
+    <div id="admin-sidebar-tooltip"
+         role="tooltip"
+         class="fixed left-[88px] z-[70] pointer-events-none px-3 py-1.5 rounded-lg bg-[#1d0508] text-white text-xs font-bold border border-[#CE9501]/40 shadow-xl shadow-black/40 whitespace-nowrap opacity-0 transition-opacity duration-150 hidden lg:block"
+         style="transform: translateY(-50%);">
+    </div>
+
+    <script>
+        (function () {
+            const nav = document.getElementById('admin-sidebar-nav');
+            const tooltip = document.getElementById('admin-sidebar-tooltip');
+            if (!nav || !tooltip) return;
+
+            function isCollapsedDesktop() {
+                const aside = nav.closest('aside');
+                return window.innerWidth >= 1024 && aside && aside.classList.contains('sidebar-is-collapsed');
+            }
+
+            function showTooltipFor(link) {
+                if (!isCollapsedDesktop()) {
+                    hideTooltip();
+                    return;
+                }
+                const label = link.getAttribute('data-tooltip');
+                if (!label) return;
+
+                const rect = link.getBoundingClientRect();
+                tooltip.textContent = label;
+                tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+                tooltip.style.opacity = '1';
+            }
+
+            function hideTooltip() {
+                tooltip.style.opacity = '0';
+            }
+
+            nav.addEventListener('mouseover', function (e) {
+                const link = e.target.closest('a.sidebar-link');
+                if (link) {
+                    showTooltipFor(link);
+                }
+            });
+
+            nav.addEventListener('mouseout', function (e) {
+                const fromLink = e.target.closest('a.sidebar-link');
+                const toLink = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest('a.sidebar-link') : null;
+                if (fromLink && fromLink !== toLink) {
+                    hideTooltip();
+                }
+            });
+
+            nav.addEventListener('mouseleave', hideTooltip);
+            nav.addEventListener('scroll', hideTooltip, { passive: true });
+            nav.addEventListener('focusin', function (e) {
+                const link = e.target.closest('a.sidebar-link');
+                if (link) {
+                    showTooltipFor(link);
+                }
+            });
+            nav.addEventListener('focusout', hideTooltip);
+        })();
+    </script>
+
     <!-- ======================================================== -->
     <!-- AREA KONTEN KANAN: TOP HEADER + MAIN CONTENT CANVAS       -->
     <!-- ======================================================== -->
-    <div class="lg:pl-64 xl:pl-72 flex flex-col min-h-screen">
+    <div id="admin-main-wrapper"
+         :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64 xl:pl-72'"
+         class="flex flex-col min-h-screen transition-[padding] duration-250 ease-in-out overflow-x-clip">
         
         <!-- TOP HEADER ADMIN BAR -->
         <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between shadow-2xs">
             
-            <!-- Left Header: Toggle Sidebar (Mobile) & Judul Halaman -->
-            <div class="flex items-center gap-3 sm:gap-4">
-                <button @click="sidebarOpen = true" class="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+            <!-- Left Header: Toggle Sidebar (Mobile & Desktop Hamburger) & Judul Halaman -->
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <!-- Hamburger Mobile (< lg) -->
+                <button @click="sidebarOpen = true"
+                    type="button"
+                    aria-label="Buka menu navigasi"
+                    :aria-expanded="sidebarOpen.toString()"
+                    class="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -412,7 +619,21 @@
                     </svg>
                 </button>
 
-                <div>
+                <!-- Hamburger Desktop (lg+) -->
+                <button @click="toggleDesktopSidebar()"
+                    type="button"
+                    aria-label="Toggle navigasi sidebar"
+                    :aria-expanded="(!sidebarCollapsed).toString()"
+                    :title="sidebarCollapsed ? 'Perluas Sidebar' : 'Ciutkan Sidebar'"
+                    class="hidden lg:inline-flex p-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 hover:text-[#940C10] transition-all cursor-pointer shrink-0">
+                    <svg class="w-5 h-5 transition-transform duration-200" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+
+                <div class="min-w-0">
                     <h1 id="admin-header-title" class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight leading-tight">
                         {{ $title ?? 'Dashboard Administrator' }}
                     </h1>
@@ -562,17 +783,157 @@
         updateAdminLiveClock();
         setInterval(updateAdminLiveClock, 1000);
 
-        // Keep-Alive Heartbeat: Memastikan sesi admin selalu aktif selama tab browser terbuka (mencegah auto-logout saat didiamkan)
-        setInterval(() => {
-            fetch('{{ route("admin.ping") }}', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                cache: 'no-store'
-            }).catch(() => {});
-        }, 60000); // Ping setiap 60 detik
+        // ========================================================
+        // DETEKSI IDLE 5 MENIT + POPUP PERINGATAN & KEEP-ALIVE PING
+        // ========================================================
+        (function () {
+            const IDLE_LIMIT_MS = 5 * 60 * 1000;      // 5 menit total
+            const WARNING_BEFORE_MS = 30 * 1000;      // Popup peringatan 30 detik sebelum logout
+            const WARNING_AT_MS = IDLE_LIMIT_MS - WARNING_BEFORE_MS;
+
+            let lastUserActivityAt = Date.now();
+            let warningShown = false;
+            let countdownTimer = null;
+            let isLoggingOutIdle = false;
+
+            function submitIdleLogout() {
+                if (isLoggingOutIdle) return;
+                isLoggingOutIdle = true;
+                clearInterval(countdownTimer);
+
+                let form = document.getElementById('auto-idle-logout-form');
+                if (!form) {
+                    form = document.createElement('form');
+                    form.id = 'auto-idle-logout-form';
+                    form.method = 'POST';
+                    form.action = '{{ route("admin.logout") }}';
+
+                    const csrf = document.createElement('input');
+                    csrf.type = 'hidden';
+                    csrf.name = '_token';
+                    csrf.value = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                    form.appendChild(csrf);
+
+                    const idleInput = document.createElement('input');
+                    idleInput.type = 'hidden';
+                    idleInput.name = 'idle_expired';
+                    idleInput.value = '1';
+                    form.appendChild(idleInput);
+
+                    document.body.appendChild(form);
+                }
+                if (typeof showPageLoader === 'function') {
+                    showPageLoader('Mengakhiri Sesi...', 'Mengalihkan ke halaman login');
+                }
+                setTimeout(() => {
+                    form.submit();
+                }, 120);
+            }
+
+            function markUserActive() {
+                if (warningShown || isLoggingOutIdle) return;
+                lastUserActivityAt = Date.now();
+            }
+
+            ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach((evt) => {
+                window.addEventListener(evt, markUserActive, { passive: true });
+            });
+
+            function showIdleWarningPopup() {
+                if (warningShown || isLoggingOutIdle) return;
+                warningShown = true;
+
+                let secondsLeft = Math.ceil(WARNING_BEFORE_MS / 1000);
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        html: `
+                            <div style="font-family: 'Plus Jakarta Sans', sans-serif;" class="text-center pt-2">
+                                <svg class="w-11 h-11 text-[#CE9501] mx-auto mb-3.5 animate-spin" style="animation-duration: 4s;" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                                    Tidak Ada Aktivitas Terdeteksi
+                                </h3>
+                                <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                                    Demi keamanan, sesi Anda akan otomatis keluar dalam
+                                    <strong id="idle-countdown-sec" class="text-[#940c10] font-black">${secondsLeft}</strong> detik.
+                                </p>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Saya Masih Aktif',
+                        cancelButtonText: 'Keluar Sekarang',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        reverseButtons: true,
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: 'rounded-3xl border border-slate-100 bg-white shadow-2xl p-6 max-w-md w-full',
+                            htmlContainer: 'p-0 m-0',
+                            actions: 'mt-5 flex items-center justify-center gap-3 w-full',
+                            confirmButton: 'flex-1 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#940C10] hover:bg-[#7A0A0D] cursor-pointer transition-all',
+                            cancelButton: 'flex-1 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 cursor-pointer transition-all'
+                        },
+                        didOpen: () => {
+                            const secEl = document.getElementById('idle-countdown-sec');
+                            countdownTimer = setInterval(() => {
+                                secondsLeft -= 1;
+                                if (secEl) secEl.textContent = Math.max(0, secondsLeft);
+                                if (secondsLeft <= 0) {
+                                    clearInterval(countdownTimer);
+                                    Swal.close();
+                                    submitIdleLogout();
+                                }
+                            }, 1000);
+                        }
+                    }).then((result) => {
+                        clearInterval(countdownTimer);
+                        if (result.isConfirmed) {
+                            warningShown = false;
+                            lastUserActivityAt = Date.now();
+                            fetch('{{ route("admin.ping") }}', {
+                                method: 'GET',
+                                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                                cache: 'no-store'
+                            }).catch(() => {});
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            submitIdleLogout();
+                        }
+                    });
+                } else {
+                    submitIdleLogout();
+                }
+            }
+
+            // Cek status idle setiap 5 detik
+            setInterval(() => {
+                if (isLoggingOutIdle || warningShown) return;
+                const idleElapsed = Date.now() - lastUserActivityAt;
+                if (idleElapsed >= WARNING_AT_MS) {
+                    showIdleWarningPopup();
+                }
+            }, 5000);
+
+            // Keep-alive ping hanya dikirim selama admin benar-benar aktif dalam 2 menit terakhir
+            setInterval(() => {
+                if (Date.now() - lastUserActivityAt < 120000) {
+                    fetch('{{ route("admin.ping") }}', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        cache: 'no-store'
+                    }).then((res) => {
+                        if (res.redirected && res.url.includes('/admin/login')) {
+                            window.location.href = res.url;
+                        }
+                    }).catch(() => {});
+                }
+            }, 60000);
+        })();
 
         window.confirmLogout = function confirmLogout(formId) {
             const form = document.getElementById(formId);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\AdminSessionLimiterService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureAdmin
 {
+    public function __construct(
+        protected AdminSessionLimiterService $sessionLimiter
+    ) {}
     /**
      * Handle an incoming request.
      * Memastikan akses panel administrator hanya dapat diakses oleh akun admin terotentikasi.
@@ -59,6 +63,41 @@ class EnsureAdmin
                 'identifier' => 'Akun administrator Anda sedang dinonaktifkan atau tidak memiliki izin akses.',
             ]);
         }
+
+        // 4. Periksa apakah sesi login telah idle melewati batas waktu (> 5 menit)
+        $lastActive = $request->session()->get('admin_last_active_at');
+        if ($lastActive !== null && (now()->timestamp - (int) $lastActive) > AdminSessionLimiterService::IDLE_TIMEOUT_SECONDS) {
+            $this->sessionLimiter->forget($admin->id, $request->session()->getId());
+            Auth::guard('admin')->logout();
+            $request->session()->forget('admin_last_active_at');
+
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Sesi berakhir otomatis karena tidak ada aktivitas selama 5 menit.',
+                ], 401);
+            }
+
+            return redirect()->route('admin.login')->withErrors([
+                'general' => 'Sesi berakhir otomatis karena tidak ada aktivitas selama 5 menit.',
+            ]);
+        }
+
+        // 5. Perbarui last_activity dan pastikan kuota 5 sesi aktif tidak terlampaui
+        if (! $this->sessionLimiter->touch($admin->id, $request->session()->getId())) {
+            Auth::guard('admin')->logout();
+
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Sesi administrator berakhir karena kuota perangkat aktif sudah penuh.',
+                ], 401);
+            }
+
+            return redirect()->route('admin.login')->withErrors([
+                'general' => 'Sesi berakhir karena batas maksimal ' . AdminSessionLimiterService::MAX_CONCURRENT_SESSIONS . ' pengguna aktif penuh.',
+            ]);
+        }
+
+        $request->session()->put('admin_last_active_at', now()->timestamp);
 
         Auth::shouldUse('admin');
 

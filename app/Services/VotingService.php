@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendVoteReceiptEmailJob;
 use App\Models\Ballot;
 use App\Models\CandidatePair;
 use App\Models\ElectionPeriod;
@@ -10,6 +11,7 @@ use App\Models\VoterParticipation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use RuntimeException;
 
@@ -57,7 +59,7 @@ class VotingService
         }
 
         // 3. Atomically check and execute within DB Transaction with row locking
-        return DB::transaction(function () use ($student, $activePeriod, $candidatePair, $request) {
+        $participation = DB::transaction(function () use ($student, $activePeriod, $candidatePair, $request) {
             $participation = VoterParticipation::firstOrCreate(
                 [
                     'election_period_id' => $activePeriod->id,
@@ -98,5 +100,18 @@ class VotingService
 
             return $lockedParticipation;
         });
+
+        // 6. Dispatch queued vote receipt email AFTER transaction succeeds (non-blocking & fault-tolerant)
+        try {
+            SendVoteReceiptEmailJob::dispatch($participation->id, $request->ip());
+        } catch (\Throwable $e) {
+            Log::error('Gagal menjadwalkan job pengiriman email tanda terima PEMIRA.', [
+                'participation_id' => $participation->id,
+                'student_nim' => $participation->student_nim,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $participation;
     }
 }

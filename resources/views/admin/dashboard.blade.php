@@ -233,7 +233,30 @@
                 </div>
 
                 <div class="space-y-2.5">
-                    <!-- 1. Kelola Paslon -->
+                    <!-- 1. Verifikasi Kehadiran -->
+                    <a href="{{ route('admin.verification.index') }}" target="_blank" rel="noopener noreferrer" data-no-spa="true"
+                        class="p-3 rounded-xl border border-slate-200/80 hover:border-[#940C10]/40 bg-slate-50/70 hover:bg-white hover:shadow-2xs flex items-center justify-between group transition-all select-none">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 text-slate-600 group-hover:text-[#940C10] group-hover:border-[#940C10]/30 flex items-center justify-center shrink-0 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <polyline points="16 11 18 13 22 9"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800 group-hover:text-[#940C10] transition-colors">Verifikasi Kehadiran</p>
+                                <span class="text-[11px] text-slate-500">Buku tamu & registrasi TPS</span>
+                            </div>
+                        </div>
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
+
+                    <!-- 2. Kelola Paslon -->
                     <a href="{{ route('admin.candidates.index') }}"
                         class="p-3 rounded-xl border border-slate-200/80 hover:border-[#940C10]/40 bg-slate-50/70 hover:bg-white hover:shadow-2xs flex items-center justify-between group transition-all select-none">
                         <div class="flex items-center gap-3">

@@ -70,6 +70,7 @@ Route::middleware(['admin', 'prevent-back'])->prefix('admin')->name('admin.')->g
 
     // 4. Manajemen Pemilih: Data Mahasiswa, DPT & Kehadiran
     Route::get('/voters', [VoterController::class, 'index'])->name('voters.index');
+    Route::get('/voters/print', [VoterController::class, 'print'])->name('voters.print');
     Route::get('/voters/template', [VoterController::class, 'downloadTemplate'])->name('voters.template');
     Route::post('/voters/import', [VoterController::class, 'import'])->name('voters.import');
 

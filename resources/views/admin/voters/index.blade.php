@@ -33,22 +33,66 @@
             </div>
         </div>
 
-        <!-- Badges Kanan: Tombol Import & Total DPT -->
+        <!-- Badges Kanan: Baris Tombol Cetak & Import Sejajar + Badge Total DPT Sejajar Penuh di Bawahnya -->
         @if(isset($participations))
-        <div class="w-full md:w-auto md:ml-auto shrink-0 flex flex-col items-end gap-2.5">
-            <!-- Tombol Import Data Mahasiswa (High Contrast, Jelas & Tegas) -->
-            <button type="button" @click="isImportOpen = true"
-                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940C10] hover:bg-[#7A0A0D] active:scale-95 text-white text-xs font-extrabold shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap">
-                <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="12" x2="12" y2="15"></line>
-                </svg>
-                <span class="tracking-wide">Import Data Mahasiswa</span>
-            </button>
+        <div class="w-full md:w-auto md:ml-auto shrink-0 flex flex-col items-stretch gap-2.5">
+            <div class="flex items-center justify-between md:justify-end gap-2.5">
+                <!-- Dropdown Cetak Data Berdasarkan Status -->
+                <div class="relative flex-1 md:flex-initial" x-data="{ openPrintMenu: false }" @click.outside="openPrintMenu = false">
+                    <button type="button" @click="openPrintMenu = !openPrintMenu"
+                        class="w-full md:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 active:scale-95 text-slate-800 border border-slate-300 text-xs font-extrabold shadow-2xs hover:shadow-sm transition-all cursor-pointer whitespace-nowrap">
+                        <svg class="w-4 h-4 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        <span class="tracking-wide">Cetak Data</span>
+                        <svg class="w-3.5 h-3.5 text-slate-500 transition-transform" :class="openPrintMenu ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
 
-            <!-- Total Counter Badge -->
-            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-bold text-slate-700 whitespace-nowrap">
+                    <div x-show="openPrintMenu"
+                         x-cloak
+                         x-transition.opacity.duration.150ms
+                         class="absolute right-0 mt-1.5 w-52 bg-white rounded-xl border border-slate-200 shadow-xl py-1.5 z-40 text-left">
+                        <a href="{{ route('admin.voters.print', request()->except('status', 'page')) }}" target="_blank" @click="openPrintMenu = false"
+                           class="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#940C10]">
+                            <span>Semua Mahasiswa (DPT)</span>
+                        </a>
+                        <a href="{{ route('admin.voters.print', array_merge(request()->except('page'), ['status' => 'present'])) }}" target="_blank" @click="openPrintMenu = false"
+                           class="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#940C10]">
+                            <span>Sudah Hadir (TPS)</span>
+                        </a>
+                        <a href="{{ route('admin.voters.print', array_merge(request()->except('page'), ['status' => 'not_present'])) }}" target="_blank" @click="openPrintMenu = false"
+                           class="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#940C10]">
+                            <span>Belum Hadir</span>
+                        </a>
+                        <a href="{{ route('admin.voters.print', array_merge(request()->except('page'), ['status' => 'voted'])) }}" target="_blank" @click="openPrintMenu = false"
+                           class="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#940C10]">
+                            <span>Sudah Memilih</span>
+                        </a>
+                        <a href="{{ route('admin.voters.print', array_merge(request()->except('page'), ['status' => 'not_voted'])) }}" target="_blank" @click="openPrintMenu = false"
+                           class="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#940C10]">
+                            <span>Belum Memilih</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tombol Import Data (Sejajar di samping tombol Cetak) -->
+                <button type="button" @click="isImportOpen = true"
+                    class="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#940C10] hover:bg-[#7A0A0D] active:scale-95 text-white text-xs font-extrabold shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap">
+                    <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="12" x2="12" y2="15"></line>
+                    </svg>
+                    <span class="tracking-wide">Import Data</span>
+                </button>
+            </div>
+
+            <!-- Total Counter Badge (Lebar Sejajar Penuh dengan Kedua Tombol di Atasnya) -->
+            <span class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-bold text-slate-700 whitespace-nowrap">
                 <svg class="w-4 h-4 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
@@ -108,28 +152,24 @@
                 </a>
             </div>
 
-            <!-- Sortir & Form Pencarian -->
+            <!-- Filter Kelas & Form Pencarian -->
             <form action="{{ route('admin.voters.index') }}" method="GET" class="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full 2xl:w-auto justify-start 2xl:justify-end">
                 @if(request('status'))
                     <input type="hidden" name="status" value="{{ request('status') }}">
                 @endif
 
-                <!-- Pilihan Sortir Dropdown -->
+                <!-- Filter Kelas Dropdown -->
                 <div class="relative shrink-0">
-                    <select name="sort" onchange="this.form.submit()" 
+                    <select name="class_name" onchange="this.form.submit()" 
                         class="appearance-none pl-8 pr-8 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 focus:ring-2 focus:ring-[#940C10] focus:border-[#940C10] transition-all cursor-pointer shadow-2xs">
-                        <option value="latest" {{ request('sort', 'latest') === 'latest' ? 'selected' : '' }}>Urutkan: Aktivitas Terbaru</option>
-                        <option value="nim_asc" {{ request('sort') === 'nim_asc' ? 'selected' : '' }}>Urutkan: NIM (0 - 9)</option>
-                        <option value="nim_desc" {{ request('sort') === 'nim_desc' ? 'selected' : '' }}>Urutkan: NIM (9 - 0)</option>
-                        <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Urutkan: Nama (A - Z)</option>
-                        <option value="voted_desc" {{ request('sort') === 'voted_desc' ? 'selected' : '' }}>Urutkan: Waktu Voting Tercepat</option>
+                        <option value="">Kelas: Semua Kelas</option>
+                        @foreach($classes ?? [] as $cls)
+                            <option value="{{ $cls }}" {{ request('class_name') === $cls ? 'selected' : '' }}>Kelas: {{ $cls }}</option>
+                        @endforeach
                     </select>
-                    <!-- Icon Sort -->
+                    <!-- Icon Filter Kelas -->
                     <svg class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="m3 16 4 4 4-4"></path>
-                        <path d="M7 20V4"></path>
-                        <path d="m21 8-4-4-4 4"></path>
-                        <path d="M17 4v16"></path>
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                     </svg>
                     <!-- Chevron Down -->
                     <svg class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>

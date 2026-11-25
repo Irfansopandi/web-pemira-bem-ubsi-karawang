@@ -120,7 +120,7 @@
 
                 <div x-ref="detailScroll"
                      @scroll="updateScrollState()"
-                     class="bg-white rounded-3xl p-5 sm:p-6 lg:p-7 shadow-2xl shadow-black/70 border border-slate-200/80 space-y-4 lg:h-full lg:overflow-y-auto no-scrollbar">
+                     class="bg-white rounded-3xl p-5 sm:p-6 lg:p-7 lg:pb-16 shadow-2xl shadow-black/70 border border-slate-200/80 space-y-4 lg:h-full lg:overflow-y-auto no-scrollbar">
                 
                 <!-- 1. Header Judul Paslon & Periode -->
                 <div>
@@ -221,11 +221,11 @@
                 <div x-show="canScrollDown"
                      x-cloak
                      x-transition.opacity.duration.200ms
-                     class="hidden lg:flex pointer-events-none absolute inset-x-0 bottom-0 h-16 rounded-b-3xl bg-gradient-to-t from-white via-white/90 to-transparent items-end justify-center pb-3">
+                     class="hidden lg:flex pointer-events-none absolute inset-x-0 bottom-0 h-14 rounded-b-3xl bg-gradient-to-t from-white via-white/95 to-transparent items-end justify-center pb-1.5">
                     <button type="button"
                             @click="scrollDown()"
                             title="Gulir ke bawah"
-                            class="pointer-events-auto w-9 h-9 rounded-full bg-[#940c10] hover:bg-[#7a0a0d] text-white shadow-lg shadow-red-950/30 flex items-center justify-center animate-bounce cursor-pointer transition-colors">
+                            class="pointer-events-auto w-8 h-8 rounded-full bg-[#940c10] hover:bg-[#7a0a0d] text-white shadow-lg shadow-red-950/30 flex items-center justify-center animate-bounce cursor-pointer transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
@@ -236,12 +236,12 @@
                 <div x-show="atBottom"
                      x-cloak
                      x-transition.opacity.duration.200ms
-                     class="hidden lg:flex pointer-events-none absolute inset-x-0 bottom-0 h-12 rounded-b-3xl bg-gradient-to-t from-white/90 to-transparent items-end justify-center pb-2.5">
+                     class="hidden lg:flex pointer-events-none absolute inset-x-0 bottom-0 h-11 rounded-b-3xl bg-gradient-to-t from-white via-white/90 to-transparent items-end justify-center pb-1.5">
                     <button type="button"
                             @click="scrollTop()"
                             title="Kembali ke atas"
-                            class="pointer-events-auto w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shadow-sm flex items-center justify-center cursor-pointer transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            class="pointer-events-auto w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shadow-sm flex items-center justify-center cursor-pointer transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                             <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
                     </button>

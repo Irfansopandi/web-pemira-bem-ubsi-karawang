@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\ElectionPeriod;
+use App\Models\Student;
 use App\Models\VoterParticipation;
 use App\Services\ElectionService;
 use App\Services\StudentImportService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,54 +34,12 @@ class VoterController extends Controller
         $allPeriods = ElectionPeriod::orderByDesc('is_active')->orderByDesc('id')->get();
         $stats = $period ? $this->electionService->getParticipationStats($period) : null;
 
-        $query = VoterParticipation::with('student', 'verifiedBy');
-
-        if ($period) {
-            $query->where('voter_participations.election_period_id', $period->id);
-        }
-
-        // Filter status kehadiran
-        if ($request->status === 'voted') {
-            $query->where('voter_participations.has_voted', true);
-        } elseif ($request->status === 'not_voted') {
-            $query->where('voter_participations.has_voted', false);
-        } elseif ($request->status === 'present') {
-            $query->whereNotNull('voter_participations.verified_at');
-        }
-
-        // Pencarian NIM atau Nama
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->whereHas('student', function ($q) use ($search) {
-                $q->where('nim', 'like', "%{$search}%")
-                  ->orWhere('name', 'like', "%{$search}%");
-            });
-        }
-
-        // Filter program studi
-        if ($request->filled('study_program')) {
-            $prodi = $request->input('study_program');
-            $query->whereHas('student', function ($q) use ($prodi) {
-                $q->where('study_program', $prodi);
-            });
-        }
-
-        // Pilihan Sortir / Pengurutan
-        $sort = $request->input('sort', 'latest');
-        match ($sort) {
-            'nim_asc' => $query->orderBy('voter_participations.student_nim', 'asc'),
-            'nim_desc' => $query->orderBy('voter_participations.student_nim', 'desc'),
-            'name_asc' => $query->join('students', 'voter_participations.student_nim', '=', 'students.nim')
-                                ->orderBy('students.name', 'asc')
-                                ->select('voter_participations.*'),
-            'voted_desc' => $query->orderByRaw('voter_participations.voted_at IS NULL, voter_participations.voted_at DESC'),
-            default => $query->latest('voter_participations.updated_at'),
-        };
+        $query = $this->buildFilteredQuery($request, $period);
 
         $participations = $query->paginate(10)->withQueryString();
 
-        // Respon AJAX / Polling Background untuk Live Auto-Sync
-        if ($request->ajax() || $request->has('live')) {
+        // Respon AJAX / Polling Background untuk Live Auto-Sync (jangan bajak navigasi SPA HTML)
+        if ($request->has('live') || $request->wantsJson()) {
             $votersData = $participations->mapWithKeys(function ($part) {
                 $isPresent = (bool) !empty($part->verified_at);
                 $verifierText = 'Belum Mengisi Buku Tamu';
@@ -134,7 +94,90 @@ class VoterController extends Controller
               ->header('Expires', '0');
         }
 
-        return view('admin.voters.index', compact('period', 'allPeriods', 'stats', 'participations'));
+        $classes = Student::query()
+            ->whereNotNull('class_name')
+            ->where('class_name', '!=', '')
+            ->when($period, function ($q) use ($period) {
+                $q->whereHas('participations', fn ($pq) => $pq->where('election_period_id', $period->id));
+            })
+            ->distinct()
+            ->orderBy('class_name')
+            ->pluck('class_name');
+
+        return view('admin.voters.index', compact('period', 'allPeriods', 'stats', 'participations', 'classes'));
+    }
+
+    /**
+     * Tampilkan halaman cetak Daftar Pemilih Tetap (DPT) & Kehadiran Mahasiswa.
+     */
+    public function print(Request $request): View
+    {
+        if ($request->has('period_id')) {
+            session(['admin_selected_period_id' => $request->period_id]);
+        }
+
+        $period = $this->electionService->getSelectedPeriod();
+        $stats = $period ? $this->electionService->getParticipationStats($period) : null;
+        $participations = $this->buildFilteredQuery($request, $period)->get();
+
+        return view('admin.voters.print', compact('period', 'stats', 'participations'));
+    }
+
+    /**
+     * Bangun query daftar pemilih dengan filter dan pengurutan yang konsisten.
+     */
+    protected function buildFilteredQuery(Request $request, ?ElectionPeriod $period): Builder
+    {
+        $query = VoterParticipation::with('student', 'verifiedBy');
+
+        if ($period) {
+            $query->where('voter_participations.election_period_id', $period->id);
+        }
+
+        if ($request->status === 'voted') {
+            $query->where('voter_participations.has_voted', true);
+        } elseif ($request->status === 'not_voted') {
+            $query->where('voter_participations.has_voted', false);
+        } elseif ($request->status === 'present') {
+            $query->whereNotNull('voter_participations.verified_at');
+        } elseif ($request->status === 'not_present') {
+            $query->whereNull('voter_participations.verified_at');
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('nim', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('study_program')) {
+            $prodi = $request->input('study_program');
+            $query->whereHas('student', function ($q) use ($prodi) {
+                $q->where('study_program', $prodi);
+            });
+        }
+
+        if ($request->filled('class_name')) {
+            $className = $request->input('class_name');
+            $query->whereHas('student', function ($q) use ($className) {
+                $q->where('class_name', $className);
+            });
+        }
+
+        $sort = $request->input('sort', 'latest');
+        match ($sort) {
+            'nim_asc' => $query->orderBy('voter_participations.student_nim', 'asc'),
+            'nim_desc' => $query->orderBy('voter_participations.student_nim', 'desc'),
+            'name_asc' => $query->join('students', 'voter_participations.student_nim', '=', 'students.nim')
+                                ->orderBy('students.name', 'asc')
+                                ->select('voter_participations.*'),
+            'voted_desc' => $query->orderByRaw('voter_participations.voted_at IS NULL, voter_participations.voted_at DESC'),
+            default => $query->latest('voter_participations.updated_at'),
+        };
+
+        return $query;
     }
 
     /**

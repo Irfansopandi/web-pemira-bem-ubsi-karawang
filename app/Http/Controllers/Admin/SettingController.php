@@ -83,12 +83,26 @@ class SettingController extends Controller
             File::copy($imagesDir . '/logo-kabinet.png', $imagesDir . '/default-logo-kabinet.png');
         }
 
-        // 2. Simpan secara permanen ke direktori Laravel Storage (storage/app/public/branding/)
-        $storedPath = $file->storeAs('branding', 'logo-kabinet.png', 'public');
+        // 2. Normalisasi gambar (auto-trim margin transparan & resize proporsional ke 512x512)
+        //    agar ukuran visualnya selalu seragam dengan logo UBSI & BEM UBSI di semua halaman
+        $storageDir = storage_path('app/public/branding');
+        if (! File::isDirectory($storageDir)) {
+            File::makeDirectory($storageDir, 0755, true);
+        }
+
+        $storageLogoPath = $storageDir . '/logo-kabinet.png';
+        $normalized = $this->normalizeLogoImage($file->getRealPath(), strtolower($file->getClientOriginalExtension()), $storageLogoPath);
+
+        if ($normalized) {
+            $storedPath = 'branding/logo-kabinet.png';
+        } else {
+            // Fallback untuk SVG atau jika GD tidak mendukung format sumber
+            $storedPath = $file->storeAs('branding', 'logo-kabinet.png', 'public');
+        }
 
         // 3. Sinkronkan file baru langsung ke public/images/ agar seluruh view ter-update seketika
-        File::copy(storage_path('app/public/branding/logo-kabinet.png'), $imagesDir . '/logo-kabinet.png');
-        File::copy(storage_path('app/public/branding/logo-kabinet.png'), $imagesDir . '/custom-logo-kabinet.png');
+        File::copy(storage_path('app/public/' . $storedPath), $imagesDir . '/logo-kabinet.png');
+        File::copy(storage_path('app/public/' . $storedPath), $imagesDir . '/custom-logo-kabinet.png');
         File::put($imagesDir . '/.is_custom_logo', (string) now());
 
         // 4. Catat riwayat perubahan ke Audit Trail
@@ -146,5 +160,91 @@ class SettingController extends Controller
         ]);
 
         return back()->with('success', 'Logo kabinet kustom berhasil dihapus dari storage dan seluruh sistem kembali menggunakan logo bawaan.');
+    }
+
+    /**
+     * Pangkas margin transparan berlebih dan sesuaikan logo ke kanvas standar 512x512
+     * agar tampil proporsional dan seragam dengan logo resmi lainnya di semua halaman.
+     */
+    private function normalizeLogoImage(string $sourcePath, string $extension, string $destinationPath): bool
+    {
+        if (! function_exists('imagecreatetruecolor') || $extension === 'svg') {
+            return false;
+        }
+
+        $src = match ($extension) {
+            'png' => @imagecreatefrompng($sourcePath),
+            'jpg', 'jpeg' => @imagecreatefromjpeg($sourcePath),
+            'webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($sourcePath) : false,
+            default => false,
+        };
+
+        if (! $src) {
+            return false;
+        }
+
+        $w = imagesx($src);
+        $h = imagesy($src);
+
+        if ($w <= 0 || $h <= 0) {
+            imagedestroy($src);
+            return false;
+        }
+
+        // Cari bounding box piksel tidak transparan (auto-trim margin kosong)
+        $minX = $w;
+        $minY = $h;
+        $maxX = -1;
+        $maxY = -1;
+
+        for ($y = 0; $y < $h; $y++) {
+            for ($x = 0; $x < $w; $x++) {
+                $rgba = imagecolorat($src, $x, $y);
+                $alpha = ($rgba >> 24) & 0x7F;
+                if ($alpha < 122) {
+                    if ($x < $minX) $minX = $x;
+                    if ($y < $minY) $minY = $y;
+                    if ($x > $maxX) $maxX = $x;
+                    if ($y > $maxY) $maxY = $y;
+                }
+            }
+        }
+
+        if ($maxX < $minX || $maxY < $minY) {
+            $minX = 0;
+            $minY = 0;
+            $maxX = $w - 1;
+            $maxY = $h - 1;
+        }
+
+        $cropW = $maxX - $minX + 1;
+        $cropH = $maxY - $minY + 1;
+
+        // Kanvas standar 512x512 dengan ~95% fill (486px area isi, sama seperti logo-ubsi & logo-bem-ubsi)
+        $canvasSize = 512;
+        $innerMax = 486;
+        $scale = min($innerMax / $cropW, $innerMax / $cropH);
+        $targetW = max(1, (int) round($cropW * $scale));
+        $targetH = max(1, (int) round($cropH * $scale));
+        $offsetX = (int) floor(($canvasSize - $targetW) / 2);
+        $offsetY = (int) floor(($canvasSize - $targetH) / 2);
+
+        $dst = imagecreatetruecolor($canvasSize, $canvasSize);
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+        $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+        imagefilledrectangle($dst, 0, 0, $canvasSize, $canvasSize, $transparent);
+
+        imagealphablending($dst, true);
+        imagecopyresampled($dst, $src, $offsetX, $offsetY, $minX, $minY, $targetW, $targetH, $cropW, $cropH);
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+
+        $saved = imagepng($dst, $destinationPath, 6);
+
+        imagedestroy($src);
+        imagedestroy($dst);
+
+        return (bool) $saved;
     }
 }

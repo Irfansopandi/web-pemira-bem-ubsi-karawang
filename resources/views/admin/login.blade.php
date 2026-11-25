@@ -209,18 +209,34 @@
                         @php
                             $errorMessage = $errors->first('general') ?: ($errors->first('identifier') ?: $errors->first('password'));
                             $isLoginRequired = str_contains($errorMessage, 'Silakan masuk terlebih dahulu') || str_contains($errorMessage, 'Akses ditolak');
+                            $isSessionEnded = str_contains($errorMessage, 'Sesi berakhir');
+                            $isLimitReached = str_contains($errorMessage, 'Batas maksimal');
+                            $isWarningStyle = $isLoginRequired || $isSessionEnded;
+
+                            $alertTitle = match (true) {
+                                $isSessionEnded => 'Sesi Administrator Berakhir',
+                                $isLoginRequired => 'Akses Terbatas — Memerlukan Login',
+                                $isLimitReached => 'Batas Pengguna Aktif Tercapai',
+                                default => null,
+                            };
                         @endphp
-                        <div class="p-3 rounded-xl {{ $isLoginRequired ? 'bg-amber-50/90 border border-amber-200 text-amber-800' : 'bg-red-50/90 border border-red-200 text-red-700' }} flex items-start gap-2.5 shadow-sm">
-                            <svg class="w-4 h-4 {{ $isLoginRequired ? 'text-amber-600' : 'text-red-600' }} shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <div class="p-3 rounded-xl {{ $isWarningStyle ? 'bg-amber-50/90 border border-amber-200 text-amber-800' : 'bg-red-50/90 border border-red-200 text-red-700' }} flex {{ $alertTitle ? 'items-start' : 'items-center' }} gap-2.5 shadow-sm">
+                            <svg class="w-4 h-4 {{ $isWarningStyle ? 'text-amber-600' : 'text-red-600' }} shrink-0 {{ $alertTitle ? 'mt-0.5' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
                             <div class="text-xs">
-                                <span class="font-bold block {{ $isLoginRequired ? 'text-amber-900' : 'text-red-800' }}">
-                                    {{ $isLoginRequired ? 'Akses Terbatas — Memerlukan Login' : 'Autentikasi Administrator Gagal' }}
-                                </span>
-                                <span class="text-[11px] {{ $isLoginRequired ? 'text-amber-700' : 'text-red-600' }} font-normal leading-relaxed">
-                                    {{ $errorMessage }}
-                                </span>
+                                @if ($alertTitle)
+                                    <span class="font-bold block {{ $isWarningStyle ? 'text-amber-900' : 'text-red-800' }}">
+                                        {{ $alertTitle }}
+                                    </span>
+                                    <span class="text-[11px] {{ $isWarningStyle ? 'text-amber-700' : 'text-red-600' }} font-normal leading-relaxed">
+                                        {{ $errorMessage }}
+                                    </span>
+                                @else
+                                    <span class="font-semibold text-red-700 leading-relaxed">
+                                        {{ $errorMessage }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -242,7 +258,7 @@
                                 name="identifier" 
                                 id="identifier" 
                                 value="{{ old('identifier') }}"
-                                placeholder="Contoh: admin / admin.pemira@bsi.ac.id" 
+                                placeholder="Contoh: email@bsi.ac.id" 
                                 autofocus
                                 class="w-full px-3.5 py-2.5 sm:py-3 bg-[#F4F5F8] border {{ $errors->has('identifier') ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-200 focus:ring-[#7A0A0D] focus:border-transparent' }} rounded-xl text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 transition-all shadow-sm"
                             >
