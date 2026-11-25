@@ -83,6 +83,13 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: rgba(206, 149, 1, 0.8);
         }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 
     @stack('styles')
@@ -280,7 +287,7 @@
     @endif
 
     <!-- Main Content Area -->
-    <main class="flex-1 min-h-0 flex flex-col {{ ($darkTheme ?? false) && !($allowScroll ?? false) ? 'overflow-y-auto custom-scrollbar justify-center' : '' }}">
+    <main class="flex-1 min-h-0 flex flex-col {{ ($darkTheme ?? false) && !($allowScroll ?? false) ? 'lg:overflow-hidden justify-center' : '' }}">
         @yield('content')
     </main>
 

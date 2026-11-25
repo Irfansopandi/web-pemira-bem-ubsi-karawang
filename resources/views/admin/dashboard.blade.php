@@ -71,119 +71,75 @@
 
     @if($period)
         <!-- ======================================================== -->
-        <!-- 2. KARTU STATISTIK UTAMA (4 KPI METRICS - HORIZONTAL CARD) -->
+        <!-- 2. KARTU STATISTIK UTAMA (4 KPI METRICS)                 -->
         <!-- ======================================================== -->
         @if($stats)
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 xl:gap-5">
-            <!-- 1. Total DPT (MERAH) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- 1. Total DPT -->
             <a href="{{ route('admin.voters.index') }}"
-                class="bg-[#fff8f8] p-4 sm:p-4.5 rounded-2xl border-2 border-[#940C10]/30 hover:border-[#940C10]/75 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/30 transition-all duration-150 shadow-2xs group flex items-center justify-between gap-3 select-none">
-                <div class="flex items-center gap-3.5 min-w-0">
-                    <!-- Icon Box -->
-                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                        </svg>
-                    </div>
-                    <!-- Info Stack -->
-                    <div class="min-w-0">
-                        <p class="text-xs font-medium text-slate-500 truncate">Total DPT</p>
-                        <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="formatNumber(stats.total_students)">
-                            {{ number_format($stats['total_students']) }}
-                        </p>
-                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Mahasiswa Terdaftar</p>
-                    </div>
-                </div>
-                <!-- Chevron Right -->
-                <div class="text-[#940C10] group-hover:translate-x-1 transition-transform shrink-0">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <polyline points="9 18 15 12 9 6"></polyline>
+                class="bg-white px-5 py-4 rounded-2xl border border-slate-200/80 hover:border-[#940C10]/40 hover:shadow-sm transition-all duration-150 shadow-xs group flex items-center gap-4 select-none">
+                <div class="w-12 h-12 rounded-full bg-[#940C10]/10 text-[#940C10] flex items-center justify-center shrink-0 group-hover:bg-[#940C10] group-hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                     </svg>
+                </div>
+                <div class="h-10 w-px bg-slate-200/80 shrink-0"></div>
+                <div class="min-w-0">
+                    <p class="text-xs font-medium text-slate-500 whitespace-nowrap">Total DPT</p>
+                    <p class="text-2xl font-extrabold text-slate-900 leading-tight mt-0.5" x-text="formatNumber(stats.total_students)">
+                        {{ number_format($stats['total_students']) }}
+                    </p>
                 </div>
             </a>
 
-            <!-- 2. Suara Masuk (KUNING) -->
+            <!-- 2. Suara Masuk -->
             <a href="{{ route('admin.voters.index', ['status' => 'voted']) }}"
-                class="bg-[#fffdf5] p-4 sm:p-4.5 rounded-2xl border-2 border-[#CE9501]/35 hover:border-[#CE9501]/85 active:border-[#CE9501] active:ring-2 active:ring-[#CE9501]/30 transition-all duration-150 shadow-2xs group flex items-center justify-between gap-3 select-none">
-                <div class="flex items-center gap-3.5 min-w-0">
-                    <!-- Icon Box -->
-                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#fef7e2] text-[#CE9501] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="m9 12 2 2 4-4"></path>
-                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                        </svg>
-                    </div>
-                    <!-- Info Stack -->
-                    <div class="min-w-0">
-                        <p class="text-xs font-medium text-slate-500 truncate">Suara Masuk</p>
-                        <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="formatNumber(stats.total_voted)">
-                            {{ number_format($stats['total_voted']) }}
-                        </p>
-                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Surat Suara Sah</p>
-                    </div>
-                </div>
-                <!-- Chevron Right -->
-                <div class="text-[#CE9501] group-hover:translate-x-1 transition-transform shrink-0">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <polyline points="9 18 15 12 9 6"></polyline>
+                class="bg-white px-5 py-4 rounded-2xl border border-slate-200/80 hover:border-[#CE9501]/55 hover:shadow-sm transition-all duration-150 shadow-xs group flex items-center gap-4 select-none">
+                <div class="w-12 h-12 rounded-full bg-[#CE9501]/12 text-[#B58200] flex items-center justify-center shrink-0 group-hover:bg-[#CE9501] group-hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
+                </div>
+                <div class="h-10 w-px bg-slate-200/80 shrink-0"></div>
+                <div class="min-w-0">
+                    <p class="text-xs font-medium text-slate-500 whitespace-nowrap">Suara Masuk</p>
+                    <p class="text-2xl font-extrabold text-slate-900 leading-tight mt-0.5" x-text="formatNumber(stats.total_voted)">
+                        {{ number_format($stats['total_voted']) }}
+                    </p>
                 </div>
             </a>
 
-            <!-- 3. Sudah Hadir di TPS (MERAH) -->
+            <!-- 3. Sudah Hadir di TPS -->
             <a href="{{ route('admin.voters.index', ['status' => 'present']) }}"
-                class="bg-[#fff8f8] p-4 sm:p-4.5 rounded-2xl border-2 border-[#940C10]/30 hover:border-[#940C10]/75 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/30 transition-all duration-150 shadow-2xs group flex items-center justify-between gap-3 select-none">
-                <div class="flex items-center gap-3.5 min-w-0">
-                    <!-- Icon Box -->
-                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <polyline points="16 11 18 13 22 9"></polyline>
-                        </svg>
-                    </div>
-                    <!-- Info Stack -->
-                    <div class="min-w-0">
-                        <p class="text-xs font-medium text-slate-500 truncate">Sudah Hadir</p>
-                        <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="formatNumber(stats.total_present)">
-                            {{ number_format($stats['total_present'] ?? 0) }}
-                        </p>
-                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Terverifikasi TPS</p>
-                    </div>
-                </div>
-                <!-- Chevron Right -->
-                <div class="text-[#940C10] group-hover:translate-x-1 transition-transform shrink-0">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <polyline points="9 18 15 12 9 6"></polyline>
+                class="bg-white px-5 py-4 rounded-2xl border border-slate-200/80 hover:border-[#940C10]/40 hover:shadow-sm transition-all duration-150 shadow-xs group flex items-center gap-4 select-none">
+                <div class="w-12 h-12 rounded-full bg-[#940C10]/10 text-[#940C10] flex items-center justify-center shrink-0 group-hover:bg-[#940C10] group-hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
+                </div>
+                <div class="h-10 w-px bg-slate-200/80 shrink-0"></div>
+                <div class="min-w-0">
+                    <p class="text-xs font-medium text-slate-500 whitespace-nowrap">Sudah Hadir</p>
+                    <p class="text-2xl font-extrabold text-slate-900 leading-tight mt-0.5" x-text="formatNumber(stats.total_present)">
+                        {{ number_format($stats['total_present'] ?? 0) }}
+                    </p>
                 </div>
             </a>
 
-            <!-- 4. Partisipasi (KUNING) -->
+            <!-- 4. Tingkat Partisipasi -->
             <a href="{{ route('admin.elections.monitoring') }}"
-                class="bg-[#fffdf5] p-4 sm:p-4.5 rounded-2xl border-2 border-[#CE9501]/35 hover:border-[#CE9501]/85 active:border-[#CE9501] active:ring-2 active:ring-[#CE9501]/30 transition-all duration-150 shadow-2xs group flex items-center justify-between gap-3 select-none">
-                <div class="flex items-center gap-3.5 min-w-0">
-                    <!-- Icon Box -->
-                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#fef7e2] text-[#CE9501] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                        </svg>
-                    </div>
-                    <!-- Info Stack -->
-                    <div class="min-w-0">
-                        <p class="text-xs font-medium text-slate-500 truncate">Tingkat Partisipasi</p>
-                        <p class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight mt-0.5" x-text="stats.turnout_percentage + '%'">
-                            {{ $stats['turnout_percentage'] }}%
-                        </p>
-                        <p class="text-[11px] text-slate-400 font-normal truncate mt-0.5">Kehadiran TPS</p>
-                    </div>
-                </div>
-                <!-- Chevron Right -->
-                <div class="text-[#CE9501] group-hover:translate-x-1 transition-transform shrink-0">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <polyline points="9 18 15 12 9 6"></polyline>
+                class="bg-white px-5 py-4 rounded-2xl border border-slate-200/80 hover:border-[#CE9501]/55 hover:shadow-sm transition-all duration-150 shadow-xs group flex items-center gap-4 select-none">
+                <div class="w-12 h-12 rounded-full bg-[#CE9501]/12 text-[#B58200] flex items-center justify-center shrink-0 group-hover:bg-[#CE9501] group-hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/>
                     </svg>
+                </div>
+                <div class="h-10 w-px bg-slate-200/80 shrink-0"></div>
+                <div class="min-w-0">
+                    <p class="text-xs font-medium text-slate-500 whitespace-nowrap">Tingkat Partisipasi</p>
+                    <p class="text-2xl font-extrabold text-slate-900 leading-tight mt-0.5" x-text="stats.turnout_percentage + '%'">
+                        {{ $stats['turnout_percentage'] }}%
+                    </p>
                 </div>
             </a>
         </div>
@@ -279,9 +235,9 @@
                 <div class="space-y-2.5">
                     <!-- 1. Kelola Paslon -->
                     <a href="{{ route('admin.candidates.index') }}"
-                        class="p-2.5 sm:p-3 rounded-xl border-2 border-[#940C10]/25 hover:border-[#940C10]/70 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/20 bg-[#fff8f8]/60 hover:bg-[#fff8f8] flex items-center justify-between group transition-all select-none">
+                        class="p-3 rounded-xl border border-slate-200/80 hover:border-[#940C10]/40 bg-slate-50/70 hover:bg-white hover:shadow-2xs flex items-center justify-between group transition-all select-none">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 text-slate-600 group-hover:text-[#940C10] group-hover:border-[#940C10]/30 flex items-center justify-center shrink-0 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
@@ -291,19 +247,19 @@
                             </div>
                             <div>
                                 <p class="text-xs font-bold text-slate-800 group-hover:text-[#940C10] transition-colors">Kelola Paslon</p>
-                                <span class="text-[10px] text-slate-400">Visi, misi, dan nomor urut</span>
+                                <span class="text-[11px] text-slate-500">Visi, misi, dan nomor urut</span>
                             </div>
                         </div>
-                        <svg class="w-3.5 h-3.5 text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </a>
 
                     <!-- 2. Kelola DPT & Kehadiran -->
                     <a href="{{ route('admin.voters.index') }}"
-                        class="p-2.5 sm:p-3 rounded-xl border-2 border-[#940C10]/25 hover:border-[#940C10]/70 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/20 bg-[#fff8f8]/60 hover:bg-[#fff8f8] flex items-center justify-between group transition-all select-none">
+                        class="p-3 rounded-xl border border-slate-200/80 hover:border-[#940C10]/40 bg-slate-50/70 hover:bg-white hover:shadow-2xs flex items-center justify-between group transition-all select-none">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 text-slate-600 group-hover:text-[#940C10] group-hover:border-[#940C10]/30 flex items-center justify-center shrink-0 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
@@ -312,48 +268,48 @@
                             </div>
                             <div>
                                 <p class="text-xs font-bold text-slate-800 group-hover:text-[#940C10] transition-colors">Kelola DPT & Kehadiran</p>
-                                <span class="text-[10px] text-slate-400">Filter pemilih & status suara</span>
+                                <span class="text-[11px] text-slate-500">Filter pemilih & status suara</span>
                             </div>
                         </div>
-                        <svg class="w-3.5 h-3.5 text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </a>
 
                     <!-- 3. Monitoring TPS -->
                     <a href="{{ route('admin.elections.monitoring') }}"
-                        class="p-2.5 sm:p-3 rounded-xl border-2 border-[#940C10]/25 hover:border-[#940C10]/70 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/20 bg-[#fff8f8]/60 hover:bg-[#fff8f8] flex items-center justify-between group transition-all select-none">
+                        class="p-3 rounded-xl border border-slate-200/80 hover:border-[#940C10]/40 bg-slate-50/70 hover:bg-white hover:shadow-2xs flex items-center justify-between group transition-all select-none">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 text-slate-600 group-hover:text-[#940C10] group-hover:border-[#940C10]/30 flex items-center justify-center shrink-0 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                                 </svg>
                             </div>
                             <div>
                                 <p class="text-xs font-bold text-slate-800 group-hover:text-[#940C10] transition-colors">Monitoring TPS</p>
-                                <span class="text-[10px] text-slate-400">Arus kehadiran pemilih live</span>
+                                <span class="text-[11px] text-slate-500">Arus kehadiran pemilih live</span>
                             </div>
                         </div>
-                        <svg class="w-3.5 h-3.5 text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </a>
 
                     <!-- 4. Audit Trail & Log -->
                     <a href="{{ route('admin.audit.index') }}"
-                        class="p-2.5 sm:p-3 rounded-xl border-2 border-[#940C10]/25 hover:border-[#940C10]/70 active:border-[#940C10] active:ring-2 active:ring-[#940C10]/20 bg-[#fff8f8]/60 hover:bg-[#fff8f8] flex items-center justify-between group transition-all select-none">
+                        class="p-3 rounded-xl border border-slate-200/80 hover:border-[#940C10]/40 bg-slate-50/70 hover:bg-white hover:shadow-2xs flex items-center justify-between group transition-all select-none">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-[#fcedee] text-[#940C10] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 text-slate-600 group-hover:text-[#940C10] group-hover:border-[#940C10]/30 flex items-center justify-center shrink-0 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                 </svg>
                             </div>
                             <div>
                                 <p class="text-xs font-bold text-slate-800 group-hover:text-[#940C10] transition-colors">Audit Trail & Log</p>
-                                <span class="text-[10px] text-slate-400">Jejak aktivitas keamanan</span>
+                                <span class="text-[11px] text-slate-500">Jejak aktivitas keamanan</span>
                             </div>
                         </div>
-                        <svg class="w-3.5 h-3.5 text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#940C10] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </a>

@@ -479,14 +479,22 @@
                 @endif
                 
                 <!-- Live Clock (WIB) -->
-                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100/80 border border-slate-200/70 text-slate-700 text-xs">
-                    <svg class="w-3.5 h-3.5 text-[#940C10]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
+                <div class="hidden md:inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 shadow-2xs">
+                    <svg class="w-4 h-4 text-[#940c10] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2.5" ry="2.5"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <circle cx="8" cy="14" r="0.75" fill="currentColor"></circle>
+                        <circle cx="12" cy="14" r="0.75" fill="currentColor"></circle>
+                        <circle cx="16" cy="14" r="0.75" fill="currentColor"></circle>
+                        <circle cx="8" cy="17.5" r="0.75" fill="currentColor"></circle>
+                        <circle cx="12" cy="17.5" r="0.75" fill="currentColor"></circle>
+                        <circle cx="16" cy="17.5" r="0.75" fill="currentColor"></circle>
                     </svg>
-                    <span id="admin-live-date" class="font-medium text-[11px]">{{ \Carbon\Carbon::now('Asia/Jakarta')->locale('id')->isoFormat('dddd, D MMM Y') }}</span>
-                    <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                    <span id="admin-live-time" class="font-mono font-bold text-slate-900">{{ \Carbon\Carbon::now('Asia/Jakarta')->format('H:i:s') }} WIB</span>
+                    <span id="admin-live-date" class="text-xs font-medium text-slate-900 whitespace-nowrap">{{ \Carbon\Carbon::now('Asia/Jakarta')->locale('id')->isoFormat('dddd, D MMM Y') }}</span>
+                    <span class="text-slate-300 font-light text-xs select-none">|</span>
+                    <span id="admin-live-time" class="text-xs font-extrabold text-[#940c10] tabular-nums whitespace-nowrap">{{ \Carbon\Carbon::now('Asia/Jakarta')->format('H : i : s') }} WIB</span>
                 </div>
 
                 <!-- Tombol Logout Quick Button -->
@@ -548,7 +556,7 @@
                 const h = String(now.getHours()).padStart(2, '0');
                 const m = String(now.getMinutes()).padStart(2, '0');
                 const s = String(now.getSeconds()).padStart(2, '0');
-                timeEl.textContent = `${h}:${m}:${s} WIB`;
+                timeEl.textContent = `${h} : ${m} : ${s} WIB`;
             }
         }
         updateAdminLiveClock();

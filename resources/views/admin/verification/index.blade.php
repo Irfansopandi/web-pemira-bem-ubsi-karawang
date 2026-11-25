@@ -49,7 +49,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-[#FDFDFD] text-slate-800 antialiased selection:bg-[#940c10] selection:text-white flex flex-col justify-between relative overflow-x-hidden"
+<body class="min-h-screen lg:h-screen lg:overflow-hidden bg-[#FDFDFD] text-slate-800 antialiased selection:bg-[#940c10] selection:text-white flex flex-col justify-between relative overflow-x-hidden"
       x-data="bukuTamuApp({
           lookupUrl: '{{ route('guestbook.lookup') }}',
           storeUrl: '{{ route('guestbook.store') }}',
@@ -104,7 +104,7 @@
     <!-- ======================================================== -->
     <!-- TOP NAVIGATION BAR (PERSISTENT ACROSS ALL SCREENS)       -->
     <!-- ======================================================== -->
-    <header class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40 shadow-2xs">
+    <header class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-2.5 lg:py-3 sticky top-0 z-40 shadow-2xs shrink-0">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
             
             <!-- Left: Back Button & Institutional Branding -->
@@ -165,17 +165,7 @@
                     <span class="text-sm sm:text-[15px] font-extrabold text-[#940c10] tracking-normal whitespace-nowrap" x-text="timeString">18 : 48 : 41 WIB</span>
                 </div>
 
-                <!-- Header Action: Dashboard Admin atau Akses Cepat Bilik Suara -->
-                @if(Auth::guard('admin')->check())
-                    <a href="{{ route('admin.dashboard') }}" 
-                       class="w-10 h-10 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-400 hover:text-[#940c10] flex items-center justify-center transition-all shadow-2xs shrink-0"
-                       title="Kembali ke Dashboard Administrator">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                    </a>
-                @else
+                @if(!Auth::guard('admin')->check())
                     <a href="{{ route('login') }}" 
                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:border-[#940c10] hover:bg-red-50 text-slate-700 hover:text-[#940c10] text-xs font-bold transition-all shadow-2xs"
                        title="Buka Halaman Bilik Suara">
@@ -193,7 +183,7 @@
     <!-- ======================================================== -->
     <!-- MAIN CONTAINER                                           -->
     <!-- ======================================================== -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+    <main class="flex-1 min-h-0 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 lg:py-4 flex flex-col justify-center">
 
         <!-- ==================================================== -->
         <!-- SCREEN 0: WELCOME SCREEN (BERANDA - PERSIS DESAIN)  -->
@@ -202,12 +192,12 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 scale-98"
              x-transition:enter-end="opacity-100 scale-100"
-             class="w-full my-auto py-2 sm:py-6">
+             class="w-full my-auto">
             
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
                 
                 <!-- Left Column: Hero Text, CTA Button & Logos -->
-                <div class="lg:col-span-7 space-y-6 sm:space-y-7">
+                <div class="lg:col-span-7 space-y-4 sm:space-y-5">
                     
                     <!-- Top Pill Tag -->
                     <div>
@@ -266,10 +256,10 @@
 
                 <!-- Right Column: Official PEMIRA Banner Card -->
                 <div class="lg:col-span-5 flex justify-center lg:justify-end">
-                    <div class="relative w-full max-w-lg lg:max-w-none rounded-[28px] overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200/60 group">
+                    <div class="relative w-full max-w-md lg:max-w-[440px] rounded-[28px] overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200/60 group">
                         <img src="{{ asset('images/buku-tamu-banner-2x.png') }}" 
                              alt="PEMIRA BEM UBSI Kampus Kabupaten Karawang" 
-                             class="w-full h-auto object-contain block select-none group-hover:scale-[1.01] transition-transform duration-500">
+                             class="w-full max-h-[58vh] object-cover block select-none group-hover:scale-[1.01] transition-transform duration-500">
                     </div>
                 </div>
 
@@ -284,28 +274,28 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6 sm:space-y-8 my-auto">
+             class="space-y-3 my-auto">
 
             <!-- ================================================ -->
             <!-- STEPPER HEADER (PROGRESS INDIKATOR)              -->
             <!-- ================================================ -->
-            <div class="max-w-2xl mx-auto px-4">
+            <div class="max-w-xl mx-auto px-4">
                 <div class="relative flex items-center justify-between">
-                    <!-- Connecting Background Line -->
-                    <div class="absolute top-5 left-10 right-10 h-0.5 bg-slate-200 -z-0"></div>
-                    <!-- Connecting Progress Line -->
-                    <div class="absolute top-5 left-10 h-0.5 bg-[#940c10] -z-0 transition-all duration-300"
-                         :style="'width: ' + ((currentStep - 1) * 50) + '%'"></div>
+                    <!-- Connecting Track & Progress Line -->
+                    <div class="absolute top-4 left-10 right-10 h-0.5 bg-slate-200 -z-0 overflow-hidden">
+                        <div class="h-full bg-[#940c10] transition-all duration-300"
+                             :style="'width: ' + ((currentStep - 1) * 50) + '%'"></div>
+                    </div>
 
                     <!-- Step 1: Asal Kampus -->
                     <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-2xs"
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-2xs"
                              :class="{
                                  'bg-[#940c10] text-white shadow-md shadow-red-950/20': currentStep === 1 || currentStep > 1,
                                  'bg-white border-2 border-slate-300 text-slate-400': currentStep < 1
                              }">
                             <template x-if="currentStep > 1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </template>
@@ -313,7 +303,7 @@
                                 <span>1</span>
                             </template>
                         </div>
-                        <span class="mt-2 text-xs font-bold text-center"
+                        <span class="mt-1 text-[11px] font-bold text-center"
                               :class="currentStep >= 1 ? 'text-[#940c10]' : 'text-slate-400'">
                             Asal Kampus
                         </span>
@@ -321,13 +311,13 @@
 
                     <!-- Step 2: Data Diri -->
                     <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-2xs"
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-2xs"
                              :class="{
                                  'bg-[#940c10] text-white shadow-md shadow-red-950/20': currentStep >= 2,
                                  'bg-white border-2 border-slate-300 text-slate-400': currentStep < 2
                              }">
                             <template x-if="currentStep > 2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </template>
@@ -335,7 +325,7 @@
                                 <span>2</span>
                             </template>
                         </div>
-                        <span class="mt-2 text-xs font-bold text-center"
+                        <span class="mt-1 text-[11px] font-bold text-center"
                               :class="currentStep >= 2 ? 'text-[#940c10]' : 'text-slate-400'">
                             Data Diri
                         </span>
@@ -343,14 +333,14 @@
 
                     <!-- Step 3: Konfirmasi -->
                     <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-2xs"
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-2xs"
                              :class="{
                                  'bg-[#940c10] text-white shadow-md shadow-red-950/20': currentStep === 3,
                                  'bg-white border-2 border-slate-300 text-slate-400': currentStep < 3
                              }">
                             <span>3</span>
                         </div>
-                        <span class="mt-2 text-xs font-bold text-center"
+                        <span class="mt-1 text-[11px] font-bold text-center"
                               :class="currentStep === 3 ? 'text-[#940c10]' : 'text-slate-400'">
                             Konfirmasi
                         </span>
@@ -365,9 +355,9 @@
                  x-transition:enter="transition ease-out duration-300"
                  class="max-w-3xl mx-auto w-full">
                 
-                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-10 space-y-8">
+                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-7 space-y-5">
                     <div class="text-center space-y-1">
-                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                             Pilih Asal Kampus
                         </h2>
                         <p class="text-xs sm:text-sm text-slate-500 font-normal">
@@ -376,30 +366,30 @@
                     </div>
 
                     <!-- Grid 2 Pilihan: Karawang dan Cikampek -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                         
                         <!-- Pilihan 1: UBSI Karawang -->
                         <div @click="selectCampus('UBSI Karawang')"
-                             class="rounded-2xl border-2 p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none group relative"
+                             class="rounded-2xl border-2 p-5 sm:p-6 text-center cursor-pointer transition-all duration-200 select-none group relative"
                              :class="selectedCampus === 'UBSI Karawang' 
                                  ? 'border-[#940c10] bg-red-50/40 ring-4 ring-red-500/10 shadow-md' 
                                  : 'border-slate-200/90 hover:border-red-300 hover:bg-slate-50/60'">
                             
                             <!-- Checkmark Badge on Selected -->
                             <div x-show="selectedCampus === 'UBSI Karawang'" 
-                                 class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#940c10] text-white flex items-center justify-center">
+                                 class="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-[#940c10] text-white flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
 
                             <!-- Avatar Circle Icon -->
-                            <div class="w-16 h-16 rounded-full bg-red-100 text-[#940c10] flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 rounded-full bg-red-100 text-[#940c10] flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
                             </div>
 
-                            <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                            <h3 class="text-base font-black text-slate-900 tracking-tight">
                                 UBSI Karawang
                             </h3>
                             <p class="text-xs text-slate-500 font-normal mt-1">
@@ -409,26 +399,26 @@
 
                         <!-- Pilihan 2: UBSI Cikampek -->
                         <div @click="selectCampus('UBSI Cikampek')"
-                             class="rounded-2xl border-2 p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none group relative"
+                             class="rounded-2xl border-2 p-5 sm:p-6 text-center cursor-pointer transition-all duration-200 select-none group relative"
                              :class="selectedCampus === 'UBSI Cikampek' 
                                  ? 'border-[#940c10] bg-red-50/40 ring-4 ring-red-500/10 shadow-md' 
                                  : 'border-slate-200/90 hover:border-red-300 hover:bg-slate-50/60'">
                             
                             <!-- Checkmark Badge on Selected -->
                             <div x-show="selectedCampus === 'UBSI Cikampek'" 
-                                 class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#940c10] text-white flex items-center justify-center">
+                                 class="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-[#940c10] text-white flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
 
                             <!-- Avatar Circle Icon (Accent Gold) -->
-                            <div class="w-16 h-16 rounded-full bg-amber-100 text-[#CE9501] flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 text-[#CE9501] flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
                             </div>
 
-                            <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                            <h3 class="text-base font-black text-slate-900 tracking-tight">
                                 UBSI Cikampek
                             </h3>
                             <p class="text-xs text-slate-500 font-normal mt-1">
@@ -439,17 +429,17 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-100">
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
                         <button type="button" 
                                 @click="goToStep(0)"
-                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
+                                class="px-6 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
                             Batal
                         </button>
                         
                         <button type="button" 
                                 @click="goToStep(2)"
                                 :disabled="!selectedCampus"
-                                class="px-6 sm:px-8 py-3 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
+                                class="px-6 py-2.5 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <span>Selanjutnya</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
@@ -465,52 +455,21 @@
                  x-transition:enter="transition ease-out duration-300"
                  class="max-w-3xl mx-auto w-full">
                 
-                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-10 space-y-6">
+                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-3.5">
                     <div>
-                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                             Data Diri
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-500 font-normal mt-1">
+                        <p class="text-xs text-slate-500 font-normal mt-0.5">
                             Mohon lengkapi data di bawah ini dengan benar.
                         </p>
                     </div>
 
-                    <!-- Status Notification Bar -->
-                    <template x-if="statusMessage">
-                        <div class="p-4 rounded-xl border text-xs sm:text-sm flex items-start gap-3 transition-all"
-                             :class="{
-                                 'bg-emerald-50 border-emerald-200 text-emerald-900': status === 'ready',
-                                 'bg-blue-50 border-blue-200 text-blue-900': status === 'already_verified',
-                                 'bg-amber-50 border-amber-200 text-amber-900': status === 'already_voted',
-                                 'bg-red-50 border-red-200 text-red-900': status === 'not_found' || status === 'error'
-                             }">
-                            <div class="mt-0.5 shrink-0">
-                                <template x-if="status === 'ready'">
-                                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 11 14 15 10"></polyline></svg>
-                                </template>
-                                <template x-if="status === 'already_verified'">
-                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                </template>
-                                <template x-if="status === 'already_voted'">
-                                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                                </template>
-                                <template x-if="status === 'not_found' || status === 'error'">
-                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                </template>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-bold text-xs uppercase tracking-wider" 
-                                   x-text="status === 'ready' ? 'Data DPT Terverifikasi' : (status === 'already_verified' ? 'Sudah Pernah Hadir' : (status === 'already_voted' ? 'Hak Suara Sudah Digunakan' : 'Peringatan Data'))"></p>
-                                <p class="mt-0.5 font-medium leading-relaxed" x-text="statusMessage"></p>
-                            </div>
-                        </div>
-                    </template>
-
                     <!-- Form Inputs (2 Kolom Layout) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
                         
                         <!-- NIM (Nomor Induk Mahasiswa - Hanya Angka) -->
-                        <div class="space-y-1.5 sm:col-span-2">
+                        <div class="space-y-1 sm:col-span-2">
                             <label class="block text-xs font-bold text-slate-800">
                                 Nomor Induk Mahasiswa (NIM) <span class="text-red-500">*</span>
                             </label>
@@ -524,11 +483,11 @@
                                        @keydown="if (!/[0-9]/.test($event.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'].includes($event.key) && !$event.ctrlKey && !$event.metaKey) $event.preventDefault()"
                                        @keydown.enter.prevent="searchStudent()"
                                        placeholder="Masukkan 8 digit NIM Anda (192609234)"
-                                       class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono font-bold text-slate-900 placeholder:font-sans placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] focus:border-transparent transition-all shadow-2xs">
+                                       class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-mono font-bold text-slate-900 placeholder:font-sans placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] focus:border-transparent transition-all shadow-2xs">
                                 
-                                <div class="absolute right-2.5 flex items-center gap-1.5">
+                                <div class="absolute right-2 flex items-center gap-1.5">
                                     <template x-if="isLoading">
-                                        <svg class="animate-spin w-5 h-5 text-[#940c10]" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin w-4 h-4 text-[#940c10]" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                         </svg>
@@ -536,7 +495,7 @@
                                     <button type="button" 
                                             @click="searchStudent()"
                                             :disabled="isLoading || nim.trim().length === 0"
-                                            class="px-3.5 py-1.5 bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer">
+                                            class="px-3 py-1 bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer">
                                         Cek DPT
                                     </button>
                                 </div>
@@ -545,7 +504,7 @@
                         </div>
 
                         <!-- Nama Lengkap -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-800">
                                 Nama Lengkap <span class="text-red-500">*</span>
                             </label>
@@ -553,22 +512,22 @@
                                    x-model="fullName" 
                                    readonly
                                    placeholder="Nama lengkap otomatis dari DPT"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 placeholder-slate-400 focus:outline-none cursor-default shadow-2xs">
+                                   class="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 placeholder-slate-400 focus:outline-none cursor-default shadow-2xs">
                         </div>
 
                         <!-- Asal Kampus / Alamat -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-800">
                                 Asal Kampus / Alamat <span class="text-red-500">*</span>
                             </label>
                             <input type="text" 
                                    :value="selectedCampus" 
                                    readonly
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
+                                   class="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
                         </div>
 
                         <!-- Program Studi -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-800">
                                 Program Studi <span class="text-red-500">*</span>
                             </label>
@@ -576,11 +535,11 @@
                                    x-model="studyProgram" 
                                    readonly
                                    placeholder="Program studi mahasiswa"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
+                                   class="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
                         </div>
 
                         <!-- Kelas / Semester -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-800">
                                 Kelas / Semester <span class="text-red-500">*</span>
                             </label>
@@ -588,11 +547,11 @@
                                    x-model="className" 
                                    readonly
                                    placeholder="Kelas mahasiswa"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
+                                   class="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900 cursor-default shadow-2xs">
                         </div>
 
                         <!-- Informasi Kontak Tambahan: No Telepon / WA (Hanya Angka) -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-800">
                                 No. Telepon / WhatsApp <span class="text-slate-400 font-normal">(Opsional)</span>
                             </label>
@@ -604,46 +563,38 @@
                                    @input="phone = $event.target.value.replace(/\D/g, '')"
                                    @keydown="if (!/[0-9]/.test($event.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'].includes($event.key) && !$event.ctrlKey && !$event.metaKey) $event.preventDefault()"
                                    placeholder="Contoh: 08*********"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs transition-all">
+                                   class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940c10] shadow-2xs transition-all">
                         </div>
 
                         <!-- Email (Wajib Diisi & Validasi Format @) -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-800">
                                 Email <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
                                 <input type="email" 
                                        x-model="email" 
-                                       @input="validateEmail()"
-                                       @blur="validateEmail()"
+                                       @input="emailError = ''"
                                        required
                                        placeholder="nim@bsi.ac.id"
                                        :class="emailError ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-[#940c10]'"
-                                       class="w-full px-4 py-3 rounded-xl border text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 shadow-2xs transition-all">
+                                       class="w-full px-3.5 py-2 rounded-xl border text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 shadow-2xs transition-all">
                             </div>
-                            <template x-if="emailError">
-                                <p class="text-[11px] text-red-600 font-medium flex items-center gap-1 mt-1">
-                                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                    <span x-text="emailError"></span>
-                                </p>
-                            </template>
                         </div>
 
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-100">
+                    <div class="flex items-center justify-between pt-3.5 border-t border-slate-100">
                         <button type="button" 
                                 @click="goToStep(1)"
-                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
+                                class="px-6 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
                             Kembali
                         </button>
                         
                         <button type="button" 
                                 @click="handleStep2Next()"
-                                :disabled="status !== 'ready' || !student || !isEmailValid"
-                                class="px-6 sm:px-8 py-3 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
+                                class="px-6 py-2.5 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] text-xs sm:text-sm font-bold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <span>Selanjutnya</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
@@ -659,66 +610,60 @@
                  x-transition:enter="transition ease-out duration-300"
                  class="max-w-3xl mx-auto w-full">
                 
-                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-10 space-y-6">
+                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-3.5">
                     <div>
-                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                             Konfirmasi Data
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-500 font-normal mt-1">
+                        <p class="text-xs text-slate-500 font-normal mt-0.5">
                             Periksa kembali data Anda sebelum membubuhkan tanda tangan kehadiran.
                         </p>
                     </div>
 
                     <!-- Ringkasan Data Card -->
-                    <div class="bg-[#FDFDFD] rounded-2xl p-5 sm:p-6 border border-slate-200/80 space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-[#FDFDFD] rounded-2xl p-3.5 sm:p-4 border border-slate-200/80">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                             
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Asal Kampus</span>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <svg class="w-4 h-4 text-[#940c10]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                    </svg>
-                                    <span class="font-extrabold text-slate-900 text-sm" x-text="selectedCampus"></span>
-                                </div>
+                                <span class="font-extrabold text-slate-900 text-xs sm:text-sm mt-0.5 block truncate" x-text="selectedCampus"></span>
                             </div>
 
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Nama Lengkap</span>
-                                <span class="font-extrabold text-slate-900 text-sm mt-1 block" x-text="fullName"></span>
+                                <span class="font-extrabold text-slate-900 text-xs sm:text-sm mt-0.5 block truncate" x-text="fullName"></span>
                             </div>
 
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">NIM (Nomor Induk Mahasiswa)</span>
-                                <span class="font-mono font-bold text-[#940c10] text-sm mt-1 block" x-text="nim"></span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">NIM</span>
+                                <span class="font-mono font-bold text-[#940c10] text-xs sm:text-sm mt-0.5 block" x-text="nim"></span>
                             </div>
 
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Program Studi</span>
-                                <span class="font-bold text-slate-900 text-sm mt-1 block" x-text="studyProgram"></span>
+                                <span class="font-bold text-slate-900 text-xs sm:text-sm mt-0.5 block truncate" x-text="studyProgram"></span>
                             </div>
 
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Kelas / Semester</span>
-                                <span class="font-bold text-slate-900 text-sm mt-1 block" x-text="className"></span>
+                                <span class="font-bold text-slate-900 text-xs sm:text-sm mt-0.5 block" x-text="className"></span>
                             </div>
 
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">No. Telepon / WhatsApp</span>
-                                <span class="font-semibold text-slate-700 text-sm mt-1 block" x-text="phone || '-'"></span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">No. WhatsApp</span>
+                                <span class="font-semibold text-slate-700 text-xs sm:text-sm mt-0.5 block truncate" x-text="phone || '-'"></span>
                             </div>
 
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Email</span>
-                                <span class="font-semibold text-slate-700 text-sm mt-1 block" x-text="email || '-'"></span>
+                                <span class="font-semibold text-slate-700 text-xs sm:text-sm mt-0.5 block truncate" x-text="email || '-'"></span>
                             </div>
 
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Status Partisipasi</span>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 mt-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    Siap Menggunakan Hak Suara
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Status</span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 mt-0.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Siap Memilih
                                 </span>
                             </div>
 
@@ -762,7 +707,7 @@
                             </div>
 
                             <canvas id="signature-canvas" 
-                                    class="w-full h-44 sm:h-52 cursor-crosshair touch-none bg-transparent"
+                                    class="w-full h-28 sm:h-32 cursor-crosshair touch-none bg-transparent"
                                     @mousedown="startDrawing($event)"
                                     @mousemove="draw($event)"
                                     @mouseup="stopDrawing()"
@@ -774,17 +719,17 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-100">
+                    <div class="flex items-center justify-between pt-3.5 border-t border-slate-100">
                         <button type="button" 
                                 @click="goToStep(2)"
-                                class="px-6 sm:px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
+                                class="px-6 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 transition-colors cursor-pointer">
                             Kembali
                         </button>
                         
                         <button type="button" 
                                 @click="submitVerification()"
                                 :disabled="isSubmitting || !hasSignature"
-                                class="px-7 sm:px-9 py-3.5 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-extrabold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
+                                class="px-7 py-2.5 rounded-xl bg-[#940c10] hover:bg-[#7a0a0d] disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-extrabold text-white transition-all shadow-md shadow-red-950/20 flex items-center gap-2 cursor-pointer">
                             <template x-if="isSubmitting">
                                 <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -810,9 +755,71 @@
     <!-- ======================================================== -->
     <!-- FOOTER RESMI (PERSIS DESAIN)                             -->
     <!-- ======================================================== -->
-    <footer class="w-full bg-white border-t border-slate-200/80 py-4 px-4 sm:px-8 text-center text-xs text-slate-500">
+    <footer class="w-full bg-white border-t border-slate-200/80 py-2.5 lg:py-3 px-4 sm:px-8 text-center text-xs text-slate-500 shrink-0">
         <p>&copy; 2026 Panitia PEMIRA BEM UBSI Kampus Kabupaten Karawang. Seluruh hak cipta dilindungi.</p>
     </footer>
+
+    <!-- ======================================================== -->
+    <!-- POPUP MODAL STATUS VERIFIKASI DPT                        -->
+    <!-- ======================================================== -->
+    <div x-show="showStatusPopup"
+         x-cloak
+         @click.self="closeStatusPopup()"
+         @keydown.escape.window="closeStatusPopup()"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+
+        <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl text-center space-y-4 border border-slate-100"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto"
+                 :class="{
+                     'bg-emerald-100 text-emerald-600': popupStatus === 'ready',
+                     'bg-blue-100 text-blue-600': popupStatus === 'already_verified',
+                     'bg-amber-100 text-amber-600': popupStatus === 'already_voted',
+                     'bg-red-100 text-red-600': popupStatus === 'not_found' || popupStatus === 'error'
+                 }">
+                <template x-if="popupStatus === 'ready'">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 11 14 15 10"></polyline></svg>
+                </template>
+                <template x-if="popupStatus === 'already_verified'">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </template>
+                <template x-if="popupStatus === 'already_voted'">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </template>
+                <template x-if="popupStatus === 'not_found' || popupStatus === 'error'">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </template>
+            </div>
+
+            <div class="space-y-1.5">
+                <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border"
+                      :class="{
+                          'text-emerald-700 bg-emerald-50 border-emerald-200': popupStatus === 'ready',
+                          'text-blue-700 bg-blue-50 border-blue-200': popupStatus === 'already_verified',
+                          'text-amber-700 bg-amber-50 border-amber-200': popupStatus === 'already_voted',
+                          'text-red-700 bg-red-50 border-red-200': popupStatus === 'not_found' || popupStatus === 'error'
+                      }"
+                      x-text="popupStatus === 'ready' ? 'Data DPT Terverifikasi' : (popupStatus === 'already_verified' ? 'Sudah Pernah Hadir' : (popupStatus === 'already_voted' ? 'Hak Suara Sudah Digunakan' : 'Peringatan Data'))">
+                </span>
+                <p class="text-sm font-medium text-slate-700 leading-relaxed pt-1 whitespace-pre-line" x-text="popupMessage"></p>
+            </div>
+
+            <button type="button"
+                    @click="closeStatusPopup()"
+                    class="w-full py-2.5 rounded-xl text-xs font-extrabold text-white transition-all cursor-pointer"
+                    :class="popupStatus === 'ready' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-[#940c10] hover:bg-[#7a0a0d]'">
+                Oke, Mengerti
+            </button>
+        </div>
+    </div>
 
     <!-- ======================================================== -->
     <!-- POPUP MODAL SUKSES (HITUNG MUNDUR MENUJU BERANDA)        -->
@@ -907,12 +914,12 @@
                     return false;
                 }
                 if (!clean.includes('@')) {
-                    this.emailError = 'Email harus mengandung tanda "@" (contoh: nama@email.com).';
+                    this.emailError = 'Email harus mengandung tanda "@".\n(contoh: nama@gmail.com / nim@bsi.ac.id)';
                     return false;
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
                 if (!emailRegex.test(clean)) {
-                    this.emailError = 'Format email tidak valid (contoh: nama@email.com).';
+                    this.emailError = 'Format email tidak valid.\n(contoh: nama@gmail.com / nim@bsi.ac.id)';
                     return false;
                 }
                 this.emailError = '';
@@ -920,7 +927,16 @@
             },
 
             handleStep2Next() {
+                if (this.status !== 'ready' || !this.student) {
+                    const msg = (!this.statusMessage || this.status === 'idle')
+                        ? 'Silakan masukkan NIM dan klik Cek DPT terlebih dahulu sebelum melanjutkan.'
+                        : this.statusMessage;
+                    const type = this.status === 'idle' ? 'error' : this.status;
+                    this.openStatusPopup(type, msg);
+                    return;
+                }
                 if (!this.validateEmail()) {
+                    this.openStatusPopup('error', this.emailError);
                     return;
                 }
                 this.goToStep(3);
@@ -931,6 +947,10 @@
             dateString: 'Minggu, 22 Nov 2026',
 
             // Modal State
+            showStatusPopup: false,
+            popupStatus: 'idle',
+            popupMessage: '',
+            statusPopupTimer: null,
             showSuccessModal: false,
             lastVerifiedName: '',
             lastVerifiedNim: '',
@@ -1017,6 +1037,7 @@
                     this.status = data.status;
                     this.statusMessage = data.message;
                     this.student = data.student || null;
+                    this.openStatusPopup();
 
                     if (data.student) {
                         this.fullName = data.student.name;
@@ -1038,8 +1059,36 @@
                     this.status = 'error';
                     this.statusMessage = 'Gagal menghubungi server verifikasi. Periksa koneksi internet Anda.';
                     this.student = null;
+                    this.openStatusPopup();
                 } finally {
                     this.isLoading = false;
+                }
+            },
+
+            openStatusPopup(customStatus = null, customMessage = null) {
+                const targetStatus = customStatus || this.status;
+                const targetMessage = customMessage || this.statusMessage;
+                if (!targetMessage) return;
+
+                if (this.statusPopupTimer) {
+                    clearTimeout(this.statusPopupTimer);
+                    this.statusPopupTimer = null;
+                }
+                this.popupStatus = targetStatus;
+                this.popupMessage = targetMessage;
+                this.showStatusPopup = true;
+                if (targetStatus === 'ready') {
+                    this.statusPopupTimer = setTimeout(() => {
+                        this.closeStatusPopup();
+                    }, 3500);
+                }
+            },
+
+            closeStatusPopup() {
+                this.showStatusPopup = false;
+                if (this.statusPopupTimer) {
+                    clearTimeout(this.statusPopupTimer);
+                    this.statusPopupTimer = null;
                 }
             },
 

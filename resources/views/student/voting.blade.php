@@ -1,18 +1,18 @@
-@extends('layouts.app', ['title' => 'Bilik Suara', 'darkTheme' => true, 'allowScroll' => true])
+@extends('layouts.app', ['title' => 'Bilik Suara', 'darkTheme' => true])
 
 @section('content')
-<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 lg:py-9 flex-1 flex flex-col justify-start">
+<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-4 flex-1 flex flex-col justify-center">
 
-    <!-- Header Halaman Voting Sesuai Desain Referensi -->
-    <div class="mb-6 sm:mb-8 text-center sm:text-left">
-        <!-- Judul Periode Pemilihan (Teks Murni Tanpa Badge & Tanpa Border) -->
-        <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#CE9501] block mb-2">
+    <!-- Header Halaman Voting -->
+    <div class="mb-4 sm:mb-5 text-center sm:text-left">
+        <!-- Judul Periode Pemilihan -->
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#CE9501] block mb-1">
             PEMIRA BEM UBSI Kab.Karawang &bull; PERIODE {{ $activePeriod->academic_year }}
         </span>
 
         <!-- Title dengan Red Glowing Ballot Box Icon -->
-        <div class="flex items-center justify-center sm:justify-start gap-3 mb-2">
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-[#D71920] to-[#7A0A0D] shadow-md shadow-red-700/50 border border-red-400/30 flex items-center justify-center shrink-0">
+        <div class="flex items-center justify-center sm:justify-start gap-3 mb-1.5">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#D71920] to-[#7A0A0D] shadow-md shadow-red-700/50 border border-red-400/30 flex items-center justify-center shrink-0">
                 <!-- Ballot Box with Checkmark SVG -->
                 <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10z" />
@@ -22,7 +22,7 @@
                     <polyline points="10 7 11.5 8.5 14 6" stroke="white" stroke-width="1.8" />
                 </svg>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
+            <h1 class="text-xl sm:text-2xl lg:text-[26px] font-extrabold text-white tracking-wide">
                 Gunakan Hak Suara Anda
             </h1>
         </div>
@@ -37,15 +37,15 @@
     @php
         $candidateCount = $candidates->count();
         $gridClass = match($candidateCount) {
-            1 => 'grid-cols-1 max-w-md mx-auto',
-            2 => 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto',
-            default => 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto',
+            1 => 'grid-cols-1 max-w-sm mx-auto',
+            2 => 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto',
+            default => 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto',
         };
     @endphp
-    <div class="grid {{ $gridClass }} gap-6 sm:gap-7 lg:gap-8 justify-center w-full">
+    <div class="grid {{ $gridClass }} gap-5 sm:gap-6 justify-center w-full">
         @foreach($candidates as $candidate)
             <a href="{{ route('student.candidate.detail', $candidate->id) }}"
-               class="group relative block aspect-[3/4] sm:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl shadow-black/80 transition-all duration-300 border border-white/10 hover:border-[#CE9501]/60 bg-gradient-to-b from-[#52000D] via-[#7A0A0D] to-[#940C10] transform hover:-translate-y-1.5 cursor-pointer">
+               class="group relative block w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-auto lg:h-[52vh] lg:max-h-[410px] lg:min-h-[300px] rounded-3xl overflow-hidden shadow-2xl shadow-black/80 transition-all duration-300 border border-white/10 hover:border-[#CE9501]/60 bg-gradient-to-b from-[#52000D] via-[#7A0A0D] to-[#940C10] transform hover:-translate-y-1 cursor-pointer">
             
             <!-- Badge Nomor Paslon Ramping Horizontal di Pojok Kiri Atas -->
             <div class="absolute top-3.5 left-3.5 z-20">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="w-full max-w-lg sm:max-w-xl mx-auto px-4 py-6 sm:py-8 flex items-center justify-center my-auto"
     x-data="{
-        secondsLeft: 30,
+        secondsLeft: 5,
         timer: null,
         storageKey: 'pemira_completed_expires_{{ $student->nim }}',
         init() {
@@ -11,7 +11,7 @@
             let targetTime = sessionStorage.getItem(this.storageKey);
 
             if (!targetTime) {
-                targetTime = now + (30 * 1000);
+                targetTime = now + (5 * 1000);
                 sessionStorage.setItem(this.storageKey, targetTime);
             } else {
                 targetTime = parseInt(targetTime, 10);
@@ -59,7 +59,7 @@
             </p>
         </div>
 
-        <!-- 30-Second Countdown Timer Badge -->
+        <!-- 5-Second Countdown Timer Badge -->
         <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-amber-950 space-y-2.5">
             <div class="flex items-center justify-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#B58200]">
                 <svg class="w-4 h-4 text-[#B58200] animate-spin" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@
             </div>
             
             <div class="text-center">
-                <span class="text-4xl sm:text-5xl font-black text-[#940c10] font-mono tracking-tight" x-text="secondsLeft">30</span>
+                <span class="text-4xl sm:text-5xl font-black text-[#940c10] font-mono tracking-tight" x-text="secondsLeft">5</span>
                 <span class="text-xs font-medium text-slate-600 block mt-1">detik menuju logout otomatis</span>
             </div>
 

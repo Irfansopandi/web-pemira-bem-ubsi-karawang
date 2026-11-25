@@ -35,10 +35,10 @@
 
         <!-- Badges Kanan: Tombol Import & Total DPT -->
         @if(isset($participations))
-        <div class="flex items-center gap-3 flex-wrap">
+        <div class="w-full md:w-auto md:ml-auto shrink-0 flex flex-col items-end gap-2.5">
             <!-- Tombol Import Data Mahasiswa (High Contrast, Jelas & Tegas) -->
             <button type="button" @click="isImportOpen = true"
-                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940C10] hover:bg-[#7A0A0D] active:scale-95 text-white text-xs font-extrabold shadow-sm hover:shadow-md transition-all cursor-pointer">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#940C10] hover:bg-[#7A0A0D] active:scale-95 text-white text-xs font-extrabold shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap">
                 <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="17 8 12 3 7 8"></polyline>
@@ -48,7 +48,7 @@
             </button>
 
             <!-- Total Counter Badge -->
-            <span class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-bold text-slate-700">
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-bold text-slate-700 whitespace-nowrap">
                 <svg class="w-4 h-4 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
