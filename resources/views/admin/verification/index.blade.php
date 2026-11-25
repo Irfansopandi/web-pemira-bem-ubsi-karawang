@@ -140,7 +140,7 @@
                 </div>
             </div>
 
-            <!-- Right: Live Date & Clock Pill + Admin Lock Icon -->
+            <!-- Right: Live Date & Clock Pill -->
             <div class="flex items-center gap-2.5 sm:gap-3">
                 <!-- Date & Clock Pill -->
                 <div class="inline-flex items-center gap-3 sm:gap-3.5 px-4 sm:px-5 py-2 rounded-2xl sm:rounded-full bg-white border border-slate-200/90 shadow-2xs">
@@ -164,17 +164,6 @@
                     <!-- Time String (Deep Red UBSI, Bold Sans-Serif) -->
                     <span class="text-sm sm:text-[15px] font-extrabold text-[#940c10] tracking-normal whitespace-nowrap" x-text="timeString">18 : 48 : 41 WIB</span>
                 </div>
-
-                @if(!Auth::guard('admin')->check())
-                    <a href="{{ route('login') }}" 
-                       class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:border-[#940c10] hover:bg-red-50 text-slate-700 hover:text-[#940c10] text-xs font-bold transition-all shadow-2xs"
-                       title="Buka Halaman Bilik Suara">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
-                        </svg>
-                        <span>Ke Bilik Suara</span>
-                    </a>
-                @endif
             </div>
 
         </div>
