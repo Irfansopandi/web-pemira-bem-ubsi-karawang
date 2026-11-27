@@ -84,10 +84,11 @@ class SecurityAccessControlTest extends TestCase
             'has_voted' => false,
         ]);
 
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '12229999',
-            // Tanpa password sama sekali
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '12229999',
+                // Tanpa password sama sekali
+            ]);
 
         $response->assertRedirect(route('student.voting'));
         $this->assertAuthenticatedAs($this->student, 'student');
@@ -108,9 +109,10 @@ class SecurityAccessControlTest extends TestCase
             'is_active' => true,
         ]);
 
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '12228888',
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '12228888',
+            ]);
 
         $response->assertSessionHasErrors('identifier');
         $this->assertGuest('student');

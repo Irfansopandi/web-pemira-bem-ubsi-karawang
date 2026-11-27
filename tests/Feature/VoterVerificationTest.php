@@ -154,9 +154,10 @@ class VoterVerificationTest extends TestCase
 
     public function test_student_cannot_login_to_booth_before_verification(): void
     {
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '12220001',
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '12220001',
+            ]);
 
         $response->assertSessionHasErrors('identifier');
         $this->assertGuest('student');
@@ -175,9 +176,10 @@ class VoterVerificationTest extends TestCase
             ]);
 
         // Login ke bilik suara
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '12220001',
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '12220001',
+            ]);
 
         $response->assertRedirect(route('student.voting'));
         $this->assertAuthenticatedAs($this->student, 'student');

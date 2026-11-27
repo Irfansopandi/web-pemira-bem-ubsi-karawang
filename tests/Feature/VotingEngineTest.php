@@ -92,13 +92,60 @@ class VotingEngineTest extends TestCase
         $response = $this->get('/login');
         $response->assertStatus(200);
         $response->assertSee('PEMILIHAN UMUM RAYA');
+        $response->assertSee('Verifikasi Keamanan');
+    }
+
+    public function test_login_page_generates_math_captcha_with_max_result_10(): void
+    {
+        for ($i = 0; $i < 15; $i++) {
+            $this->get('/login')->assertStatus(200);
+            $answer = session('login_captcha_answer');
+            $this->assertIsInt($answer);
+            $this->assertGreaterThanOrEqual(1, $answer);
+            $this->assertLessThanOrEqual(10, $answer);
+        }
+    }
+
+    public function test_student_cannot_login_without_verifying_captcha(): void
+    {
+        $this->get('/login');
+
+        $response = $this->post(route('login.submit'), [
+            'identifier' => '12220001',
+        ]);
+
+        $response->assertSessionHasErrors('captcha');
+        $this->assertGuest('student');
+    }
+
+    public function test_math_captcha_verify_and_refresh_endpoints(): void
+    {
+        $this->get('/login');
+        $expected = session('login_captcha_answer');
+
+        $wrong = $this->postJson(route('login.captcha.verify'), [
+            'answer' => $expected + 1,
+        ]);
+        $wrong->assertStatus(422)
+            ->assertJson(['verified' => false]);
+
+        $newExpected = session('login_captcha_answer');
+        $this->assertGreaterThanOrEqual(1, $newExpected);
+        $this->assertLessThanOrEqual(10, $newExpected);
+
+        $right = $this->postJson(route('login.captcha.verify'), [
+            'answer' => $newExpected,
+        ]);
+        $right->assertStatus(200)
+            ->assertJson(['verified' => true]);
     }
 
     public function test_student_can_login_with_valid_nim(): void
     {
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '12220001',
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '12220001',
+            ]);
 
         $response->assertRedirect(route('student.voting'));
         $this->assertAuthenticatedAs($this->student, 'student');
@@ -106,9 +153,10 @@ class VotingEngineTest extends TestCase
 
     public function test_student_cannot_login_with_invalid_credentials(): void
     {
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '99999999',
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '99999999',
+            ]);
 
         $response->assertSessionHasErrors('identifier');
         $this->assertGuest('student');
@@ -132,9 +180,10 @@ class VotingEngineTest extends TestCase
             'verified_at' => null,
         ]);
 
-        $response = $this->post(route('login.submit'), [
-            'identifier' => '12220002',
-        ]);
+        $response = $this->withSession(['login_captcha_verified' => true])
+            ->post(route('login.submit'), [
+                'identifier' => '12220002',
+            ]);
 
         $response->assertSessionHasErrors('identifier');
         $this->assertGuest('student');

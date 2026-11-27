@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\VoterParticipation;
 use App\Services\ElectionService;
 use App\Services\GuestbookService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,76 @@ class LoginController extends Controller
         protected GuestbookService $guestbookService,
         protected ElectionService $electionService,
     ) {}
+
+    /**
+     * Buat soal captcha matematika acak dengan hasil maksimal 10 (1..10).
+     */
+    private function generateMathCaptcha(): string
+    {
+        $useAddition = (bool) random_int(0, 1);
+
+        if ($useAddition) {
+            $a = random_int(1, 9);
+            $b = random_int(1, 10 - $a);
+            $answer = $a + $b;
+            $question = "{$a} + {$b} = ?";
+        } else {
+            $a = random_int(2, 10);
+            $b = random_int(1, $a - 1);
+            $answer = $a - $b;
+            $question = "{$a} - {$b} = ?";
+        }
+
+        session([
+            'login_captcha_answer' => $answer,
+            'login_captcha_question' => $question,
+            'login_captcha_verified' => false,
+        ]);
+
+        return $question;
+    }
+
+    /**
+     * Verifikasi jawaban captcha matematika sebelum tombol masuk aktif.
+     */
+    public function verifyCaptcha(Request $request): JsonResponse
+    {
+        $answer = $request->input('answer');
+        $expected = session('login_captcha_answer');
+
+        if ($expected === null) {
+            return response()->json([
+                'verified' => false,
+                'message' => 'Sesi verifikasi diperbarui. Silakan jawab soal baru.',
+                'question' => $this->generateMathCaptcha(),
+            ], 422);
+        }
+
+        if ($answer !== null && $answer !== '' && is_numeric($answer) && (int) $answer === (int) $expected) {
+            session(['login_captcha_verified' => true]);
+
+            return response()->json([
+                'verified' => true,
+                'message' => 'Verifikasi berhasil! Silakan tekan Buka Bilik Suara.',
+            ]);
+        }
+
+        return response()->json([
+            'verified' => false,
+            'message' => 'Jawaban kurang tepat. Silakan coba soal baru.',
+            'question' => $this->generateMathCaptcha(),
+        ], 422);
+    }
+
+    /**
+     * Muat ulang soal captcha matematika baru (hasil maksimal 10).
+     */
+    public function refreshCaptcha(): JsonResponse
+    {
+        return response()->json([
+            'question' => $this->generateMathCaptcha(),
+        ]);
+    }
 
     /**
      * Tampilkan formulir bilik suara digital khusus mahasiswa (Zero-Guest).
@@ -59,7 +130,9 @@ class LoginController extends Controller
                 }
                 request()->session()->regenerateToken();
 
-                return view('auth.login')->with('info', 'Saat ini belum ada periode pemilihan PEMIRA yang sedang dibuka.');
+                return view('auth.login', [
+                    'captchaQuestion' => $this->generateMathCaptcha(),
+                ])->with('info', 'Saat ini belum ada periode pemilihan PEMIRA yang sedang dibuka.');
             }
 
             // Jika ada periode aktif, cek apakah mahasiswa sudah pernah memilih pada periode ini
@@ -88,7 +161,9 @@ class LoginController extends Controller
                 }
                 request()->session()->regenerateToken();
 
-                return view('auth.login')->withErrors([
+                return view('auth.login', [
+                    'captchaQuestion' => $this->generateMathCaptcha(),
+                ])->withErrors([
                     'identifier' => "Bilik suara periode {$activePeriod->academic_year} saat ini sedang ditutup oleh Panitia KPUM.",
                 ]);
             }
@@ -96,7 +171,9 @@ class LoginController extends Controller
             return redirect()->route('student.voting');
         }
 
-        return view('auth.login');
+        return view('auth.login', [
+            'captchaQuestion' => $this->generateMathCaptcha(),
+        ]);
     }
 
     /**
@@ -106,6 +183,27 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $identifier = trim((string) $request->input('identifier', ''));
+
+        // 0. Validasi Captcha Matematika (maksimal hasil 10) sebelum memproses login
+        $captchaVerified = session('login_captcha_verified') === true;
+        $captchaExpected = session('login_captcha_answer');
+        $captchaInput = $request->input('captcha_answer');
+
+        $isInlineMatch = $captchaExpected !== null
+            && $captchaInput !== null
+            && $captchaInput !== ''
+            && is_numeric($captchaInput)
+            && (int) $captchaInput === (int) $captchaExpected;
+
+        if (! $captchaVerified && ! $isInlineMatch) {
+            $this->generateMathCaptcha();
+
+            return back()
+                ->withInput(['identifier' => $identifier])
+                ->withErrors([
+                    'captcha' => 'Silakan selesaikan verifikasi matematika terlebih dahulu.',
+                ]);
+        }
 
         // 1. Validasi NIM tidak boleh kosong
         if ($identifier === '') {
@@ -200,6 +298,9 @@ class LoginController extends Controller
 
         // 6. Jika lolos seluruh verifikasi, pastikan status mahasiswa aktif
         $student->update(['is_active' => true]);
+
+        // Bersihkan sesi captcha setelah berhasil melewati gerbang login
+        session()->forget(['login_captcha_verified', 'login_captcha_answer', 'login_captcha_question']);
 
         // Login dan langsung masuk ke bilik suara
         Auth::guard('student')->login($student);

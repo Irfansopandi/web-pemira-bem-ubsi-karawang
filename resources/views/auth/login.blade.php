@@ -155,7 +155,7 @@
         <div class="lg:col-span-7 bg-white rounded-2xl xl:rounded-3xl shadow-2xl shadow-black/70 overflow-hidden flex flex-col justify-between border border-white/10">
             
             <!-- Header Kartu Kanan: Background Gradient Maroon & Wave Divider -->
-            <div class="bg-gradient-to-b from-[#52000D] via-[#7A0A0D] to-[#940C10] px-5 sm:px-6 xl:px-7 pt-5 sm:pt-6 pb-7 sm:pb-8 text-center text-white relative overflow-hidden">
+            <div class="bg-gradient-to-b from-[#52000D] via-[#7A0A0D] to-[#940C10] px-5 sm:px-6 xl:px-7 pt-4 sm:pt-5 pb-6 sm:pb-7 text-center text-white relative overflow-hidden">
                 
                 <!-- Foto Gedung Kampus UBSI Cikampek (Sebelah Kiri) dengan Gradasi Halus -->
                 <div class="absolute left-0 top-0 bottom-0 w-5/12 sm:w-1/2 pointer-events-none select-none overflow-hidden z-0">
@@ -182,10 +182,10 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-[#52000D]/70 via-transparent to-[#940C10] pointer-events-none z-0"></div>
 
                 <!-- 3 Logo Resmi: Universitas BSI, BEM UBSI, Kabinet/PEMIRA -->
-                <div class="relative z-10 flex items-center justify-center gap-3.5 sm:gap-4 mb-2 sm:mb-2.5">
-                    <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet BEM UBSI Kab.Karawang" class="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                <div class="relative z-10 flex items-center justify-center gap-3 sm:gap-3.5 mb-1.5 sm:mb-2">
+                    <img src="{{ asset('images/logo-ubsi.png') }}" alt="Logo Universitas BSI" class="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                    <img src="{{ asset('images/logo-bem-ubsi.png') }}" alt="Logo BEM UBSI Kab.Karawang" class="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
+                    <img src="{{ asset('images/logo-kabinet.png') }}?v={{ file_exists(public_path('images/logo-kabinet.png')) ? filemtime(public_path('images/logo-kabinet.png')) : 1 }}" alt="Logo Kabinet BEM UBSI Kab.Karawang" class="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-md hover:scale-105 transition-transform duration-200">
                 </div>
 
                 <!-- Judul Utama Diapit Golden Laurel Wreath (Daun Emas) -->
@@ -236,16 +236,141 @@
 
                 <!-- Pemisah Garis Gelombang Organik (SVG Wave Divider) -->
                 <div class="absolute -bottom-[1px] left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
-                    <svg class="w-full h-6 sm:h-7 block text-white" viewBox="0 0 1000 100" preserveAspectRatio="none">
+                    <svg class="w-full h-5 sm:h-6 block text-white" viewBox="0 0 1000 100" preserveAspectRatio="none">
                         <path d="M 0,40 C 300,40 450,85 700,75 C 850,70 950,45 1000,35 L 1000,100 L 0,100 Z" fill="currentColor"></path>
                     </svg>
                 </div>
             </div>
 
             <!-- Body Kartu Kanan: Form Input Putih Bersih (Pure White Section Khusus Mahasiswa) -->
-            <div class="px-5 sm:px-6 xl:px-7 py-5 sm:py-6 flex-1 flex flex-col justify-center bg-white" x-data="{ isSubmitting: false }">
+            <div class="px-5 sm:px-6 xl:px-7 py-4 sm:py-5 flex-1 flex flex-col justify-center bg-white"
+                 x-data="{
+                     isSubmitting: false,
+                     captchaQuestion: @js($captchaQuestion ?? ''),
+                     captchaAnswer: '',
+                     captchaVerified: {{ session('login_captcha_verified') ? 'true' : 'false' }},
+                     captchaChecking: false,
+                     captchaError: '',
+                     init() {
+                         this.$nextTick(() => this.drawCaptcha());
+                     },
+                     drawCaptcha() {
+                         const canvas = this.$refs.captchaCanvas;
+                         if (!canvas || !this.captchaQuestion) return;
+                         const ctx = canvas.getContext('2d');
+                         const dpr = window.devicePixelRatio || 1;
+                         const width = canvas.clientWidth || 160;
+                         const height = canvas.clientHeight || 44;
+                         canvas.width = width * dpr;
+                         canvas.height = height * dpr;
+                         ctx.scale(dpr, dpr);
+
+                         // Latar belakang abu-abu sangat terang dengan tekstur titik halus
+                         ctx.fillStyle = '#F8FAFC';
+                         ctx.fillRect(0, 0, width, height);
+
+                         for (let i = 0; i < 80; i++) {
+                             ctx.fillStyle = `rgba(148, 163, 184, ${Math.random() * 0.35 + 0.1})`;
+                             ctx.beginPath();
+                             ctx.arc(Math.random() * width, Math.random() * height, Math.random() * 1.1 + 0.3, 0, Math.PI * 2);
+                             ctx.fill();
+                         }
+
+                         // Garis tipis acak anti-OCR
+                         for (let i = 0; i < 2; i++) {
+                             ctx.strokeStyle = 'rgba(148, 163, 184, 0.28)';
+                             ctx.lineWidth = 1;
+                             ctx.beginPath();
+                             ctx.moveTo(0, Math.random() * height);
+                             ctx.bezierCurveTo(
+                                 width * 0.33, Math.random() * height,
+                                 width * 0.66, Math.random() * height,
+                                 width, Math.random() * height
+                             );
+                             ctx.stroke();
+                         }
+
+                         // Render karakter soal matematika bergaya tulisan tangan
+                         const chars = this.captchaQuestion.split('');
+                         const spacing = Math.min(16, (width - 20) / Math.max(chars.length, 1));
+                         const startX = (width - (chars.length - 1) * spacing) / 2;
+                         ctx.textAlign = 'center';
+                         ctx.textBaseline = 'middle';
+                         ctx.fillStyle = '#1E293B';
+
+                         chars.forEach((ch, idx) => {
+                             ctx.save();
+                             const x = startX + idx * spacing;
+                             const y = height / 2 + (Math.random() * 4 - 2);
+                             const angle = (Math.random() * 0.16) - 0.08;
+                             ctx.translate(x, y);
+                             ctx.rotate(angle);
+                             ctx.font = 'italic 600 19px \'Segoe Print\', \'Comic Sans MS\', \'Instrument Sans\', cursive, sans-serif';
+                             ctx.fillText(ch, 0, 0);
+                             ctx.restore();
+                         });
+                     },
+                     async refreshCaptcha() {
+                         if (this.captchaVerified || this.captchaChecking) return;
+                         this.captchaError = '';
+                         this.captchaAnswer = '';
+                         try {
+                             const res = await fetch('{{ route('login.captcha.refresh') }}', {
+                                 method: 'POST',
+                                 headers: {
+                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                     'Accept': 'application/json',
+                                 },
+                             });
+                             const data = await res.json();
+                             if (data.question) {
+                                 this.captchaQuestion = data.question;
+                                 this.$nextTick(() => this.drawCaptcha());
+                             }
+                         } catch (e) {
+                             this.captchaError = 'Gagal memuat soal baru. Silakan coba lagi.';
+                         }
+                     },
+                     async verifyCaptcha() {
+                         if (this.captchaVerified || this.captchaChecking) return;
+                         if (this.captchaAnswer.trim() === '') {
+                             this.captchaError = 'Masukkan jawaban Anda terlebih dahulu.';
+                             return;
+                         }
+                         this.captchaChecking = true;
+                         this.captchaError = '';
+                         try {
+                             const res = await fetch('{{ route('login.captcha.verify') }}', {
+                                 method: 'POST',
+                                 headers: {
+                                     'Content-Type': 'application/json',
+                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                     'Accept': 'application/json',
+                                 },
+                                 body: JSON.stringify({ answer: this.captchaAnswer.trim() }),
+                             });
+                             const data = await res.json();
+                             if (res.ok && data.verified) {
+                                 this.captchaVerified = true;
+                                 this.captchaError = '';
+                             } else {
+                                 this.captchaVerified = false;
+                                 this.captchaAnswer = '';
+                                 this.captchaError = data.message || 'Jawaban kurang tepat.';
+                                 if (data.question) {
+                                     this.captchaQuestion = data.question;
+                                     this.$nextTick(() => this.drawCaptcha());
+                                 }
+                             }
+                         } catch (e) {
+                             this.captchaError = 'Terjadi gangguan saat memverifikasi. Silakan coba lagi.';
+                         } finally {
+                             this.captchaChecking = false;
+                         }
+                     }
+                 }">
                 
-                <div class="w-full max-w-md mx-auto my-auto space-y-3.5">
+                <div class="w-full max-w-md mx-auto my-auto space-y-2.5">
                     <!-- ALERT INFO (Misal: setelah voting atau redirect) -->
                     @if (session('info'))
                         <div class="p-3 rounded-xl bg-amber-50/90 border border-amber-200 text-amber-800 flex items-start gap-2.5 shadow-sm">
@@ -283,8 +408,9 @@
                     @endif
 
                     <!-- FORMULIR MASUK BILIK SUARA (HANYA SATU KOLOM INPUT NIM NUMERIK) -->
-                    <form method="POST" action="{{ route('login.submit') }}" class="space-y-4" @submit="isSubmitting = true" novalidate>
+                    <form method="POST" action="{{ route('login.submit') }}" class="space-y-3" @submit="if (!captchaVerified) { $event.preventDefault(); captchaError = 'Silakan selesaikan verifikasi matematika terlebih dahulu.'; return; } isSubmitting = true" novalidate>
                         @csrf
+                        <input type="hidden" name="captcha_answer" :value="captchaAnswer">
 
                         <div>
                             <label for="identifier" class="flex items-center gap-1.5 text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
@@ -307,10 +433,10 @@
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
                                 autofocus
-                                class="w-full px-4 py-3 bg-[#F4F5F8] border {{ $errors->has('identifier') ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-200 focus:ring-[#940C10] focus:border-transparent' }} rounded-xl text-sm sm:text-base font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 transition-all shadow-sm tracking-wider"
+                                class="w-full px-4 py-2.5 bg-[#F4F5F8] border {{ $errors->has('identifier') ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-200 focus:ring-[#940C10] focus:border-transparent' }} rounded-xl text-sm sm:text-base font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 transition-all shadow-sm tracking-wider"
                             >
                             
-                            <p class="text-[11px] text-slate-500 mt-1.5 font-normal flex items-center gap-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                            <p class="text-[11px] text-slate-500 mt-1 font-normal flex items-center gap-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                                 <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <circle cx="12" cy="12" r="10" />
                                     <polyline points="12 6 12 12 16 14" />
@@ -319,12 +445,78 @@
                             </p>
                         </div>
 
+                        <!-- Verifikasi Captcha Matematika (Compact Horizontal Layout, Hasil Maksimal 10) -->
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/70 p-2.5 sm:p-3 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-[#940C10] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                    <span class="text-[11px] font-bold text-slate-800 uppercase tracking-wider">Verifikasi Keamanan</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    x-show="!captchaVerified"
+                                    @click="refreshCaptcha()"
+                                    title="Ganti soal matematika"
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold text-slate-500 hover:text-[#940C10] hover:bg-red-50 transition-colors shrink-0 cursor-pointer">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                        <path d="M3 3v5h5" />
+                                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                                        <path d="M16 16h5v5" />
+                                    </svg>
+                                    <span>Ganti Soal</span>
+                                </button>
+                            </div>
+
+                            <!-- Canvas + Input + Verifikasi Sejajar -->
+                            <div x-show="!captchaVerified" class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-5 overflow-hidden rounded-lg border border-slate-200 bg-[#F8FAFC]">
+                                    <canvas x-ref="captchaCanvas" class="w-full h-[42px] block select-none"></canvas>
+                                </div>
+                                <div class="col-span-7 flex items-center gap-1.5">
+                                    <input
+                                        id="captcha_answer_input"
+                                        type="text"
+                                        x-model="captchaAnswer"
+                                        inputmode="numeric"
+                                        pattern="[0-9]*"
+                                        maxlength="2"
+                                        placeholder="Hasil"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        @keydown.enter.prevent="verifyCaptcha()"
+                                        class="w-full min-w-0 px-2.5 py-2 bg-white border border-slate-300 rounded-lg text-sm font-bold text-center text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#940C10] focus:border-transparent transition-all"
+                                    >
+                                    <button
+                                        type="button"
+                                        @click="verifyCaptcha()"
+                                        :disabled="captchaChecking"
+                                        class="px-3 py-2 bg-slate-800 hover:bg-slate-900 disabled:opacity-60 text-white text-xs font-bold rounded-lg transition-all shrink-0 cursor-pointer">
+                                        <span x-show="!captchaChecking">Verifikasi</span>
+                                        <span x-show="captchaChecking" x-cloak>Cek...</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p x-show="!captchaVerified && captchaError" x-text="captchaError" x-cloak class="text-[11px] font-medium text-red-600"></p>
+
+                            <!-- Status Terverifikasi -->
+                            <div x-show="captchaVerified" x-cloak class="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800">
+                                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                    <polyline points="22 4 12 14.01 9 11.01" />
+                                </svg>
+                                <span class="text-xs font-semibold">Verifikasi berhasil. Silakan tekan Buka Bilik Suara.</span>
+                            </div>
+                        </div>
+
                         <!-- Tombol Buka Bilik Suara -->
-                        <div class="pt-1">
+                        <div class="pt-0.5">
                             <button 
                                 type="submit" 
-                                :disabled="isSubmitting"
-                                class="w-full py-3 px-5 bg-gradient-to-r from-[#940C10] via-[#B51016] to-[#D71920] hover:from-[#7A0A0D] hover:via-[#940C10] hover:to-[#B51016] disabled:opacity-75 disabled:cursor-wait text-white font-bold rounded-xl shadow-lg shadow-red-900/35 hover:shadow-red-800/50 hover:brightness-105 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#940C10]">
+                                :disabled="isSubmitting || !captchaVerified"
+                                class="w-full py-2.5 px-5 bg-gradient-to-r from-[#940C10] via-[#B51016] to-[#D71920] hover:from-[#7A0A0D] hover:via-[#940C10] hover:to-[#B51016] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-lg shadow-red-900/35 hover:shadow-red-800/50 hover:brightness-105 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#940C10]">
                                 
                                 <!-- State Normal -->
                                 <span x-show="!isSubmitting" class="flex items-center justify-center gap-2">
@@ -348,7 +540,7 @@
                     </form>
 
                     <!-- Footer Kartu Kanan: Bantuan TPS -->
-                    <div class="pt-3 mt-4 border-t border-slate-100 flex items-center justify-center text-xs text-slate-500">
+                    <div class="pt-2.5 mt-3 border-t border-slate-100 flex items-center justify-center text-xs text-slate-500">
                         <span class="flex items-center gap-1.5 whitespace-nowrap text-[11px]">
                             <svg class="w-3.5 h-3.5 text-[#CE9501]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10" />

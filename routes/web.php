@@ -20,6 +20,8 @@ Route::redirect('/', '/login');
 // Autentikasi Mahasiswa Pemilih (Bilik Suara Digital)
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::post('/login/captcha/verify', [LoginController::class, 'verifyCaptcha'])->name('login.captcha.verify');
+Route::post('/login/captcha/refresh', [LoginController::class, 'refreshCaptcha'])->name('login.captcha.refresh');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Autentikasi Khusus Administrator KPUM
